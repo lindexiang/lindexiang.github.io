@@ -1,5 +1,5 @@
 ---
-title: 深入理解JVM虚拟机 第6章 类文件结构
+title: 深入理解JVM虚拟机 第6章 类文件结构   
 date: 2018-07-27 09:32:51
 tags: 虚拟机
 ---
@@ -16,7 +16,7 @@ ClassFile {
               u2             major_version;
               u2             constant_pool_count;
               cp_info        constant_pool[constant_pool_count-1]; //常量池，字面量和符号引用
-              u2             access_flags; //访问标志
+              u2             access_flags; //访问标志1
               u2             this_class; //全限定名
               u2             super_class; //父类全限定名
               u2             interfaces_count; //接口数量
