@@ -6,8 +6,9 @@ tags:
   - 垃圾回收
   - 内存分配
 categories: JVM虚拟机原理
-image: http://pbhb4py13.bkt.clouddn.com/eberhard-grossgasteiger-775055-unsplash.jpg
+image: http://pbhb4py13.bkt.clouddn.com/alex-blajan-774515-unsplash.jpg
 ---
+
 
 # 垃圾回收和内存分配策略
 垃圾收集(Garbage Collection, GC)主要关注的是java堆。因为虚拟机栈，本地方法栈，程序计数器都是随着线程的产生和消失。所以这部分的内存分配是在编译器可知。对它的内存分配是确定的。对于java堆的对象实例，只有在运行期间才知道创建那些对象实例，则这部分的内存分配和回收是动态的。<!-- more -->

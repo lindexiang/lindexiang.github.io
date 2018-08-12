@@ -1,10 +1,15 @@
 ---
 title: 深入理解JVM虚拟机 第7章 虚拟机的类加载机制
 date: 2018-07-12 01:03:01
-tags:
+tags: 
+  - JVM原理 
+  - 虚拟机类加载机制
+categories: JVM虚拟机原理
+image: http://pbhb4py13.bkt.clouddn.com/damon-lam-774304-unsplash.jpg
 ---
 
 # 虚拟机类加载机制
+
 >虚拟机类加载机制虚拟机把描述类的数据从class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。Java语言里，类型的加载和连接过程是在程序运行期间完成的。
 
 ## 类加载的时机

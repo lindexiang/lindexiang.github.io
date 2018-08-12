@@ -1,7 +1,11 @@
 ---
 title: 深入理解JVM虚拟机 第6章 类文件结构   
 date: 2018-07-27 09:32:51
-tags: 虚拟机
+tags: 
+  - JVM原理 
+  - 类文件结构
+categories: JVM虚拟机原理
+image: http://pbhb4py13.bkt.clouddn.com/humphrey-muleba-774641-unsplash.jpg
 ---
 
 # 深入理解Java虚拟机 第六章 类文件结构
