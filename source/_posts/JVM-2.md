@@ -15,6 +15,7 @@ image: http://pbhb4py13.bkt.clouddn.com/alex-bachor-775124-unsplash.jpg
 
 ##2.2 运行时数据区域
 &emsp;&emsp;java虚拟机在运行程序时会把管理的内存分为几个不同的数据区域，这些区域的作用不同并且创建和销毁的时间不同。java虚拟机将管理的内存分为以下几个数据区域。
+<!-- more -->
 ```
 线程共享部分
 1. 方法区
