@@ -206,9 +206,9 @@ sidebar:
   # Sidebar Display, available value (only for Muse | Mist):
   # 侧栏显示方式，post 代表只有点进一篇文章内
   # 且文章有目录，侧栏才会弹出显示
-  #display: post
+  display: post
   #display: always
-  display: hide
+  #display: hide
   #display: remove
 
   # Sidebar offset from top menubar in pixels (only for Pisces | Gemini).
@@ -434,15 +434,16 @@ changyan:
 # You can get your appid and appkey from https://leancloud.cn
 # more info please open https://valine.js.org
 valine:
-  enable: false
-  appid:  # your leancloud application appid
-  appkey:  # your leancloud application appkey
+  enable: true
+  appid:  CGD5uAsfibJi6l5bykvuxJQQ-gzGzoHsz
+  appkey:  T6VMmohj66z8YpBlxXgEsezd
   notify: false # mail notifier , https://github.com/xCss/Valine/wiki
   verify: false # Verification code
-  placeholder: Just go go # comment box placeholder
+  placeholder: 快来评论啊 小哥
   avatar: mm # gravatar style
   guest_info: nick,mail,link # custom comment header
   pageSize: 10 # pagination size
+  visitor: false # leancloud-counter-security is not supported for now. When visitor is set to be true, appid and appkey are recommended to be the same as leancloud_visitors' for counter compatibility. Article reading statistic https://valine.js.org/visitor.html
 
 
 # Support for youyan comments system.
@@ -593,7 +594,7 @@ rating:
 # 然后可以通过阅读量建立 TopX 页面，教程链接：
 # https://notes.wanghao.work/2015-10-21-为NexT主题添加文章阅读量统计功能.html
 leancloud_visitors:
-  enable: true
+  enable: false
   app_id: #<app_id>
   app_key: #<app_key>
 

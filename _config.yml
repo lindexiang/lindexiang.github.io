@@ -3,7 +3,7 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Blog
+title: ldx's Blog
 subtitle: 
 description: this is personal blog
 keywords:
@@ -107,7 +107,9 @@ githubEmojis:
   styles:
   localEmojis:
 
-    
+
+
+
 ## Themes: https://hexo.io/themes/
 theme: next
 

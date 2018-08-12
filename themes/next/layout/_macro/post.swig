@@ -200,7 +200,7 @@
           {% endif %}
 
           {# LeanCould PageView #}
-          {% if theme.leancloud_visitors.enable %}
+          {% if theme.leancloud_visitors.enable or (theme.valine.enable and theme.valine.appid and theme.valine.appkey and theme.valine.visitor) %}
              <span id="{{ url_for(post.path) }}" class="leancloud_visitors" data-flag-title="{{ post.title }}">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
@@ -302,13 +302,13 @@
         {% elif post.excerpt  %}
           {{ post.excerpt }}
 
-                    
+
         {% if post.image %}
         <div class="out-img-topic">
           <img src={{ post.image }} class="img-topic" />
         </div>
         {% endif %}
- 
+
 
           <!--noindex-->
           <div class="post-button text-center">

@@ -1,0 +1,796 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="edc30867-af3d-4dd8-a488-1d28223b9a0d" name="Default" comment="" />
+    <ignored path="$PROJECT_DIR$/.tmp/" />
+    <ignored path="$PROJECT_DIR$/temp/" />
+    <ignored path="$PROJECT_DIR$/tmp/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DockManager">
+    <window id="1">
+      <content type="file-editors">
+        <state>
+          <leaf>
+            <file leaf-file-name="_config.yml" pinned="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/next/_config.yml">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="-1469">
+                    <caret line="208" column="2" selection-start-line="208" selection-start-column="2" selection-end-line="208" selection-end-column="2" />
+                  </state>
+                </provider>
+              </entry>
+            </file>
+          </leaf>
+        </state>
+      </content>
+    </window>
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="_config.yml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/nextreload/_config.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="398">
+              <caret line="64" column="31" lean-forward="true" selection-start-line="64" selection-start-column="31" selection-end-line="64" selection-end-column="31" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="custom.styl" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/next/source/css/_custom/custom.styl">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="8" column="16" lean-forward="true" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="_layout.swig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/next/layout/_layout.swig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="305">
+              <caret line="25" column="9" lean-forward="true" selection-start-line="25" selection-start-column="6" selection-end-line="25" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="_layout.swig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/nextreload/layout/_layout.swig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15">
+              <caret line="20" column="23" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>anvas-nest</find>
+      <find>Canvas-nest</find>
+      <find>symbols_count_time</find>
+      <find>headband</find>
+      <find>sidebar</find>
+      <find>_custo</find>
+      <find>rss</find>
+    </findStrings>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/nextreload/layout/_layout.swig" />
+        <option value="$PROJECT_DIR$/nextreload/_config.yml" />
+        <option value="$PROJECT_DIR$/next/_config.yml" />
+        <option value="$PROJECT_DIR$/next/source/css/_custom/custom.styl" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodeModulesDirectoryManager">
+    <handled-path value="$PROJECT_DIR$/next/node_modules" />
+  </component>
+  <component name="NodePackageJsonFileManager">
+    <packageJsonPaths>
+      <path value="$PROJECT_DIR$/landscape/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/ansi-cyan/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/ansi-gray/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/ansi-red/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/ansi-regex/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/ansi-styles/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/ansi-wrap/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/anymatch/node_modules/arr-diff/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/anymatch/node_modules/array-unique/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/anymatch/node_modules/braces/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/anymatch/node_modules/expand-brackets/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/anymatch/node_modules/extglob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/anymatch/node_modules/is-extglob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/anymatch/node_modules/is-glob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/anymatch/node_modules/kind-of/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/anymatch/node_modules/micromatch/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/anymatch/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/archy/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/argparse/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/arr-diff/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/arr-flatten/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/arr-union/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/array-differ/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/array-each/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/array-slice/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/array-uniq/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/array-unique/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/assign-symbols/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/async-each/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/async/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/atob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/balanced-match/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/base/node_modules/define-property/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/base/node_modules/is-accessor-descriptor/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/base/node_modules/is-data-descriptor/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/base/node_modules/is-descriptor/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/base/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/beeper/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/binary-extensions/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/brace-expansion/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/braces/node_modules/extend-shallow/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/braces/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/builtin-modules/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/cache-base/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/camelcase/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/chalk/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/chokidar/node_modules/is-extglob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/chokidar/node_modules/is-glob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/chokidar/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/class-utils/node_modules/define-property/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/class-utils/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/cli/node_modules/glob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/cli/node_modules/minimatch/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/cli/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/cliui/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/clone-stats/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/clone/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/code-point-at/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/coffee-script/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/collection-visit/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/color-convert/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/color-name/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/color-support/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/colors/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/columnify/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/component-emitter/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/concat-map/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/console-browserify/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/copy-descriptor/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/core-util-is/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/cycle/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/date-now/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/dateformat/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/debug/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/decamelize/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/decode-uri-component/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/defaults/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/define-property/node_modules/is-accessor-descriptor/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/define-property/node_modules/is-data-descriptor/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/define-property/node_modules/is-descriptor/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/define-property/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/deprecated/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/detect-file/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/dom-serializer/node_modules/domelementtype/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/dom-serializer/node_modules/entities/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/dom-serializer/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/domelementtype/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/domhandler/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/domutils/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/duplexer2/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/end-of-stream/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/entities/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/error-ex/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/escape-string-regexp/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/esprima/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/exit/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/expand-brackets/node_modules/define-property/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/expand-brackets/node_modules/extend-shallow/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/expand-brackets/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/expand-range/node_modules/fill-range/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/expand-range/node_modules/is-number/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/expand-range/node_modules/isarray/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/expand-range/node_modules/isobject/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/expand-range/node_modules/kind-of/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/expand-range/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/expand-tilde/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/extend-shallow/node_modules/is-extendable/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/extend-shallow/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/extend/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/extglob/node_modules/define-property/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/extglob/node_modules/extend-shallow/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/extglob/node_modules/is-accessor-descriptor/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/extglob/node_modules/is-data-descriptor/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/extglob/node_modules/is-descriptor/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/extglob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/eyes/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fancy-log/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/filename-regex/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fill-range/node_modules/extend-shallow/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fill-range/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/find-index/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/find-up/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/findup-sync/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fined/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/first-chunk-stream/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/flagged-respawn/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/for-in/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/for-own/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fragment-cache/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fs.realpath/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/abbrev/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/ansi-regex/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/aproba/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/are-we-there-yet/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/balanced-match/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/brace-expansion/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/chownr/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/code-point-at/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/concat-map/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/console-control-strings/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/core-util-is/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/debug/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/deep-extend/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/delegates/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/detect-libc/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/fs-minipass/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/fs.realpath/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/gauge/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/glob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/has-unicode/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/iconv-lite/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/ignore-walk/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/inflight/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/inherits/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/ini/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/is-fullwidth-code-point/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/isarray/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/minimatch/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/minimist/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/minipass/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/minizlib/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/mkdirp/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/ms/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/needle/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/node-pre-gyp/lib/util/nw-pre-gyp/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/node-pre-gyp/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/nopt/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/npm-bundled/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/npm-packlist/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/npmlog/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/number-is-nan/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/object-assign/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/once/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/os-homedir/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/os-tmpdir/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/osenv/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/path-is-absolute/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/process-nextick-args/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/rc/node_modules/minimist/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/rc/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/readable-stream/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/rimraf/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/safe-buffer/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/safer-buffer/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/sax/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/semver/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/set-blocking/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/signal-exit/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/string-width/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/string_decoder/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/strip-ansi/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/strip-json-comments/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/tar/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/util-deprecate/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/wide-align/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/wrappy/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/node_modules/yallist/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/fsevents/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/gaze/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/get-value/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/glob-base/node_modules/is-extglob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/glob-base/node_modules/is-glob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/glob-base/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/glob-parent/node_modules/is-extglob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/glob-parent/node_modules/is-glob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/glob-parent/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/glob-stream/node_modules/readable-stream/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/glob-stream/node_modules/through2/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/glob-stream/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/glob-watcher/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/glob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/glob2base/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/global-modules/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/global-prefix/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/globule/node_modules/glob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/globule/node_modules/graceful-fs/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/globule/node_modules/inherits/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/globule/node_modules/minimatch/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/globule/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/glogg/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/graceful-fs/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/gulp-jshint/node_modules/lodash/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/gulp-jshint/node_modules/readable-stream/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/gulp-jshint/node_modules/through2/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/gulp-jshint/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/gulp-shell/node_modules/ansi-styles/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/gulp-shell/node_modules/async/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/gulp-shell/node_modules/chalk/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/gulp-shell/node_modules/lodash.template/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/gulp-shell/node_modules/lodash.templatesettings/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/gulp-shell/node_modules/lodash/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/gulp-shell/node_modules/supports-color/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/gulp-shell/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/gulp-util/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/gulp/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/gulplog/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/has-ansi/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/has-flag/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/has-gulplog/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/has-value/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/has-values/node_modules/kind-of/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/has-values/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/homedir-polyfill/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/hosted-git-info/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/htmlparser2/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/inflight/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/inherits/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/ini/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/interpret/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/invert-kv/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/irregular-plurals/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-absolute/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-accessor-descriptor/node_modules/kind-of/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-accessor-descriptor/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-arrayish/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-binary-path/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-buffer/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-builtin-module/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-data-descriptor/node_modules/kind-of/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-data-descriptor/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-descriptor/node_modules/kind-of/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-descriptor/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-dotfile/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-equal-shallow/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-extendable/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-extglob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-fullwidth-code-point/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-glob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-number/node_modules/kind-of/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-number/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-plain-object/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-posix-bracket/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-primitive/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-relative/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-unc-path/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-utf8/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/is-windows/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/isarray/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/isexe/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/isobject/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/isstream/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/js-yaml/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/jshint-stylish/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/jshint/node_modules/lodash/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/jshint/node_modules/minimatch/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/jshint/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/kind-of/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lcid/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/liftoff/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/load-json-file/node_modules/graceful-fs/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/load-json-file/node_modules/strip-bom/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/load-json-file/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash._basecopy/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash._basetostring/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash._basevalues/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash._getnative/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash._isiterateecall/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash._reescape/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash._reevaluate/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash._reinterpolate/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash._root/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash.assign/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash.assigninwith/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash.clonedeep/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash.defaults/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash.escape/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash.isarguments/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash.isarray/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash.keys/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash.rest/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash.restparam/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash.template/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash.templatesettings/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lodash/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/log-symbols/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/lru-cache/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/make-iterator/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/map-cache/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/map-visit/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/math-random/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/micromatch/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/minimatch/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/minimist/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/mixin-deep/node_modules/is-extendable/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/mixin-deep/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/mkdirp/node_modules/minimist/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/mkdirp/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/mout/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/ms/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/multipipe/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/nan/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/nan/tools/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/nanomatch/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/natives/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/normalize-package-data/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/normalize-path/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/number-is-nan/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/object-assign/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/object-copy/node_modules/define-property/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/object-copy/node_modules/kind-of/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/object-copy/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/object-visit/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/object.defaults/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/object.map/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/object.omit/node_modules/for-own/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/object.omit/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/object.pick/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/once/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/orchestrator/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/ordered-read-streams/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/os-homedir/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/os-locale/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/parse-filepath/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/parse-glob/node_modules/is-extglob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/parse-glob/node_modules/is-glob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/parse-glob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/parse-json/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/parse-passwd/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/pascalcase/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/path-exists/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/path-is-absolute/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/path-parse/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/path-root-regex/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/path-root/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/path-type/node_modules/graceful-fs/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/path-type/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/pify/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/pinkie-promise/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/pinkie/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/pkg-conf/node_modules/object-assign/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/pkg-conf/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/plugin-error/node_modules/arr-diff/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/plugin-error/node_modules/arr-union/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/plugin-error/node_modules/array-slice/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/plugin-error/node_modules/extend-shallow/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/plugin-error/node_modules/kind-of/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/plugin-error/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/plur/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/posix-character-classes/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/preserve/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/pretty-hrtime/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/process-nextick-args/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/randomatic/node_modules/is-number/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/randomatic/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/rcfinder/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/rcloader/node_modules/lodash/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/rcloader/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/read-pkg-up/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/read-pkg/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/readable-stream/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/readdirp/examples/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/readdirp/node_modules/graceful-fs/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/readdirp/node_modules/isarray/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/readdirp/node_modules/minimatch/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/readdirp/node_modules/readable-stream/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/readdirp/node_modules/string_decoder/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/readdirp/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/rechoir/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/regex-cache/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/regex-not/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/remove-trailing-separator/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/repeat-element/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/repeat-string/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/replace-ext/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/require-main-filename/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/resolve-dir/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/resolve-url/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/resolve/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/resolve/test/module_dir/zmodules/bbb/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/resolve/test/resolver/baz/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/resolve/test/resolver/browser_field/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/resolve/test/resolver/dot_main/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/resolve/test/resolver/dot_slash_main/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/resolve/test/resolver/incorrect_main/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/ret/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/safe-buffer/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/safe-regex/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/semver/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/sequencify/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/set-blocking/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/set-immediate-shim/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/set-value/node_modules/extend-shallow/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/set-value/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/shelljs/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/sigmund/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/snapdragon-node/node_modules/define-property/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/snapdragon-node/node_modules/is-accessor-descriptor/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/snapdragon-node/node_modules/is-data-descriptor/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/snapdragon-node/node_modules/is-descriptor/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/snapdragon-node/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/snapdragon-util/node_modules/kind-of/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/snapdragon-util/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/snapdragon/node_modules/define-property/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/snapdragon/node_modules/extend-shallow/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/snapdragon/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/source-map-resolve/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/source-map-url/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/source-map/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/sparkles/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/spdx-correct/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/spdx-exceptions/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/spdx-expression-parse/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/spdx-license-ids/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/split-string/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/split/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/sprintf-js/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/stack-trace/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/stampit/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/static-extend/node_modules/define-property/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/static-extend/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/stream-consume/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/string-length/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/string-width/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/string_decoder/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/strip-ansi/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/strip-bom/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/strip-json-comments/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/stylint/node_modules/async/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/stylint/node_modules/glob/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/stylint/node_modules/path-is-absolute/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/stylint/node_modules/strip-json-comments/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/stylint/node_modules/user-home/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/stylint/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/supports-color/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/symbol/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/text-table/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/through/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/through2/node_modules/isarray/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/through2/node_modules/readable-stream/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/through2/node_modules/string_decoder/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/through2/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/tildify/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/time-stamp/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/to-object-path/node_modules/kind-of/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/to-object-path/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/to-regex-range/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/to-regex/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/unc-path-regex/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/unicode-5.2.0/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/union-value/node_modules/extend-shallow/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/union-value/node_modules/set-value/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/union-value/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/unique-stream/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/unset-value/node_modules/has-value/node_modules/isobject/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/unset-value/node_modules/has-value/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/unset-value/node_modules/has-values/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/unset-value/node_modules/isarray/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/unset-value/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/urix/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/use/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/user-home/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/util-deprecate/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/v8flags/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/validate-npm-package-license/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/vinyl-fs/node_modules/clone/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/vinyl-fs/node_modules/readable-stream/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/vinyl-fs/node_modules/through2/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/vinyl-fs/node_modules/vinyl/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/vinyl-fs/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/vinyl/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/wcwidth/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/which/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/window-size/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/async/node_modules/lodash/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/async/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/babel-runtime/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/codependency/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/color-convert/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/color-name/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/color-string/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/colornames/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/colorspace/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/core-js/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/diagnostics/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/enabled/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/env-variable/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/json-stringify-safe/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/kuler/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/le_node/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/lodash/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/logform/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/one-time/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/reconnect-core/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/semver/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/stack-trace/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/text-hex/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/triple-beam/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/winston-transport/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/node_modules/winston/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/winston/scratch/1280/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/wrap-ansi/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/wrappy/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/xtend/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/y18n/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/yargs-parser/package.json" />
+      <path value="$PROJECT_DIR$/next/node_modules/yargs/package.json" />
+      <path value="$PROJECT_DIR$/next/package.json" />
+      <path value="$PROJECT_DIR$/nextreload/package.json" />
+    </packageJsonPaths>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="901" />
+    <option name="y" value="370" />
+    <option name="width" value="1641" />
+    <option name="height" value="905" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="themes" type="b2602c69:ProjectViewProjectNode" />
+              <item name="themes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="themes" type="b2602c69:ProjectViewProjectNode" />
+              <item name="themes" type="462c0819:PsiDirectoryNode" />
+              <item name="next" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="themes" type="b2602c69:ProjectViewProjectNode" />
+              <item name="themes" type="462c0819:PsiDirectoryNode" />
+              <item name="next" type="462c0819:PsiDirectoryNode" />
+              <item name="layout" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="themes" type="b2602c69:ProjectViewProjectNode" />
+              <item name="themes" type="462c0819:PsiDirectoryNode" />
+              <item name="next" type="462c0819:PsiDirectoryNode" />
+              <item name="layout" type="462c0819:PsiDirectoryNode" />
+              <item name="_custom" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="edc30867-af3d-4dd8-a488-1d28223b9a0d" name="Default" comment="" />
+      <created>1534057504142</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1534057504142</updated>
+      <workItem from="1534057506846" duration="2750000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="2750000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="901" y="370" width="1641" height="905" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24984765" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" side_tool="true" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/nextreload/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-687" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/next/layout/_layout.swig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="305">
+          <caret line="25" column="9" lean-forward="true" selection-start-line="25" selection-start-column="6" selection-end-line="25" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nextreload/layout/_layout.swig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="20" column="23" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/next/_config.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1469">
+          <caret line="208" column="2" selection-start-line="208" selection-start-column="2" selection-end-line="208" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nextreload/_config.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="398">
+          <caret line="64" column="31" lean-forward="true" selection-start-line="64" selection-start-column="31" selection-end-line="64" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/next/source/css/_custom/custom.styl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="16" lean-forward="true" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
