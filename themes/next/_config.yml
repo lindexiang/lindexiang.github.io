@@ -273,7 +273,7 @@ post_meta:
 post_wordcount:
   item_text: true
   wordcount: true
-  min2read: false
+  min2read: true
   totalcount: false
   separated_meta: false
 
