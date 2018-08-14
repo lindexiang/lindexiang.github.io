@@ -1,6 +1,5 @@
 ---
 title: JVM-8
-images: /images/摘要配图/
 date: 2018-08-14 00:38:34
 tags: 
   - JVM原理 
