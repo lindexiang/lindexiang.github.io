@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CH">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#fff">
+
+
+
+  
+  
+    
+      
+    
+    
+      
+    
+  <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+  <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-flash.min.css" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.cat.net/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#fff">
+
+
+
+
+
+  <meta name="keywords" content="JVM原理,类文件结构," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ldx's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="深入理解Java虚拟机 第六章 类文件结构class类文件的结构 123456789101112131415161718ClassFile &amp;#123;              u4             magic;              u2             minor_version;              u2             major_version;">
+<meta name="keywords" content="JVM原理,类文件结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解JVM虚拟机 第6章 类文件结构">
+<meta property="og:url" content="https://lindexiang.github.io/2018/07/27/JVM-6/index.html">
+<meta property="og:site_name" content="ldx&#39;s Blog">
+<meta property="og:description" content="深入理解Java虚拟机 第六章 类文件结构class类文件的结构 123456789101112131415161718ClassFile &amp;#123;              u4             magic;              u2             minor_version;              u2             major_version;">
+<meta property="og:locale" content="zh-CH">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15319300709181.jpg">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15325344651412.jpg">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15325344711713.jpg">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15325352191240.jpg">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15325355600922.jpg">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15326196731134.jpg">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15326201581064.jpg">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15326207069614.jpg">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15326221650816.jpg">
+<meta property="og:updated_time" content="2018-08-13T09:44:16.116Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解JVM虚拟机 第6章 类文件结构">
+<meta name="twitter:description" content="深入理解Java虚拟机 第六章 类文件结构class类文件的结构 123456789101112131415161718ClassFile &amp;#123;              u4             magic;              u2             minor_version;              u2             major_version;">
+<meta name="twitter:image" content="http://pbhb4py13.bkt.clouddn.com/15319300709181.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"perspectiveLeftIn","post_header":"fadeIn","post_body":"fadeIn","coll_header":"perspectiveLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://lindexiang.github.io/2018/07/27/JVM-6/"/>
+
+
+
+
+
+  <title>深入理解JVM虚拟机 第6章 类文件结构 | ldx's Blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CH">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/lindexiang">
+      <img style="position: absolute; top: 0; right: 0; border: 0;"
+      src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ldx's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br />
+            
+            top
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-futbol-o"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://lindexiang.github.io/2018/07/27/JVM-6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lindexiang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avator.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ldx's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">深入理解JVM虚拟机 第6章 类文件结构</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-27T09:32:51+08:00">
+                2018-07-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JVM虚拟机原理/" itemprop="url" rel="index">
+                    <span itemprop="name">JVM虚拟机原理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/27/JVM-6/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/07/27/JVM-6/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,046
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  7
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="深入理解Java虚拟机-第六章-类文件结构"><a href="#深入理解Java虚拟机-第六章-类文件结构" class="headerlink" title="深入理解Java虚拟机 第六章 类文件结构"></a>深入理解Java虚拟机 第六章 类文件结构</h1><h2 id="class类文件的结构"><a href="#class类文件的结构" class="headerlink" title="class类文件的结构"></a>class类文件的结构</h2><p><img src="http://pbhb4py13.bkt.clouddn.com/15319300709181.jpg" alt="-c"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">ClassFile &#123;</span><br><span class="line">              u4             magic;</span><br><span class="line">              u2             minor_version;</span><br><span class="line">              u2             major_version;</span><br><span class="line">              u2             constant_pool_count;</span><br><span class="line">              cp_info        constant_pool[constant_pool_count-<span class="number">1</span>]; <span class="comment">//常量池，字面量和符号引用</span></span><br><span class="line">              u2             access_flags; <span class="comment">//访问标志1</span></span><br><span class="line">              u2             this_class; <span class="comment">//全限定名</span></span><br><span class="line">              u2             super_class; <span class="comment">//父类全限定名</span></span><br><span class="line">              u2             interfaces_count; <span class="comment">//接口数量</span></span><br><span class="line">              u2             interfaces[interfaces_count]; <span class="comment">//接口的全限定名</span></span><br><span class="line">              u2             fields_count;</span><br><span class="line">              field_info     fields[fields_count]; <span class="comment">//类或接口的字段</span></span><br><span class="line">              u2             methods_count;</span><br><span class="line">              method_info    methods[methods_count]; <span class="comment">//方法表</span></span><br><span class="line">              u2             attributes_count;</span><br><span class="line">              attribute_info attributes[attributes_count]; <span class="comment">//属性表，code，exception等</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>class文件是以8字节为基础的二进制流，各个数据都是按一定的顺序排列，如果需要占用8字节以上的空间数据，按照高位在前分割存储</li>
+<li>class文件的存储结构只有2种，无符号数和表</li>
+</ol>
+<ul>
+<li>无符号数 基本的数据类型，u1,u2,u4,u8类表示1，2，4，8个字节的无符号数，可以描述数字，索引引用，数字量，按UTF-8编码的字符串。</li>
+<li>表 是由多个无符号数组成的复合数据类型，所有表以_info结尾，整个class就是一张表</li>
+</ul>
+<h2 id="6-2-魔数"><a href="#6-2-魔数" class="headerlink" title="6.2 魔数"></a>6.2 魔数</h2><p>Class文件的头4个字节，作用：确定这个文件是否为一个能被虚拟机接受的Class文件。值为：0xCAFEBABE(咖啡宝宝)</p>
+<h2 id="6-3-版本号"><a href="#6-3-版本号" class="headerlink" title="6.3 版本号"></a>6.3 版本号</h2><p>紧接着魔数的4个字节。第5，6字节是次版本号，第7，8字节是主版本号</p>
+<h2 id="6-4-常量池"><a href="#6-4-常量池" class="headerlink" title="6.4 常量池"></a>6.4 常量池</h2><p>常量池可以理解为class文件的资源仓库。主要存放了两大类常量：字面量和符号引用。</p>
+<blockquote>
+<p>字面量 string类型的字面量和final类型常量<br>符号引用 包括3中类常量  1.类和接口的全限定名  2.字段的名称和描述符  3.方法的名称和描述符</p>
+</blockquote>
+<p>java在虚拟机加载class文件时才会动态链接，class文件中不会保存各个方法，字段的最终布局，这些字段，方法的符号引用需要在运行时的转换才能得到真正的内存入口。在虚拟机运行时会从常量池中得到对应的符号引用，在类创建时解析。<br>常量池的14中常量结构 比如CONSTANT_CLASS_info,代表类或接口的符号引用，表中的name_index指向CONSTANT_UTF8_info类型的数据，这个存放着我们类的全限定名。<br><img src="http://pbhb4py13.bkt.clouddn.com/15325344651412.jpg" alt=""></p>
+<p><img src="http://pbhb4py13.bkt.clouddn.com/15325344711713.jpg" alt=""></p>
+<h2 id="6-5访问标志"><a href="#6-5访问标志" class="headerlink" title="6.5访问标志"></a>6.5访问标志</h2><p>常量池结束后的两个字节是表示访问标志，用于识别类或者接口的访问信息，比如是类还是接口，访问类型，是否final等等。</p>
+<h2 id="6-6类索引，父类索引，接口索引集合"><a href="#6-6类索引，父类索引，接口索引集合" class="headerlink" title="6.6类索引，父类索引，接口索引集合"></a>6.6类索引，父类索引，接口索引集合</h2><p>class文件由这三个数据来确定类的继承关系。类索引(this_class)和父类索引(super_class)是u2类型的数据，接口索引集合是u2类型的数据集合。</p>
+<blockquote>
+<p>类索引可以确定类的全限定名，父类索引可以确定类的父类全限定名，除了Object类，其他类都有1个父类。接口索引集合按照implements顺序从左到右排列在集合索引中</p>
+</blockquote>
+<h2 id="6-7字段表集合"><a href="#6-7字段表集合" class="headerlink" title="6.7字段表集合"></a>6.7字段表集合</h2><p>字段表描述类或者接口中申明的变量。字段包括类变量和实例变量，不包括方法内部的局部变量。字段表的格式如下所示，access_flags是字段的访问标志，public，可变性final，并发性violatile等等。其中name_index和descriptor_index是对常量池的引用，代表字段的简单名称和方法的描述符。<br><img src="http://pbhb4py13.bkt.clouddn.com/15325352191240.jpg" alt=""></p>
+<h3 id="全限定名，简单名称，描述符的区别"><a href="#全限定名，简单名称，描述符的区别" class="headerlink" title="全限定名，简单名称，描述符的区别"></a>全限定名，简单名称，描述符的区别</h3><ol>
+<li>全限定名是<code>org/fenixsoft/clazz/TestClass</code>是类的全限定名</li>
+<li>简单名称 指没有类型和参数修饰符的方法或者字段名称 inc()方法和m字段的简单名称为inc 和m</li>
+<li>字段和方法的描述符的解释如下</li>
+</ol>
+<p>字段的描述符如下所示<br><img src="http://pbhb4py13.bkt.clouddn.com/15325355600922.jpg" alt=""><br>对于数组类型，每一维度用[表示，比如java.lang.string[][]的描述符为[[Ljava/lang/String, int[]的描述符为[I<br>描述符描述方法时按照先参数列表再返回值，比如void inc() 表示为()V 方法<code>java.lang.String toString()</code> 表示为 （）Ljava/lang/String ， 方法int indexOf(char[]source, int sourceOffset)可以表示为([CI)I。</p>
+<h2 id="6-8方法表集合"><a href="#6-8方法表集合" class="headerlink" title="6.8方法表集合"></a>6.8方法表集合</h2><p>方法表和字段表类似，结构也是访问标志，名称索引，描述符索引，属性表集合等。<br><img src="http://pbhb4py13.bkt.clouddn.com/15326196731134.jpg" alt=""></p>
+<p>方法的定义在可以通过方法的访问标志，名称索引，描述符索引表达清楚，<strong>方法内部的代码是经过java的编译器编译成字节码后存放在方法属性集合中的名为“code”的属性中</strong></p>
+<p>在java语言中，重载(override)一个方法，除了和原方法的简单名称一样，还需要和原方法有一个不同的<strong>特征签名</strong>,特征签名是一个方法中不同参数在常量池中的字段符号引用的合集，所以返回值不会包含在特征签名中，所以<strong>无法通过返回值来重载方法</strong></p>
+<h2 id="6-9-属性表"><a href="#6-9-属性表" class="headerlink" title="6.9 属性表"></a>6.9 属性表</h2><p><img src="http://pbhb4py13.bkt.clouddn.com/15326201581064.jpg" alt=""></p>
+<h3 id="code属性"><a href="#code属性" class="headerlink" title="code属性"></a>code属性</h3><p><strong>java代码经过javac编译后会变成字节码指令存储在code属性中</strong>。code属性存放在方法表的属性中，但是不是所有的方法表中都存在code属性，比如接口和抽象类的方法就不存在code属性<br><img src="http://pbhb4py13.bkt.clouddn.com/15326207069614.jpg" alt=""></p>
+<p>max_stack是操作数栈深度的最大值<br>max_locals是局部变量所需的空间 </p>
+<blockquote>
+<p>max_locals的单位值slot，slot是虚拟机为局部变量分配内存的最小单位，除了double和long两者是需要2个slot存放，其他的都是1个slot来存放<br>方法参数包括this，异常处理的参数，即try catch中定义的异常，方法体中的局部变量都是用slot来存放。slot可以被复用，只要保证正确性。</p>
+</blockquote>
+<p>code_length和code是存储的字节码<br>exception是方法中可能抛出的受查异常，也就是throws的异常<br>ConstantValue属性是为静态变量赋值</p>
+<h3 id="异常表"><a href="#异常表" class="headerlink" title="异常表"></a>异常表</h3><p>编译器是采用异常表而不是简单的跳转命令来实现java的异常和finally处理机制<br><img src="http://pbhb4py13.bkt.clouddn.com/15326221650816.jpg" alt=""><br>看出0-9行是正常返回，10-20是exception型的异常返回，21-25是非exception得异常返回。3中路径都有finally中的代码，finally的代码是会嵌套在3种路径的代码之后在return之前。<br>结果是没有异常，返回1，出现exception异常，返回是2，出现exception以外的异常，方法没有返回值。</p>
+<h3 id="字节码指令简介"><a href="#字节码指令简介" class="headerlink" title="字节码指令简介"></a>字节码指令简介</h3><ul>
+<li>加载和存储指令<br>加载和存储指令将数据在栈帧的局部变量表和操作数栈之间传输</li>
+<li>运算指令<br>将连个操作数栈的值进行运算，再将结果存回操作数栈顶</li>
+<li>类型转换<br>转换类型，虚拟机直接支持从小范围类型向大范围类型的安全转换，大数到小数就要使用转换指令</li>
+<li>对象创建和访问指令<br>new，newarray，访问类字段 getstatic 访问非类字段 getfield</li>
+<li>方法调用指令<blockquote>
+<p>invokevirtual 调用方法的虚方法，根据方法的实际类型进行分派<br>invokeinterface 调用接口的方法，搜索实现接口方法的实例对象并找出最合适的方法调用<br>invokespecial 调用特殊的方法，比如实力初始化方法和私有方法和父类方法<br>invokespecial 类方法static<br>invokedynamic 运行时动态解析出引用的方法。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="同步指令"><a href="#同步指令" class="headerlink" title="同步指令"></a>同步指令</h3><p>java虚拟机支持方法级的同步和方法内部指令的同步，两种的同步结构都是使用<strong>管程(Monitor)</strong>来支持。比如<code>synchronize</code>的语句实现是monitorenter和monitorexit来实现，执行的线程必须先成功持有管程，然后才能执行方法，方法最后成功或者非正常完成都会释放管程。<strong>同步方法在执行时跑出异常，在内部无法处理异常，同步方法持有的管程在异常被抛到同步方法之外时也被自动释放</strong>。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JVM原理/" rel="tag"># JVM原理</a>
+          
+            <a href="/tags/类文件结构/" rel="tag"># 类文件结构</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/12/JVM-7/" rel="next" title="深入理解JVM虚拟机 第7章 虚拟机的类加载机制">
+                <i class="fa fa-chevron-left"></i> 深入理解JVM虚拟机 第7章 虚拟机的类加载机制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/07/JVM-12/" rel="prev" title="深入理解JVM原理 第12章 java内存模型和线程">
+                深入理解JVM原理 第12章 java内存模型和线程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avator.gif"
+                alt="lindexiang" />
+            
+              <p class="site-author-name" itemprop="name">lindexiang</p>
+              <p class="site-description motion-element" itemprop="description">this is personal blog</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/lindexiang" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="1027710124@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                神奇的链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://music.163.com/#/user/home?id=86590096" title="😆 网易云音乐 😆" target="_blank">😆 网易云音乐 😆</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://coldplay.com/" title="Coldplay Official Website" target="_blank">Coldplay Official Website</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://elonmusknews.org/" title="获取 Elon Musk 的新闻" target="_blank">获取 Elon Musk 的新闻</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.bilibili.com/video/av6211226/" title="尼古拉·特斯拉：发明了现代世界的人" target="_blank">尼古拉·特斯拉：发明了现代世界的人</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://lindexiang.github.io/about/" title="关于此博客" target="_blank">关于此博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#深入理解Java虚拟机-第六章-类文件结构"><span class="nav-number">1.</span> <span class="nav-text">深入理解Java虚拟机 第六章 类文件结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#class类文件的结构"><span class="nav-number">1.1.</span> <span class="nav-text">class类文件的结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-魔数"><span class="nav-number">1.2.</span> <span class="nav-text">6.2 魔数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-版本号"><span class="nav-number">1.3.</span> <span class="nav-text">6.3 版本号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4-常量池"><span class="nav-number">1.4.</span> <span class="nav-text">6.4 常量池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-5访问标志"><span class="nav-number">1.5.</span> <span class="nav-text">6.5访问标志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-6类索引，父类索引，接口索引集合"><span class="nav-number">1.6.</span> <span class="nav-text">6.6类索引，父类索引，接口索引集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-7字段表集合"><span class="nav-number">1.7.</span> <span class="nav-text">6.7字段表集合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#全限定名，简单名称，描述符的区别"><span class="nav-number">1.7.1.</span> <span class="nav-text">全限定名，简单名称，描述符的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-8方法表集合"><span class="nav-number">1.8.</span> <span class="nav-text">6.8方法表集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-9-属性表"><span class="nav-number">1.9.</span> <span class="nav-text">6.9 属性表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#code属性"><span class="nav-number">1.9.1.</span> <span class="nav-text">code属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异常表"><span class="nav-number">1.9.2.</span> <span class="nav-text">异常表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字节码指令简介"><span class="nav-number">1.9.3.</span> <span class="nav-text">字节码指令简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步指令"><span class="nav-number">1.9.4.</span> <span class="nav-text">同步指令</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lindexiang</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user-circle-o"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      <i class="fa fa-eye"></i>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.1/velocity.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.1/velocity.ui.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'CGD5uAsfibJi6l5bykvuxJQQ-gzGzoHsz',
+        appKey: 'T6VMmohj66z8YpBlxXgEsezd',
+        placeholder: '快来评论啊 小哥',
+        avatar:'mm',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
