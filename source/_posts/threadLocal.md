@@ -124,6 +124,7 @@ pool-1-thread-1tlB 的新值 =  2035779705
 从运行结果中看出`tlA`的值被多个线程共享了，其实是因为线程池用的都是同一个线程，所以访问的是共享的变量。 接着我们看其实现原理
 ## ThreadLocal的源码解析
 
+https://www.cnblogs.com/nullzx/p/7553538.html
 
 
 
