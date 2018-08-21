@@ -5,13 +5,14 @@ tags:
   - JVM原理 
   - 类文件结构
 categories: JVM虚拟机原理
-image: http://pbhb4py13.bkt.clouddn.com/humphrey-muleba-774641-unsplash.jpg
+image: 
 
 ---
 
 # 深入理解Java虚拟机 第六章 类文件结构
 ## class类文件的结构
 ![-c](http://pbhb4py13.bkt.clouddn.com/15319300709181.jpg)
+<!--more-->
 
 
 ```java
@@ -37,7 +38,6 @@ ClassFile {
 
 1. class文件是以8字节为基础的二进制流，各个数据都是按一定的顺序排列，如果需要占用8字节以上的空间数据，按照高位在前分割存储
 2. class文件的存储结构只有2种，无符号数和表
-
 
 * 无符号数 基本的数据类型，u1,u2,u4,u8类表示1，2，4，8个字节的无符号数，可以描述数字，索引引用，数字量，按UTF-8编码的字符串。
 * 表 是由多个无符号数组成的复合数据类型，所有表以_info结尾，整个class就是一张表

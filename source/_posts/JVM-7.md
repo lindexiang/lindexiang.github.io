@@ -12,6 +12,7 @@ image: http://pbhb4py13.bkt.clouddn.com/damon-lam-774304-unsplash.jpg
 # 虚拟机类加载机制
 
 >虚拟机类加载机制虚拟机把描述类的数据从class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。Java语言里，类型的加载和连接过程是在程序运行期间完成的。
+<!--more-->
 
 ## 类加载的时机
 ![C03B21D5-7E81-419C-9C63-76CCE16DE2A8](http://pbhb4py13.bkt.clouddn.com/C03B21D5-7E81-419C-9C63-76CCE16DE2A8.png)
