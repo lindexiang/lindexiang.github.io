@@ -134,21 +134,21 @@
 
 
 
-<meta name="description" content="第8章 虚拟机字节码执行引擎 JAVA虚拟机规范中规定了虚拟机字节码执行引擎的概念模型。从概念模型的角度讲解虚拟机的方法调用和字节码执行。  运行时栈帧结构栈帧时用于支持虚拟机进行方法调用和方法执行的数据结构，是虚拟机运行时的数据区虚拟机栈的栈元素。栈帧中保存了方法调用的局部变量表，操作数栈，动态链接和方法返回地址等信息。每一个方法的开始执行到执行完毕对应着栈帧在虚拟机栈中的入栈和出栈操作。一个线">
+<meta name="description" content="第8章 虚拟机字节码执行引擎 JAVA虚拟机规范中规定了虚拟机字节码执行引擎的概念模型。从概念模型的角度讲解虚拟机的方法调用和字节码执行。">
 <meta name="keywords" content="JVM原理,虚拟机字节码执行引擎">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入理解JVM虚拟机 第8章 虚拟机字节码执行引擎">
 <meta property="og:url" content="https://lindexiang.github.io/2018/08/14/JVM-8/index.html">
 <meta property="og:site_name" content="ldx&#39;s Blog">
-<meta property="og:description" content="第8章 虚拟机字节码执行引擎 JAVA虚拟机规范中规定了虚拟机字节码执行引擎的概念模型。从概念模型的角度讲解虚拟机的方法调用和字节码执行。  运行时栈帧结构栈帧时用于支持虚拟机进行方法调用和方法执行的数据结构，是虚拟机运行时的数据区虚拟机栈的栈元素。栈帧中保存了方法调用的局部变量表，操作数栈，动态链接和方法返回地址等信息。每一个方法的开始执行到执行完毕对应着栈帧在虚拟机栈中的入栈和出栈操作。一个线">
+<meta property="og:description" content="第8章 虚拟机字节码执行引擎 JAVA虚拟机规范中规定了虚拟机字节码执行引擎的概念模型。从概念模型的角度讲解虚拟机的方法调用和字节码执行。">
 <meta property="og:locale" content="zh-CH">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15332259001761.jpg">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15332284712969.jpg">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/EC2BA283-699C-43FB-BC49-A190ECADB512.png">
-<meta property="og:updated_time" content="2018-08-15T02:35:16.153Z">
+<meta property="og:updated_time" content="2018-08-16T02:31:21.631Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解JVM虚拟机 第8章 虚拟机字节码执行引擎">
-<meta name="twitter:description" content="第8章 虚拟机字节码执行引擎 JAVA虚拟机规范中规定了虚拟机字节码执行引擎的概念模型。从概念模型的角度讲解虚拟机的方法调用和字节码执行。  运行时栈帧结构栈帧时用于支持虚拟机进行方法调用和方法执行的数据结构，是虚拟机运行时的数据区虚拟机栈的栈元素。栈帧中保存了方法调用的局部变量表，操作数栈，动态链接和方法返回地址等信息。每一个方法的开始执行到执行完毕对应着栈帧在虚拟机栈中的入栈和出栈操作。一个线">
+<meta name="twitter:description" content="第8章 虚拟机字节码执行引擎 JAVA虚拟机规范中规定了虚拟机字节码执行引擎的概念模型。从概念模型的角度讲解虚拟机的方法调用和字节码执行。">
 <meta name="twitter:image" content="http://pbhb4py13.bkt.clouddn.com/15332259001761.jpg">
 
 
@@ -513,7 +513,7 @@
 
       
         <h1 id="第8章-虚拟机字节码执行引擎"><a href="#第8章-虚拟机字节码执行引擎" class="headerlink" title="第8章 虚拟机字节码执行引擎"></a>第8章 虚拟机字节码执行引擎</h1><blockquote>
-<p>JAVA虚拟机规范中规定了虚拟机字节码执行引擎的概念模型。从概念模型的角度讲解虚拟机的方法调用和字节码执行。</p>
+<p>JAVA虚拟机规范中规定了虚拟机字节码执行引擎的概念模型。从概念模型的角度讲解虚拟机的方法调用和字节码执行。<br><a id="more"></a></p>
 </blockquote>
 <h2 id="运行时栈帧结构"><a href="#运行时栈帧结构" class="headerlink" title="运行时栈帧结构"></a>运行时栈帧结构</h2><p>栈帧时用于支持虚拟机进行方法调用和方法执行的数据结构，是虚拟机运行时的数据区<strong>虚拟机栈</strong>的栈元素。<strong>栈帧中保存了方法调用的局部变量表，操作数栈，动态链接和方法返回地址等信息。</strong>每一个方法的开始执行到执行完毕对应着栈帧在虚拟机栈中的入栈和出栈操作。<br>一个线程中的方法调用链可能很长，在活动线程中，只有栈顶的栈帧才是有效的。<br><img src="http://pbhb4py13.bkt.clouddn.com/15332259001761.jpg" alt=""></p>
 <h3 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h3><p>局部变量表是一组变量值存储空间，主要来保存方法参数和方法内定义的局部变量。在java代码编译时确定了该方法所需分配的局部变量表的最大容量。局部变量的存储单位是slot，一个Slot可以存放一个32位以内（boolean、byte、char、short、int、float、reference和returnAddress）的数据类型，reference类型表示一个对象实例的引用，returnAddress已经很少见了，可以忽略。对于64位的数据类型，long和double采用高位对齐的方式分配连续的两个slot。</p>
@@ -599,8 +599,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/08/14/JVM-13/" rel="prev" title="JVM-13">
-                JVM-13 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/08/14/JVM-13/" rel="prev" title="深入理解JVM虚拟机 第13章 线程安全和锁优化">
+                深入理解JVM虚拟机 第13章 线程安全和锁优化 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -687,7 +687,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -698,7 +698,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -709,7 +709,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>

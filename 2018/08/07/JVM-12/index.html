@@ -148,7 +148,7 @@
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/WechatIMG92.jpeg">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/WechatIMG93.jpeg">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/WechatIMG94.jpeg">
-<meta property="og:updated_time" content="2018-08-12T03:55:16.361Z">
+<meta property="og:updated_time" content="2018-08-25T06:18:42.729Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解JVM原理 第12章 java内存模型和线程">
 <meta name="twitter:description" content="java内存模型和线程 JVM的内存模型是为了解决虚拟机实现多线程，但是多线程之间共享和竞争数据导致的问题。  硬件的效率与一致性计算机的存储设备和cpu的运算能力之间存在数量级之间的差距，所以现代计算机系统会在内存和cpu之间再插入告诉缓存cache，cache的速度和cpu的速度一致。这样的好处是每次运算都会先将数据复制到缓存中，在进行cpu计算，计算结束后再讲结果从缓存同步到内存中，这个cp">
@@ -478,7 +478,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,937
+                  4,361
                 </span>
               
 
@@ -494,7 +494,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  14
+                  16
                 </span>
               
             </div>
@@ -526,11 +526,11 @@
 </ol>
 <p><img src="http://pbhb4py13.bkt.clouddn.com/D8A0CA7A-D144-4795-B7DF-7113C29AA36F.png" alt="D8A0CA7A-D144-4795-B7DF-7113C29AA36F"></p>
 <p>注意：</p>
-<ol>
+<ul>
 <li>reference变量是局部变量中，是线程私有的，但是它的实例对象是共享的。</li>
 <li>拷贝副本不会一次性拷贝10m的变量。volatile变量还是有工作内存的拷贝，但是它的操作顺序由特殊的规定，使它的操作就像在主内存中访问。</li>
 <li>这里的主内存、工作内存与Java内存区域的Java堆、栈、方法区不是同一层次内存划分。</li>
-</ol>
+</ul>
 <h2 id="内存间交互操作"><a href="#内存间交互操作" class="headerlink" title="内存间交互操作"></a>内存间交互操作</h2><p>java内存模型规定了如下8种操作来完成主内存和工作内存之间的数据交互，虚拟机保证如下8种操作是原子性的。</p>
 <ol>
 <li>lock 作用主内存的变量 把一个变量标识为线程独占的状态</li>
@@ -549,36 +549,43 @@
 <li>没有发生assign，不能将工作内存的变量同步到主内存</li>
 <li>lock时会清空工作内存的值，cpu需要使用这个值时必须重新loan 在unlock之前，会先将变量同步到主内存。</li>
 </ol>
-<h3 id="volatile变量的特殊规定"><a href="#volatile变量的特殊规定" class="headerlink" title="volatile变量的特殊规定"></a>volatile变量的特殊规定</h3><p><strong>在使用了volatile变量后，当一个线程修改了这个值，另一个线程都会立刻得知。</strong> 如果是普通的变量，只有A线程修改了值，写回主线程，B线程再读取内存的值才可以。<br>==volatile的操作规定，v和w都是volatile变量：</p>
+<p>如下的4条看上去是原子性的操作其中只有第一个是原子性，JVM保证简单的内存赋值是原子性，<code>y=x</code>首先要读取<code>x</code>变量的值，再将<code>x</code>的值赋给<code>y</code>，<code>x++</code>和<code>x=x+1</code>肯定不是原子性的操作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">1</span></span><br><span class="line">y = x</span><br><span class="line">x++</span><br><span class="line">x = x + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<h3 id="volatile变量的特殊规定"><a href="#volatile变量的特殊规定" class="headerlink" title="volatile变量的特殊规定"></a>volatile变量的特殊规定</h3><p><strong>在使用了volatile变量后，当一个线程修改了这个值，另一个线程都会立刻得知。</strong> 如果是普通的变量，只有A线程修改了值，写回主线程，B线程再读取内存的值才可以。<br>volatile的操作规定，v和w都是volatile变量：</p>
 <ol>
 <li>线程T每次use变量v之前都要执行loan操作，loan操作和read必须同时出现。即（在工作内存中，每次使用v都会从主内存刷新得到最新的值，来保证能看见其他线程对变量v所做的改变。）</li>
 <li>线程assign后必须执行store，store和write会同步出现，即(在工作内存中，每次修改v后必须同步回主内存中，用来保证其他线程能立即看见自己对变量v的修改)</li>
-<li>保证volatile修饰的变量不会指令重排序优化，保证代码的执行顺序和程序的顺序相同。==</li>
+<li>保证volatile修饰的变量不会指令重排序优化，保证代码的执行顺序和程序的顺序相同。</li>
 </ol>
-<p>volatile保证了指令不会被乱序，如果initialized没有使用volatile，那么可能由于指令重排序导致线程A的最后的initialized = true被提前执行，则线程B使用配置文件会出错。<br><img src="http://pbhb4py13.bkt.clouddn.com/ED9DBF9E-4748-413C-904A-C66E8A5797A1.png" alt="ED9DBF9E-4748-413C-904A-C66E8A5797A1"></p>
+<p><strong>volatile保证在将修改同步到内存之前，所有之前的操作都已经执行完毕，形成指令重拍序无法越过内存屏障</strong>，即保证了volatile之前的指令都已经执行完毕，在volatile之后的指令都没有执行。但是不保证其他指令的重拍序。<br><br>volatile保证了指令不会被乱序，如果initialized没有使用volatile，那么可能由于指令重排序导致线程A的最后的initialized = true被提前执行，则线程B使用配置文件会出错。<br><img src="http://pbhb4py13.bkt.clouddn.com/ED9DBF9E-4748-413C-904A-C66E8A5797A1.png" alt="ED9DBF9E-4748-413C-904A-C66E8A5797A1"></p>
 <h3 id="volatile解决DCL-双重检查-问题-单例"><a href="#volatile解决DCL-双重检查-问题-单例" class="headerlink" title="volatile解决DCL(双重检查)问题 单例"></a>volatile解决DCL(双重检查)问题 单例</h3><p>使用DCL写的懒汉式单例模式如下所示</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(instance == <span class="keyword">null</span>) &#123; <span class="comment">//1</span></span><br><span class="line">			synchonorized(Singleton.class) &#123; <span class="comment">//2</span></span><br><span class="line">				<span class="keyword">if</span>(instance == <span class="keyword">null</span>) &#123; <span class="comment">//3</span></span><br><span class="line">					instance = <span class="keyword">new</span> Singleton(); <span class="comment">//4</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> instance;  <span class="comment">//5</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.age = <span class="number">18</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123; <span class="comment">//6</span></span><br><span class="line">		<span class="keyword">return</span> age;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在一般情况下该单例模式可以正常工作，但是在多线程调用该单例还是会出现并发的问题。<strong>因为可能线程会得到一个并未完全构造完成的对象。</strong>比如当A线程访问getinstance()方法，在//1出instance == null 返回true，获得锁进入同步代码块，此时线程B也访问getInstance()方法，线程B在//1处instance==null可能会返回false，<strong>但是此时instance并未完全初始化完成，线程B得到一个完全初始化的instance，</strong>线程B在调用//6时可能不能拿到age=18的结果，此时DCL的问题就出来了。<strong>问题就出在指令重排序的问题。</strong><br>问题出现的原因<br>==instance = new Singleton()这一句话不是原子操作，它的操作可以分为如下三个部分：</p>
+<p>在一般情况下该单例模式可以正常工作，但是在多线程调用该单例还是会出现并发的问题。<strong>因为可能线程会得到一个并未完全构造完成的对象。</strong>比如当A线程访问getinstance()方法，在//1出instance == null 返回true，获得锁进入同步代码块，此时线程B也访问getInstance()方法，线程B在//1处instance==null可能会返回false，<strong>但是此时instance并未完全初始化完成，线程B得到一个完全初始化的instance，</strong>线程B在调用//6时可能不能拿到age=18的结果，此时DCL的问题就出来了。<strong>问题就出在指令重排序的问题。</strong></p>
+<h4 id="问题出现的原因"><a href="#问题出现的原因" class="headerlink" title="问题出现的原因"></a>问题出现的原因</h4><p><strong>instance = new Singleton()这一句话不是原子操作，它的操作可以分为如下三个部分：</strong></p>
 <ol>
 <li>分配内存空间</li>
 <li>实例化对象instance</li>
-<li>把instance引用指向的已分配的内存空间，此时instance有了内存地址，不再是null了==</li>
+<li>把instance引用指向的已分配的内存空间，此时instance有了内存地址，不再是null了</li>
 </ol>
 <p><em>java允许对指令进行重排序，那么以上3步的执行顺序就可能是1-3-2，在这种情况下如果线程A执行完1-3后被阻塞了，此时线程B进来获得了instance的引用，因此此时instance不为空，直接到//1就返回了获得了没有实例完全的对象。</em></p>
-<p>使用volatile可以避免这个问题，因为volatile的对象保证不会被指令重拍序，在操作volatile对象之前的代码一定是执行完毕并且可见，在变量操作之后的代码一定是还没有被执行的。<br>所以当instance被定义成volatile时，保证创建的顺序一定是1-2-3，instance一定是null或者完全初始化完成的对象。<br>其实可以创建成一个static类并获取对象，因为虚拟机会自动保证静态变量的并发。</p>
+<p>使用volatile可以避免这个问题，因为volatile的对象保证不会被指令重拍序，在操作volatile对象之前的代码一定是执行完毕并且可见，在变量操作之后的代码一定是还没有被执行的。<br>所以当instance被定义成volatile时，保证创建的顺序一定是1-2-3，instance一定是null或者完全初始化完成的对象。<br>其实可以创建成一个static类并获取对象，因为虚拟机会自动保证静态变量的并发。<br><strong>synchonorized不会对分配内存的操作防止指令重拍序，它只能保证在它离开同步代码块前把变化的变量都刷新回主内存。所以会存在instance不为null，但是对象还没有构造完成。</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(instance == <span class="keyword">null</span>) &#123; <span class="comment">//1</span></span><br><span class="line">			synchonorized(Singleton.class) &#123; <span class="comment">//2</span></span><br><span class="line">				<span class="keyword">if</span>(instance == <span class="keyword">null</span>) &#123; <span class="comment">//3</span></span><br><span class="line">					instance = <span class="keyword">new</span> Singleton(); <span class="comment">//4</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> instance;  <span class="comment">//5</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.age = <span class="number">18</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123; <span class="comment">//6</span></span><br><span class="line">		<span class="keyword">return</span> age;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="volatile和synchonorized的区别"><a href="#volatile和synchonorized的区别" class="headerlink" title="volatile和synchonorized的区别"></a>volatile和synchonorized的区别</h3><ol>
+<li>volatile和synchonorized都保证了可见性，volatile是通过强制刷新到主内存保证，synchonorized是对一个变量进行unlock时必须先同步到主内存中。</li>
+<li>volatile防止了指令重拍序，synchonorized保证了两个线程进入同步代码块的先后性保证了有序性，两者的原理有本质的区别。</li>
+</ol>
 <h3 id="volatile变量在并发下不安全"><a href="#volatile变量在并发下不安全" class="headerlink" title="volatile变量在并发下不安全"></a>volatile变量在并发下不安全</h3><p>volatile变量规定对所有线程都是立即可见的，对volatile的所有写操作都是可以立刻反应到其他的线程中。虽然volatile变量不存在一致性问题，但是java运算操作不是原子性的，所以volatile变量的运算不是安全的。还volatile变量禁止指令重排序。比如自加操作。race++这个过程需要有多个步骤，将race的值取到栈顶，这个过程是正确的，但是接下来的自加操作中如果有其他的线程往主内存写数据就会使数据写回出错。写回去的值可能会比理论值小。<br><strong>什么情况下可以使用volatile变量</strong></p>
 <ol>
 <li>运算结果不依赖当前值，或者确保只能一个线程可以修改变量的值<br>2。 变量不需要其他的状态变量共同参与不变约束。</li>
 </ol>
 <p>##原子性，可见性，有序性<br>java的内存模型都是围绕着在并发过程中如何处理原子性，可见性，有序性三个特征建立的</p>
 <ol>
-<li>==原子性== &nbsp;&nbsp;&nbsp;&nbsp;java内存模型直接保证8个基本操作是原子性的，如果要在大范围内保证原子性，必须使用monitorenter和monitorexit来隐式使用，这个反映到java代码就是同步代码块synchonorized关键字，即synchonorized的代码是原子性的。</li>
-<li>==可见性== &nbsp;&nbsp;&nbsp;&nbsp;一个线程修改了变量的值，其他的线程能立刻得到这个新的值。如volatile变量，除了这个变量，synchronized和final也可以完成可见性。final字段初始化后就能立刻被其他线程访问。</li>
-<li>==有序性== &nbsp;&nbsp;&nbsp;&nbsp;线程内表现为串行的操作，在其他的线程看来是无序的。包括指令重排序和主内存同步延迟现象。</li>
+<li>原子性 &nbsp;&nbsp;&nbsp;&nbsp;java内存模型直接保证8个基本操作是原子性的，如果要在大范围内保证原子性，必须使用monitorenter和monitorexit来隐式使用，这个反映到java代码就是同步代码块synchonorized关键字，即synchonorized的代码是原子性的。</li>
+<li>可见性 &nbsp;&nbsp;&nbsp;&nbsp;一个线程修改了变量的值，其他的线程能立刻得到这个新的值。如volatile变量，除了这个变量，synchronized和final也可以完成可见性。final字段初始化后就能立刻被其他线程访问。</li>
+<li>有序性 &nbsp;&nbsp;&nbsp;&nbsp;线程内表现为串行的操作，在其他的线程看来是无序的。包括指令重排序和主内存同步延迟现象。</li>
 </ol>
 <blockquote>
-<p>对于可见性，violatile保证可见性，synchonorized和final也能保证可见性。synchonorized同步快的可见性是“对一个对象执行unlock前必须将变量同步到主内存(执行store，write)中”保证，<strong>我理解同步块是保证了锁定的对象的可见性</strong>。final关键字的可见性是被final修饰的字段在构造器中一旦被初始化完成，并且构造器没有把“this”引用传递出去，那么其他线程就能得到正确的值。==this指针逃逸是一件危险的事情，其他线程可能访问到初始化了一半的对象。==<br>对于有序性，violatile和synchonorized都能保证有序性，==violatile是防止指令重排序，synchonorized是由一个变量在同一时刻只能一个线程对其lock操作的这个规则获得的==。则决定了同一个锁的两个同步快只能串行的进入。</p>
+<p>对于可见性，violatile保证可见性，synchonorized和final也能保证可见性。synchonorized同步快的可见性是“对一个对象执行unlock前必须将变量同步到主内存(执行store，write)中”保证，<strong>我理解同步块是保证了在同步代码块中变化的变量都必须刷新到主内存中才会释放锁</strong>。final关键字的可见性是被final修饰的字段在构造器中一旦被初始化完成，并且构造器没有把“this”引用传递出去，那么其他线程就能得到正确的值。this指针逃逸是一件危险的事情，其他线程可能访问到初始化了一半的对象。<br>对于有序性，violatile和synchonorized都能保证有序性，violatile是防止指令重排序，synchonorized是由一个变量在同一时刻只能一个线程对其lock操作的这个规则获得的==。则决定了同一个锁的两个同步快只能串行的进入。<strong>ReentrantLock是使用CAS来保证同步性，也能保证原子性，可见性，有序性。通过内置的volatile state来保证。因为volatile会保证先行发生原则。也可以理解为读取volatile前将其之前的变量都刷新到主内存中，并使其他的缓存失效</strong></p>
 </blockquote>
 <p>###先行发生原则<br>虚拟机可以对不满足先行原则的指令进行任意顺序的重排序。满足先行发生原则的规则如下：</p>
 <ol>
@@ -591,7 +598,7 @@
 <li>对象终结原则 对象构造函数执行完毕先于finilized()方法</li>
 <li>传递性 A先于B，B先于C。保证A先于C</li>
 </ol>
-<h2 id="java和线程"><a href="#java和线程" class="headerlink" title="java和线程"></a>java和线程</h2><p>线程是比进程轻量级的调度单位。各个线程可以共享进程的资源(内存地址，文件I/O)等，又可以独立调度。==线程是CPU调度的基本单位==。<br>实现线程一般有3种实现方式，<strong>内核线程实现，用户线程实现，用户线程加轻量级进程混合实现</strong>。</p>
+<h2 id="java和线程"><a href="#java和线程" class="headerlink" title="java和线程"></a>java和线程</h2><p>线程是比进程轻量级的调度单位。各个线程可以共享进程的资源(内存地址，文件I/O)等，又可以独立调度。<strong>线程是CPU调度的基本单位</strong><br>实现线程一般有3种实现方式，<strong>内核线程实现，用户线程实现，用户线程加轻量级进程混合实现</strong>。</p>
 <ol>
 <li>内核线程&nbsp;&nbsp;&nbsp;&nbsp;内核线程(Kernal-Level Thread KLT) 由操作系统内核支持的线程，这种线程由内核来完成线程切换，内核通过<strong>调度器</strong>对线程进行调度，支持多线程的内核叫做多线程内核。<strong>程序一般会使用内核线程的一种高级接口–轻量级进程(Light Weight Process LWP)轻量级进程就是通常意义的线程，每个轻量级进程都是由一个内核线程支持，因此先有内核线程，才能有轻量级进程。</strong>之间的数量关系为1：1。==内核线程耗时好资源，无法创建大规模的内核线程，并发数量低。==</li>
 <li>用户线程&nbsp;&nbsp;&nbsp;&nbsp;系统内核感知不到用户线程的存在。线程的创建，同步，销毁，调度都由用户态完成。优点：快速低耗，可以支持更大规模的线程数量。缺点：很难实现线程的调度。==因为CPU只会调度内核线程，用户线程没有内核线程的支持无法处理切换和调度。这个部分都需要用户自己去实现，比如当一个线程死循环不放弃CPU资源，其他线程将用户无法得到执行。==</li>
@@ -755,7 +762,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -766,7 +773,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -777,7 +784,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -862,7 +869,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#java内存模型和线程"><span class="nav-number">1.</span> <span class="nav-text">java内存模型和线程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#硬件的效率与一致性"><span class="nav-number">1.1.</span> <span class="nav-text">硬件的效率与一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java内存模型"><span class="nav-number">1.2.</span> <span class="nav-text">java内存模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存间交互操作"><span class="nav-number">1.3.</span> <span class="nav-text">内存间交互操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile变量的特殊规定"><span class="nav-number">1.3.1.</span> <span class="nav-text">volatile变量的特殊规定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile解决DCL-双重检查-问题-单例"><span class="nav-number">1.3.2.</span> <span class="nav-text">volatile解决DCL(双重检查)问题 单例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile变量在并发下不安全"><span class="nav-number">1.3.3.</span> <span class="nav-text">volatile变量在并发下不安全</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java和线程"><span class="nav-number">1.4.</span> <span class="nav-text">java和线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#java线程调度"><span class="nav-number">1.4.1.</span> <span class="nav-text">java线程调度</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#java内存模型和线程"><span class="nav-number">1.</span> <span class="nav-text">java内存模型和线程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#硬件的效率与一致性"><span class="nav-number">1.1.</span> <span class="nav-text">硬件的效率与一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java内存模型"><span class="nav-number">1.2.</span> <span class="nav-text">java内存模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存间交互操作"><span class="nav-number">1.3.</span> <span class="nav-text">内存间交互操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile变量的特殊规定"><span class="nav-number">1.3.1.</span> <span class="nav-text">volatile变量的特殊规定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile解决DCL-双重检查-问题-单例"><span class="nav-number">1.3.2.</span> <span class="nav-text">volatile解决DCL(双重检查)问题 单例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#问题出现的原因"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">问题出现的原因</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile和synchonorized的区别"><span class="nav-number">1.3.3.</span> <span class="nav-text">volatile和synchonorized的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile变量在并发下不安全"><span class="nav-number">1.3.4.</span> <span class="nav-text">volatile变量在并发下不安全</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java和线程"><span class="nav-number">1.4.</span> <span class="nav-text">java和线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#java线程调度"><span class="nav-number">1.4.1.</span> <span class="nav-text">java线程调度</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

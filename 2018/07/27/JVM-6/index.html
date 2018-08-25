@@ -134,13 +134,13 @@
 
 
 
-<meta name="description" content="深入理解Java虚拟机 第六章 类文件结构class类文件的结构 123456789101112131415161718ClassFile &amp;#123;              u4             magic;              u2             minor_version;              u2             major_version;">
+<meta name="description" content="深入理解Java虚拟机 第六章 类文件结构class类文件的结构">
 <meta name="keywords" content="JVM原理,类文件结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入理解JVM虚拟机 第6章 类文件结构">
 <meta property="og:url" content="https://lindexiang.github.io/2018/07/27/JVM-6/index.html">
 <meta property="og:site_name" content="ldx&#39;s Blog">
-<meta property="og:description" content="深入理解Java虚拟机 第六章 类文件结构class类文件的结构 123456789101112131415161718ClassFile &amp;#123;              u4             magic;              u2             minor_version;              u2             major_version;">
+<meta property="og:description" content="深入理解Java虚拟机 第六章 类文件结构class类文件的结构">
 <meta property="og:locale" content="zh-CH">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15319300709181.jpg">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15325344651412.jpg">
@@ -151,10 +151,10 @@
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15326201581064.jpg">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15326207069614.jpg">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15326221650816.jpg">
-<meta property="og:updated_time" content="2018-08-13T09:44:16.116Z">
+<meta property="og:updated_time" content="2018-08-25T06:18:42.730Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解JVM虚拟机 第6章 类文件结构">
-<meta name="twitter:description" content="深入理解Java虚拟机 第六章 类文件结构class类文件的结构 123456789101112131415161718ClassFile &amp;#123;              u4             magic;              u2             minor_version;              u2             major_version;">
+<meta name="twitter:description" content="深入理解Java虚拟机 第六章 类文件结构class类文件的结构">
 <meta name="twitter:image" content="http://pbhb4py13.bkt.clouddn.com/15319300709181.jpg">
 
 
@@ -518,7 +518,7 @@
       
 
       
-        <h1 id="深入理解Java虚拟机-第六章-类文件结构"><a href="#深入理解Java虚拟机-第六章-类文件结构" class="headerlink" title="深入理解Java虚拟机 第六章 类文件结构"></a>深入理解Java虚拟机 第六章 类文件结构</h1><h2 id="class类文件的结构"><a href="#class类文件的结构" class="headerlink" title="class类文件的结构"></a>class类文件的结构</h2><p><img src="http://pbhb4py13.bkt.clouddn.com/15319300709181.jpg" alt="-c"></p>
+        <h1 id="深入理解Java虚拟机-第六章-类文件结构"><a href="#深入理解Java虚拟机-第六章-类文件结构" class="headerlink" title="深入理解Java虚拟机 第六章 类文件结构"></a>深入理解Java虚拟机 第六章 类文件结构</h1><h2 id="class类文件的结构"><a href="#class类文件的结构" class="headerlink" title="class类文件的结构"></a>class类文件的结构</h2><p><img src="http://pbhb4py13.bkt.clouddn.com/15319300709181.jpg" alt="-c"><br><a id="more"></a></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">ClassFile &#123;</span><br><span class="line">              u4             magic;</span><br><span class="line">              u2             minor_version;</span><br><span class="line">              u2             major_version;</span><br><span class="line">              u2             constant_pool_count;</span><br><span class="line">              cp_info        constant_pool[constant_pool_count-<span class="number">1</span>]; <span class="comment">//常量池，字面量和符号引用</span></span><br><span class="line">              u2             access_flags; <span class="comment">//访问标志1</span></span><br><span class="line">              u2             this_class; <span class="comment">//全限定名</span></span><br><span class="line">              u2             super_class; <span class="comment">//父类全限定名</span></span><br><span class="line">              u2             interfaces_count; <span class="comment">//接口数量</span></span><br><span class="line">              u2             interfaces[interfaces_count]; <span class="comment">//接口的全限定名</span></span><br><span class="line">              u2             fields_count;</span><br><span class="line">              field_info     fields[fields_count]; <span class="comment">//类或接口的字段</span></span><br><span class="line">              u2             methods_count;</span><br><span class="line">              method_info    methods[methods_count]; <span class="comment">//方法表</span></span><br><span class="line">              u2             attributes_count;</span><br><span class="line">              attribute_info attributes[attributes_count]; <span class="comment">//属性表，code，exception等</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ol>
 <li>class文件是以8字节为基础的二进制流，各个数据都是按一定的顺序排列，如果需要占用8字节以上的空间数据，按照高位在前分割存储</li>
@@ -712,7 +712,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -723,7 +723,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -734,7 +734,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>

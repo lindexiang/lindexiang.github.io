@@ -134,21 +134,21 @@
 
 
 
-<meta name="description" content="虚拟机类加载机制 虚拟机类加载机制虚拟机把描述类的数据从class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。Java语言里，类型的加载和连接过程是在程序运行期间完成的。  类加载的时机 类加载的生命周期：  加载 验证 准备 解析 初始化 使用 卸载加载，验证，准备，初始化，卸载的顺序是确定的，为了支持java的动态绑定，解析过程可以在初始化之">
+<meta name="description" content="虚拟机类加载机制 虚拟机类加载机制虚拟机把描述类的数据从class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。Java语言里，类型的加载和连接过程是在程序运行期间完成的。">
 <meta name="keywords" content="JVM原理,虚拟机类加载机制">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入理解JVM虚拟机 第7章 虚拟机的类加载机制">
 <meta property="og:url" content="https://lindexiang.github.io/2018/07/12/JVM-7/index.html">
 <meta property="og:site_name" content="ldx&#39;s Blog">
-<meta property="og:description" content="虚拟机类加载机制 虚拟机类加载机制虚拟机把描述类的数据从class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。Java语言里，类型的加载和连接过程是在程序运行期间完成的。  类加载的时机 类加载的生命周期：  加载 验证 准备 解析 初始化 使用 卸载加载，验证，准备，初始化，卸载的顺序是确定的，为了支持java的动态绑定，解析过程可以在初始化之">
+<meta property="og:description" content="虚拟机类加载机制 虚拟机类加载机制虚拟机把描述类的数据从class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。Java语言里，类型的加载和连接过程是在程序运行期间完成的。">
 <meta property="og:locale" content="zh-CH">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/C03B21D5-7E81-419C-9C63-76CCE16DE2A8.png">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15310663051213.jpg">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/F8F341CD-91EF-4A78-A9BD-F71B50F78C0C.png">
-<meta property="og:updated_time" content="2018-08-13T09:44:16.117Z">
+<meta property="og:updated_time" content="2018-08-25T06:18:42.731Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解JVM虚拟机 第7章 虚拟机的类加载机制">
-<meta name="twitter:description" content="虚拟机类加载机制 虚拟机类加载机制虚拟机把描述类的数据从class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。Java语言里，类型的加载和连接过程是在程序运行期间完成的。  类加载的时机 类加载的生命周期：  加载 验证 准备 解析 初始化 使用 卸载加载，验证，准备，初始化，卸载的顺序是确定的，为了支持java的动态绑定，解析过程可以在初始化之">
+<meta name="twitter:description" content="虚拟机类加载机制 虚拟机类加载机制虚拟机把描述类的数据从class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。Java语言里，类型的加载和连接过程是在程序运行期间完成的。">
 <meta name="twitter:image" content="http://pbhb4py13.bkt.clouddn.com/C03B21D5-7E81-419C-9C63-76CCE16DE2A8.png">
 
 
@@ -513,7 +513,7 @@
 
       
         <h1 id="虚拟机类加载机制"><a href="#虚拟机类加载机制" class="headerlink" title="虚拟机类加载机制"></a>虚拟机类加载机制</h1><blockquote>
-<p>虚拟机类加载机制虚拟机把描述类的数据从class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。Java语言里，类型的加载和连接过程是在程序运行期间完成的。</p>
+<p>虚拟机类加载机制虚拟机把描述类的数据从class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型。Java语言里，类型的加载和连接过程是在程序运行期间完成的。<br><a id="more"></a></p>
 </blockquote>
 <h2 id="类加载的时机"><a href="#类加载的时机" class="headerlink" title="类加载的时机"></a>类加载的时机</h2><p><img src="http://pbhb4py13.bkt.clouddn.com/C03B21D5-7E81-419C-9C63-76CCE16DE2A8.png" alt="C03B21D5-7E81-419C-9C63-76CCE16DE2A8"></p>
 <p>类加载的生命周期：</p>
@@ -736,7 +736,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -747,7 +747,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -758,7 +758,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>

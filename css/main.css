@@ -1900,7 +1900,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #d934ff;
+  background: #ff8b7c;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3090,4 +3090,13 @@ pre .javascript .function {
   .post-body {
     text-align: justify;
   }
+}
+body {
+  position: relative;
+  font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 14px;
+  line-height: 2;
+  color: #555;
+  background: #222;
+  background-image: url("http://pbhb4py13.bkt.clouddn.com/wallls.com_198521.png");
 }
