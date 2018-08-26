@@ -324,7 +324,7 @@ custom_logo:
 # https://github.com/chriskempson/tomorrow-theme
 # 代码高亮主题设置
 # 都长啥样自己点开上面的链接查看
-highlight_theme: normal
+highlight_theme: night eighties
 # 注意要先在站点配置文件中设置
 # 怎么设置参考本文 3.2 节
 

@@ -7,6 +7,7 @@ tags:
   - 对象创建
   - 对象访问定位
 categories: JVM虚拟机原理
+top: 1
 image: http://pbhb4py13.bkt.clouddn.com/alex-bachor-775124-unsplash.jpg
 
 ---
