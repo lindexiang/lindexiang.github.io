@@ -204,9 +204,9 @@ static class ThreadLocalMap {
 每个线程都有一个ThreadLocalMap对象，key为ThreadLocal<?>对象，value为Object。可以在方法中定义多个threadLocal对象，但是一般都是讲ThreadLocal对象定义为static类型或者外部类中。相同的key在不同的Thread中的值是不同的。每个线程都操作各自的ThreadLocalmap对象。
 
 > Entry继承了WeakReference，且设置key为弱引用，WeakReference是在gc时一定会被回收的对象，softReference是在gc后内存不足才会再gc一遍回收软引用指向的对象。
-![未命名文件 -1-](http://pbhb4py13.bkt.clouddn.com/未命名文件 (1).jpg)
+![threadlocal1](http://pbhb4py13.bkt.clouddn.com/2018-08-27-threadlocal1.jpg)
 
-##ThreadLocal造成的内存泄露
+## ThreadLocal造成的内存泄露
 >首先，我们要明确Entry是一个强引用，Entry的key即threadLocal是一个弱引用，当这个对象只有没弱引用持有时，一定是被gc掉的。
 
 考虑一种情况，在一个方法内申明一个ThreadLocal对象，并设置了value值。当方法运行结束时，该threadLocal对象将没有被栈的变量指向，只有Entry的一个弱引用。**那么在gc时，会出现上图中所示的key为null，value存在的情况，而且该value将无法被访问。**则就出现了内存泄漏。
