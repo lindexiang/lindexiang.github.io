@@ -271,6 +271,6 @@ private int expungeStaleEntry(int staleSlot) {
 ```
 
 上述的方法并不能保证解决内存泄漏的问题，因为在调用get方法是不一定能获得key为null的对象。当线程结束时，ThreadLocalMap对象会被回收，那么完美。但是使用线程池时，如果ThreadLocal对象被回收，而线程是回收待使用，则value会一直存在堆中无法被访问。内存就会被一直泄漏。
-使用线程池时使用不当还会发生bug。**当定义一个static的ThreadLocal对象，使用线程池，在线程中set了一个ThreadLocal对象。那么下一个线程会得到上一个线程的value，造成bug。就像最开始的代码中的运行结果。所以在线程结束时，手动remove掉该ThreadLocal。**
+使用线程池时使用不当还会发生bug。**当定义一个static的ThreadLocal对象，使用线程池，在线程中set了一个ThreadLocal对象。那么下一个线程会得到上一个线程的value，造成bug。就像最开始的代码中的运行结果。所以在线程结束时，手动remove掉该ThreadLocal。**  ok
 
 
