@@ -121,9 +121,9 @@ menu_icons:
 #Mist - Muse 的紧凑版本，整洁有序的单栏外观
 #Pisces - 双栏 Scheme，小家碧玉似的清新
 # Schemes
-#scheme: Muse
+scheme: Muse
 #scheme: Mist
-scheme: Pisces
+#scheme: Pisces
 #scheme: Gemini
 
 
@@ -206,8 +206,8 @@ sidebar:
   # Sidebar Display, available value (only for Muse | Mist):
   # 侧栏显示方式，post 代表只有点进一篇文章内
   # 且文章有目录，侧栏才会弹出显示
-  #display: post
-  display: always
+  display: post
+  #display: always
   #display: hide
   #display: remove
 
