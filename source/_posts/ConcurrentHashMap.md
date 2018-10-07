@@ -1,14 +1,19 @@
 ---
 title: ConcurrentHashMap
-images: /images/摘要配图/
+images: http://pbhb4py13.bkt.clouddn.com/2018-09-17-max-saeling-1059251-unsplash.jpg
+categories: java并发编程
+top: 1
 date: 2018-09-10 00:54:16
-tags:
+tags: 
+    - HashMap
+    - ConcurrentHashMap
+    - 并发编程实践
 ---
-
 
 #HashMap和ConcurrentHashMap的原理，非常重要哦！！！
 最近在看JAVA并发编程实践，ConcurrentMap是Concurrent包中一个非常重要的同步容器，在工作中也会使用到它。对于这样的容器，想要最为一个合格的后端攻城狮，必须经常的将它的源码翻出来看看，不然搬砖就搬的太失败了。本文想记录下自己对HashMap和ConcurrentHashMap的分析。
 在1.7版本和1.8版本中java的源码发生了巨大的变化，好多之前用ReenTrantLock的貌似都改成了使用CAS或者violatile来实现。只能说HB法则太好用了。。。。
+<!--more-->
 ## 1.7版本的HashMap
 HashMap是key-value的数据结构，同时key和value均可以为null，如果key为null，默认是放到table[0]的位置。
 HashMap的底层是**数组+链表**的结构。
@@ -791,7 +796,7 @@ private final void tryPresize(int size) {
             // 1. 将 sizeCtl 设置为 (rs << RESIZE_STAMP_SHIFT) + 2)
             //     我是没看懂这个值真正的意义是什么？不过可以计算出来的是，结果是一个比较大的负数
             //  调用 transfer 方法，此时 nextTab 参数为 null
-            //这个CAS的操作是如果SIZECTL急sizeCtl的内存之=sc，
+            //这个CAS的操作是如果SIZECTL的sizeCtl的内存值=sc，
             //就把sizeCtl设置成(rs << RESIZE_STAMP_SHIFT) + 2))
             else if (U.compareAndSwapInt(this, SIZECTL, sc,
                                          (rs << RESIZE_STAMP_SHIFT) + 2))
@@ -800,5 +805,227 @@ private final void tryPresize(int size) {
     }
 }
 ```
+在数组扩容时采用sizeCtl来控制扩容的进度。如果tab为null，说明是要进行数组的初始化，那么就用CAS将sizeCtl设置成-1，然后再进行tab的初始化，再将sizeCtl设置成一个正值，结束while循环。如果tab不为null，那么就将sizeCtl设置成负数，再执行transfer(tab, null)，在下一个循环将sizeCtl+1，执行 transfer(tab, nt)。所以可能的操作是执行一次transfer(tab，null)+多次transfer(tab, nt)。
+
+其中，可以看下sizeCtl的介绍
+
+```java
+    /**
+     * Table initialization and resizing control.  When negative, the
+     * table is being initialized or resized: -1 for initialization,
+     * else -(1 + the number of active resizing threads).  Otherwise,
+     * when table is null, holds the initial table size to use upon
+     * creation, or 0 for default. After initialization, holds the
+     * next element count value upon which to resize the table.
+     */
+    private transient volatile int sizeCtl;
+```
+sizeCtl控制table的初始化或者扩容操作，当为负数时，表示table正在初始化或者resize，-1表示初始化，-(1+nt)，nt为线程的数目。另外，table为null时，sizeCtl为设置table初始化的容量大小。当初始化后，sizeCtl存的是下一次需要扩容的数量
+
+#### transfer
+这部分代码实在是看不懂了 先马着吧，，，阿西吧
+
+```java
+private final void transfer(Node<K,V>[] tab, Node<K,V>[] nextTab) {
+    int n = tab.length, stride;
+ 
+    // stride 在单核下直接等于 n，多核模式下为 (n>>>3)/NCPU，最小值是 16
+    // stride 可以理解为”步长“，有 n 个位置是需要进行迁移的，
+    //   将这 n 个任务分为多个任务包，每个任务包有 stride 个任务
+    if ((stride = (NCPU > 1) ? (n >>> 3) / NCPU : n) < MIN_TRANSFER_STRIDE)
+        stride = MIN_TRANSFER_STRIDE; // subdivide range
+ 
+    // 如果 nextTab 为 null，先进行一次初始化
+    //    前面我们说了，外围会保证第一个发起迁移的线程调用此方法时，参数 nextTab 为 null
+    //       之后参与迁移的线程调用此方法时，nextTab 不会为 null
+    if (nextTab == null) {
+        try {
+            // 容量翻倍
+            Node<K,V>[] nt = (Node<K,V>[])new Node<?,?>[n << 1];
+            nextTab = nt;
+        } catch (Throwable ex) {      // try to cope with OOME
+            sizeCtl = Integer.MAX_VALUE;
+            return;
+        }
+        // nextTable 是 ConcurrentHashMap 中的属性
+        nextTable = nextTab;
+        // transferIndex 也是 ConcurrentHashMap 的属性，用于控制迁移的位置
+        transferIndex = n;
+    }
+ 
+    int nextn = nextTab.length;
+ 
+    // ForwardingNode 翻译过来就是正在被迁移的 Node
+    // 这个构造方法会生成一个Node，key、value 和 next 都为 null，关键是 hash 为 MOVED
+    // 后面我们会看到，原数组中位置 i 处的节点完成迁移工作后，
+    //    就会将位置 i 处设置为这个 ForwardingNode，用来告诉其他线程该位置已经处理过了
+    //    所以它其实相当于是一个标志。
+    ForwardingNode<K,V> fwd = new ForwardingNode<K,V>(nextTab);
+ 
+ 
+    // advance 指的是做完了一个位置的迁移工作，可以准备做下一个位置的了
+    boolean advance = true;
+    boolean finishing = false; // to ensure sweep before committing nextTab
+ 
+    /*
+     * 下面这个 for 循环，最难理解的在前面，而要看懂它们，应该先看懂后面的，然后再倒回来看
+     * 
+     */
+ 
+    // i 是位置索引，bound 是边界，注意是从后往前
+    for (int i = 0, bound = 0;;) {
+        Node<K,V> f; int fh;
+ 
+        // 下面这个 while 真的是不好理解
+        // advance 为 true 表示可以进行下一个位置的迁移了
+        //   简单理解结局：i 指向了 transferIndex，bound 指向了 transferIndex-stride
+        while (advance) {
+            int nextIndex, nextBound;
+            if (--i >= bound || finishing)
+                advance = false;
+ 
+            // 将 transferIndex 值赋给 nextIndex
+            // 这里 transferIndex 一旦小于等于 0，说明原数组的所有位置都有相应的线程去处理了
+            else if ((nextIndex = transferIndex) <= 0) {
+                i = -1;
+                advance = false;
+            }
+            else if (U.compareAndSwapInt
+                     (this, TRANSFERINDEX, nextIndex,
+                      nextBound = (nextIndex > stride ?
+                                   nextIndex - stride : 0))) {
+                // 看括号中的代码，nextBound 是这次迁移任务的边界，注意，是从后往前
+                bound = nextBound;
+                i = nextIndex - 1;
+                advance = false;
+            }
+        }
+        if (i < 0 || i >= n || i + n >= nextn) {
+            int sc;
+            if (finishing) {
+                // 所有的迁移操作已经完成
+                nextTable = null;
+                // 将新的 nextTab 赋值给 table 属性，完成迁移
+                table = nextTab;
+                // 重新计算 sizeCtl：n 是原数组长度，所以 sizeCtl 得出的值将是新数组长度的 0.75 倍
+                sizeCtl = (n << 1) - (n >>> 1);
+                return;
+            }
+ 
+            // 之前我们说过，sizeCtl 在迁移前会设置为 (rs << RESIZE_STAMP_SHIFT) + 2
+            // 然后，每有一个线程参与迁移就会将 sizeCtl 加 1，
+            // 这里使用 CAS 操作对 sizeCtl 进行减 1，代表做完了属于自己的任务
+            if (U.compareAndSwapInt(this, SIZECTL, sc = sizeCtl, sc - 1)) {
+                // 任务结束，方法退出
+                if ((sc - 2) != resizeStamp(n) << RESIZE_STAMP_SHIFT)
+                    return;
+ 
+                // 到这里，说明 (sc - 2) == resizeStamp(n) << RESIZE_STAMP_SHIFT，
+                // 也就是说，所有的迁移任务都做完了，也就会进入到上面的 if(finishing){} 分支了
+                finishing = advance = true;
+                i = n; // recheck before commit
+            }
+        }
+        // 如果位置 i 处是空的，没有任何节点，那么放入刚刚初始化的 ForwardingNode ”空节点“
+        else if ((f = tabAt(tab, i)) == null)
+            advance = casTabAt(tab, i, null, fwd);
+        // 该位置处是一个 ForwardingNode，代表该位置已经迁移过了
+        else if ((fh = f.hash) == MOVED)
+            advance = true; // already processed
+        else {
+            // 对数组该位置处的结点加锁，开始处理数组该位置处的迁移工作
+            synchronized (f) {
+                if (tabAt(tab, i) == f) {
+                    Node<K,V> ln, hn;
+                    // 头结点的 hash 大于 0，说明是链表的 Node 节点
+                    if (fh >= 0) {
+                        // 下面这一块和 Java7 中的 ConcurrentHashMap 迁移是差不多的，
+                        // 需要将链表一分为二，
+                        //   找到原链表中的 lastRun，然后 lastRun 及其之后的节点是一起进行迁移的
+                        //   lastRun 之前的节点需要进行克隆，然后分到两个链表中
+                        int runBit = fh & n;
+                        Node<K,V> lastRun = f;
+                        for (Node<K,V> p = f.next; p != null; p = p.next) {
+                            int b = p.hash & n;
+                            if (b != runBit) {
+                                runBit = b;
+                                lastRun = p;
+                            }
+                        }
+                        if (runBit == 0) {
+                            ln = lastRun;
+                            hn = null;
+                        }
+                        else {
+                            hn = lastRun;
+                            ln = null;
+                        }
+                        for (Node<K,V> p = f; p != lastRun; p = p.next) {
+                            int ph = p.hash; K pk = p.key; V pv = p.val;
+                            if ((ph & n) == 0)
+                                ln = new Node<K,V>(ph, pk, pv, ln);
+                            else
+                                hn = new Node<K,V>(ph, pk, pv, hn);
+                        }
+                        // 其中的一个链表放在新数组的位置 i
+                        setTabAt(nextTab, i, ln);
+                        // 另一个链表放在新数组的位置 i+n
+                        setTabAt(nextTab, i + n, hn);
+                        // 将原数组该位置处设置为 fwd，代表该位置已经处理完毕，
+                        //    其他线程一旦看到该位置的 hash 值为 MOVED，就不会进行迁移了
+                        setTabAt(tab, i, fwd);
+                        // advance 设置为 true，代表该位置已经迁移完毕
+                        advance = true;
+                    }
+                    else if (f instanceof TreeBin) {
+                        // 红黑树的迁移
+                        TreeBin<K,V> t = (TreeBin<K,V>)f;
+                        TreeNode<K,V> lo = null, loTail = null;
+                        TreeNode<K,V> hi = null, hiTail = null;
+                        int lc = 0, hc = 0;
+                        for (Node<K,V> e = t.first; e != null; e = e.next) {
+                            int h = e.hash;
+                            TreeNode<K,V> p = new TreeNode<K,V>
+                                (h, e.key, e.val, null, null);
+                            if ((h & n) == 0) {
+                                if ((p.prev = loTail) == null)
+                                    lo = p;
+                                else
+                                    loTail.next = p;
+                                loTail = p;
+                                ++lc;
+                            }
+                            else {
+                                if ((p.prev = hiTail) == null)
+                                    hi = p;
+                                else
+                                    hiTail.next = p;
+                                hiTail = p;
+                                ++hc;
+                            }
+                        }
+                        // 如果一分为二后，节点数少于 8，那么将红黑树转换回链表
+                        ln = (lc <= UNTREEIFY_THRESHOLD) ? untreeify(lo) :
+                            (hc != 0) ? new TreeBin<K,V>(lo) : t;
+                        hn = (hc <= UNTREEIFY_THRESHOLD) ? untreeify(hi) :
+                            (lc != 0) ? new TreeBin<K,V>(hi) : t;
+ 
+                        // 将 ln 放置在新数组的位置 i
+                        setTabAt(nextTab, i, ln);
+                        // 将 hn 放置在新数组的位置 i+n
+                        setTabAt(nextTab, i + n, hn);
+                        // 将原数组该位置处设置为 fwd，代表该位置已经处理完毕，
+                        //    其他线程一旦看到该位置的 hash 值为 MOVED，就不会进行迁移了
+                        setTabAt(tab, i, fwd);
+                        // advance 设置为 true，代表该位置已经迁移完毕
+                        advance = true;
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
 
 
