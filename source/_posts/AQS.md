@@ -98,13 +98,15 @@ head节点存储的是new出来的节点，它的waitStatus的值为0，tail指�
 使用的也是Node节点，是一个单向队列，用nextWaiter来指向下一个节点。
 
 ### CAS操作
-AQS中有3个重要的变量
+AQS中有3个重要的变量,head、tail、state都是volatile类型的，保证了可见性。
 
 ```java
 // 队头结点    
 private transient volatile Node head;     
-// 队尾结点    private transient volatile Node tail;     
-// 代表共享资源    private volatile int state;     
+// 队尾结点    
+private transient volatile Node tail;     
+// 代表共享资源    
+private volatile int state;     
 protected final int getState() {        
     return state;    
 }     
@@ -116,6 +118,87 @@ protected final boolean compareAndSetState(int expect, int update) {
     return unsafe.compareAndSwapInt(this,stateOffset, expect, update);    
 }
 ```
+## 源码解读
+AQS定义了两种的资源共享方式
+
+1. Exclusive 独占锁模式，只有一个线程能执行，ReentrantLock
+2. Share 共享锁模式 多个线程可以同时执行，CountDownLatch/Semaphore
+
+### AQS独占锁模式
+一般情况下，ReentrantLock的释放方式为
+
+```java
+reentrantLock.lock();
+//do something
+reentrantlock.unlock();
+```
+ReentrantLock保证了在同一时刻只有一个线程能获取到锁，其余的线程都要挂起等待，**直到拥有锁的线程释放了锁，被挂起的线程被唤醒重新竞争锁。**
+ReentrantLock的加锁都是由AQS完成的，它只是初始化了AQS的state资源的数量和获取资源。ReentrantLock分为公平锁和非公平锁。
+
+获取独占锁的流程如下所示
+![1D80EF6A-6E04-4586-9A0D-4DFE3A5C8216](http://pbhb4py13.bkt.clouddn.com/2018-10-10-1D80EF6A-6E04-4586-9A0D-4DFE3A5C8216.png)
+结合ReentrantLock的源码分析
+ReentrantLock 的构造函数中是初始化sync = new NonfairSync()，其中NonfairSync继承Sync，Sync继承了AQS
+
+```java
+public ReentrantLock() {
+    sync = new NonfairSync(); //构造一个syn
+}
+```
+
+ReentrantLock.lock得到获取锁的入口函数，调用sync.lock()
+
+```java
+public void lock() {
+    sync.lock();
+}
+```
+
+公平锁和非公平锁将lock方法重写了，根据不同的sync调用不同的lock
+
+```java
+//非公平锁
+final void lock() {
+    //用CAS修改state，如果state为0 设置为1 表示当前线程获取锁
+    if (compareAndSetState(0, 1))               
+        setExclusiveOwnerThread(Thread.currentThread()); //当前线程设置为独占锁
+    else
+        acquire(1); //尝试获取锁
+}t
+
+//公平锁
+final void lock() {
+    acquire(1);
+}
+```
+**如果state为0，说明没有线程获取锁，可以设置当前线程获取独占锁，当前线程不加入队列，如果state为1，表示有线程占用资源，需要调用acquire()去获取锁**
+
+```java
+abstract static class Sync extends AbstractQueuedSynchronizer {}
+static final class NonfairSync extends Sync {}
+static final class FairSync extends Sync {}
+```
+* 公平锁 每个线程强占锁的顺序是先后调用lock方法的顺序，并依次获取锁。
+* 非公平锁 每个线程强占锁的顺序不变，和调用lock方法的先后顺序无关。
+**公平还是非公平是在获取锁的时候是直接获取锁还是先去队列中排队。**
+
+#### acquire()方法
+
+```java
+public final void acquire(int arg) {
+    //tryAcquire子类重写，不同的逻辑
+    //addWaiter是将节点加入到队列的tail     
+    //acquireQueued是不断循环，中断线程 
+    if (!tryAcquire(arg) &&    
+        acquireQueued(addWaiter(Node.EXCLUSIVE), arg)) 
+            selfInterrupt();
+}
+```
+#### tryAcquire()方法
+
+
+
+
 
 
 参考文献
