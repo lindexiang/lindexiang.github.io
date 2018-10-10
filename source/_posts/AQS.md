@@ -358,6 +358,13 @@ private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
     return false;
 }
 ```
+公平锁和非公平锁的唯一区别是在lock时的处理逻辑不同。
+
+1. 公平锁是在lock时先把当前线程入到FIFO队列中，再去按照顺序获取锁。
+2. 非公平锁是在lock时可以不管FIFO队列中是否有等待线程，先去阐释获取一次锁，即CAS操作state，失败了才入FIFO队列，否则直接获得锁。
+
+
+
 
 
 
