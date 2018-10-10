@@ -186,7 +186,7 @@ static final class FairSync extends Sync {}
 
 ```java
 public final void acquire(int arg) {
-    //tryAcquire子类重写，不同的逻辑
+    //tryAcquire子类重写，不同的获取资源逻辑
     //addWaiter是将节点加入到队列的tail     
     //acquireQueued是不断循环，中断线程 
     if (!tryAcquire(arg) &&    
@@ -195,8 +195,169 @@ public final void acquire(int arg) {
 }
 ```
 #### tryAcquire()方法
+tryAcquire()方法AQS并没有实现，具体的实现方法留给子类去实现了。从方法里可以看到当state为0表示没有线程占用锁，当state > 0 表示了线程占用，并且记录了重复进入的次数。state的更新采用CAS技术。
+同时，公平锁和非公平锁的实现也体现出来了。非公平锁是唤醒的线程均去尝试设置state。而非公平锁会只有同步队列的head节点的next节点才能去设置state。说明公平锁是按照FIFO队列中的顺序获取锁。
+
+```java
+//如果是非公平锁，调用nonfairAcquire()
+final boolean nonfairTryAcquire(int acquires) {
+    //得到当前的线程
+    final Thread current = Thread.currentThread(); 
+    //得到lock的state状态
+    int c = getState(); 
+    //没有线程占用锁
+    if (c == 0) { 
+        //当前线程直接去抢占锁
+        if (compareAndSetState(0, acquires)) {  
+            //当前线程获取锁，设置为独占锁
+            setExclusiveOwnerThread(current); 
+            return true;
+        }
+    }
+    //当前线程再次获取锁，锁可以重入 则state加1
+    else if (current == getExclusiveOwnerThread()) { 
+        int nextc = c + acquires;
+        if (nextc < 0) // overflow
+            throw new Error("Maximum lock count exceeded");
+        setState(nextc);
+        return true;
+    }
+    return false;
+}
+
+//如果是公平锁，调用
+protected final boolean tryAcquire(int acquires) {
+    final Thread current = Thread.currentThread();
+    int c = getState();
+    if (c == 0) {
+        //当前线程要排序再获取锁。当前线程是head节点的next节点并且当前节点设置state为1 则获取锁成功
+        if (!hasQueuedPredecessors() &&   
+            compareAndSetState(0, acquires)) {
+            setExclusiveOwnerThread(current);
+            return true;
+        }
+    }
+    else if (current == getExclusiveOwnerThread()) {
+        int nextc = c + acquires;
+        if (nextc < 0)
+            throw new Error("Maximum lock count exceeded");
+        setState(nextc);
+        return true;
+    }
+    return false;
+}
 
 
+// 判断当前的线程是不是head的下一个节点   按顺序唤醒
+public final boolean hasQueuedPredecessors() {
+    Node t = tail; 
+    Node h = head;
+    Node s;
+    //head的节点是一个哨兵节点 不保存节点信息
+    //s=head.next节点并且s的线程不是当前线程 也就是说head节点的next节点不是当前节点
+    return h != t && ((s = h.next) == null || s.thread != Thread.currentThread()); 
+}
+```
+#### 入队列操作 acquireQueued(addWaiter(Node.EXCLUSIVE))
+当tryAcquire()方法返回false，表示锁被线程占用并且不是当前线程，无法重入。需要将当前线程入队列并且将线程挂起。
+
+```java
+//这个方法是将当前的线程加入到阻塞队列中
+//每次都先尝试快速入队，如果失败了 再调用enq自旋入队
+private Node addWaiter(Node mode) {
+    Node node = new Node(Thread.currentThread(), mode);
+    // Try the fast path of enq; backup to full enq on failure
+    //尝试快速入队，没有竞争条件肯定成功，如果失败进入enq自旋重复入队
+    Node pred = tail;
+    if (pred != null) {
+        node.prev = pred;
+        if (compareAndSetTail(pred, node)) { //如果pred和tail的元素一样，则说明没有其他线程改变tail 可以插入  
+            pred.next = node; 
+            return node;    //插入成功，直接返回
+        }
+    }
+    enq(node);  //自旋入队
+    return node;
+}
+
+//自旋入队
+private Node enq(final Node node) {
+    for (;;) {
+        Node t = tail;
+        if (t == null) { // Must initialize
+            if (compareAndSetHead(new Node())) //队列中没有元素，new一个Node作为哨兵节点 即head=new Node() tail = head
+                tail = head;
+        } else {
+            node.prev = t;  //node指向tail
+            if (compareAndSetTail(t, node)) {  //当t没有被修改，CAS修改tail
+                t.next = node;
+                return t; //返回tail节点
+            }
+        }
+    }
+}
+
+//acquiredQueued主要是将线程挂起，等待唤醒   每次唤醒都是唤醒head节点的下一个节点   head节点为获得锁的节点
+//如果当前节点是head节点的下一个节点，并且成功获得锁就唤醒，然后将head节点也就是释放锁的节点移除队列，next节点变成head节点，准备下一次唤醒next节点
+final boolean acquireQueued(final Node node, int arg) {
+    boolean failed = true;
+    try {
+        boolean interrupted = false;
+        for (;;) {   //一直循环
+            //获取当前节点的前驱结点
+            final Node p = node.predecessor();  
+           //问题：为什么是前驱节点而不是当前节点？因为我们队列在初始化时候生成了个虚拟头节点，相当于多出来了个节点。 
+            if (p == head && tryAcquire(arg)) {    
+                //前驱结点为head节点并且尝试获取锁成功，则将当前节点设置为头节点并且放回  
+                //head节点的线程为获取到锁的线程，head节点的next节点为阻塞等待的线程 
+                setHead(node);      
+                p.next = null;   // help GC
+                failed = false;
+                return interrupted;
+            }
+            //判断当前线程是不是应该挂起 如果应该挂起则挂起，等待release唤醒释放
+            //如果不挂起，那么线程在for循环里面一直抢占cpu
+            //当阻塞后被唤醒了就继续循环
+            if (shouldParkAfterFailedAcquire(p, node) &&
+                parkAndCheckInterrupt())   
+                interrupted = true;
+        }
+    } finally {
+        if (failed)
+            cancelAcquire(node);
+    }
+}
+//使用park方法方法将线程挂起 同时唤醒和中断都可以导致线程醒来，判断线程的中断标志位
+private final boolean parkAndCheckInterrupt() {
+    //调用这个方法阻塞线程，最终调用Unsafe.park(false, 0L)这个是native方法
+    LockSupport.park(this);  
+    //检查线程的中断状态
+    return Thread.interrupted(); 
+}
+
+//判断当前节点是不是应该挂起  因为每次都是由node节点的pre节点来判断是不是要挂起  
+//当pre节点被取消了，就将该节点移出阻塞队列
+private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
+    int ws = pred.waitStatus;
+    if (ws == Node.SIGNAL)   //唤醒下一个节点
+        return true;
+    if (ws > 0) {  //pre节点被取消了 
+        
+        do { 
+            node.prev = pred = pred.prev;  //node节点指向pre节点的pre节点，相当于把取消的节点从队列中移除
+        } while (pred.waitStatus > 0); //将所有的waitstatus的节点都从队列中去除
+        pred.next = node;
+    } else {
+        /*
+        * waitStatus must be 0 or PROPAGATE.  Indicate that we
+        * need a signal, but don't park yet.  Caller will need to
+        * retry to make sure it cannot acquire before parking.
+        */
+        compareAndSetWaitStatus(pred, ws, Node.SIGNAL);   //将pre节点设置为signal
+    }
+    return false;
+}
+```
 
 
 
