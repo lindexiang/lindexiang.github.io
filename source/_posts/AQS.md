@@ -124,7 +124,7 @@ AQS定义了两种的资源共享方式
 1. Exclusive 独占锁模式，只有一个线程能执行，ReentrantLock
 2. Share 共享锁模式 多个线程可以同时执行，CountDownLatch/Semaphore
 
-### AQS独占锁模式
+## AQS独占锁模式
 一般情况下，ReentrantLock的释放方式为
 
 ```java
@@ -135,6 +135,7 @@ reentrantlock.unlock();
 ReentrantLock保证了在同一时刻只有一个线程能获取到锁，其余的线程都要挂起等待，**直到拥有锁的线程释放了锁，被挂起的线程被唤醒重新竞争锁。**
 ReentrantLock的加锁都是由AQS完成的，它只是初始化了AQS的state资源的数量和获取资源。ReentrantLock分为公平锁和非公平锁。
 
+### 获取独占锁
 获取独占锁的流程如下所示
 ![1D80EF6A-6E04-4586-9A0D-4DFE3A5C8216](http://pbhb4py13.bkt.clouddn.com/2018-10-10-1D80EF6A-6E04-4586-9A0D-4DFE3A5C8216.png)
 结合ReentrantLock的源码分析
@@ -327,6 +328,7 @@ final boolean acquireQueued(final Node node, int arg) {
             cancelAcquire(node);
     }
 }
+
 //使用park方法方法将线程挂起 同时唤醒和中断都可以导致线程醒来，判断线程的中断标志位
 private final boolean parkAndCheckInterrupt() {
     //调用这个方法阻塞线程，最终调用Unsafe.park(false, 0L)这个是native方法
@@ -355,6 +357,7 @@ private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
         */
         compareAndSetWaitStatus(pred, ws, Node.SIGNAL);   //将pre节点设置为signal
     }
+    //将取消的节点剔除出队列后返回false，重新for循环
     return false;
 }
 ```
@@ -362,6 +365,115 @@ private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
 
 1. 公平锁是在lock时先把当前线程入到FIFO队列中，再去按照顺序获取锁。
 2. 非公平锁是在lock时可以不管FIFO队列中是否有等待线程，先去阐释获取一次锁，即CAS操作state，失败了才入FIFO队列，否则直接获得锁。
+
+### 释放独占锁流程
+ReentrantLock调用unlock()方法释放独占锁，
+
+```java
+public void unlock() {
+    sync.release(1);
+}
+```
+具体的流程如下所示。
+![B2C6BF10-5D4A-4BB5-8DD7-26AEDCC80561](http://pbhb4py13.bkt.clouddn.com/2018-10-11-B2C6BF10-5D4A-4BB5-8DD7-26AEDCC80561.png)
+
+#### release()释放锁
+调用release()方法，内部调用了被子类重写的tryRelease()方法来释放资源。假如资源state释放完毕为0，则当前线程不再占用锁，找到AQS的头结点(**head结点为当前的活动线程，要释放head结点的next节点**)，调用unparkSuccessor()方法释放FIFO队列中第一个等待锁的节点。
+
+```java
+public final boolean release(int arg) {
+    if (tryRelease(arg)) {  
+    //成功将state减去了，就要从的等待队列中唤醒一个线程。 
+    //如果是同一个线程，则将锁的计数器state-1，返回false，表示锁还没有释放
+        Node h = head;  //从队列里面唤醒一个线程
+        if (h != null && h.waitStatus != 0) //waitstatus为-1，要唤醒下一个节点
+            unparkSuccessor(h);
+        return true;
+    }
+    return false;
+}
+```
+
+#### tryRelease()方法
+具体由子类重写的该方法来释放state资源。 state - release 如果state还是大于0，说明线程被重入了，则还要占有线程。当tryRelease方法返回true时，说明当前线程已经不占用锁，需要唤醒一个线程来强占锁。具体逻辑为找到head节点的next节点唤醒。
+
+```java
+protected final boolean tryRelease(int releases) {
+    //计数
+    int c = getState() - releases; 
+    if (Thread.currentThread() != getExclusiveOwnerThread())
+        throw new IllegalMonitorStateException();
+    boolean free = false;
+    if (c == 0) {
+        free = true;
+        //释放锁，lock没有线程占用
+        setExclusiveOwnerThread(null); 
+    }
+    setState(c);
+    return free;
+}
+```
+
+#### unparkSuccessor(Node node)唤醒下一个节点
+只有node节点的waitStatus为负数(1为cancel),才能唤醒下一个节点。如果next节点被取消了，那么就要从tail节点开始查找，找到FIFO队列中最早没有被取消的节点，唤醒该节点。
+
+```java
+private void unparkSuccessor(Node node) {
+    int ws = node.waitStatus;
+    if (ws < 0)
+     //如果状态为负(Signal, Propagate)，那么清除状态为0 
+     //如果失败，或者状态被其他线程改变也没有关系
+        compareAndSetWaitStatus(node, ws, 0);
+ 
+     //唤醒的节点是head节点的next节点。如果该节点被取消了，
+     //那么就从后往前遍历找到最早没有被取消的节点
+    Node s = node.next;
+    if (s == null || s.waitStatus > 0) {
+        s = null;
+        for (Node t = tail; t != null && t != node; t = t.prev)
+            if (t.waitStatus <= 0)
+                s = t;
+    }
+    if (s != null)
+        //唤醒队列中的一个线程
+        LockSupport.unpark(s.thread); 
+}
+```
+
+当调用了LockSupport.unpark(s.thread)方法后，s线程将会被唤醒，重新回到LockSupport.park(this);方法，继续执行。其中shouldParkAfterFailedAcquire()方法会从队列中剔除pre节点被取消的节点。**只有head节点的next节点才能得到锁资源，并被设置成新的head节点。head节点表示当前正在获取锁资源的节点。**
+
+```java
+private final boolean parkAndCheckInterrupt() {
+    //调用这个方法阻塞线程，最终调用Unsafe.park(false, 0L)这个是native方法
+    LockSupport.park(this);  
+    //检查线程的中断状态
+    return Thread.interrupted(); 
+}
+
+private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
+    int ws = pred.waitStatus;
+    if (ws == Node.SIGNAL)   //唤醒下一个节点
+        return true;
+    if (ws > 0) {  //pre节点被取消了 
+        
+        do { 
+            node.prev = pred = pred.prev;  //node节点指向pre节点的pre节点，相当于把取消的节点从队列中移除
+        } while (pred.waitStatus > 0); //将所有的waitstatus的节点都从队列中去除
+        pred.next = node;
+    } else {
+        compareAndSetWaitStatus(pred, ws, Node.SIGNAL);   //将pre节点设置为signal
+    }
+    //将取消的节点剔除出队列后返回false，重新for循环
+    return false;
+}
+```
+
+
+### AQS共享锁模式
+
+
+
+
 
 
 
