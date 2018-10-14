@@ -1,8 +1,15 @@
 ---
-title: AQS
-images: /images/摘要配图/
-date: 2018-10-07 22:40:04
-tags:
+title: 深入理解final关键字的作用
+date: 2018-08-30 22:55:46
+tags: 
+   - 内存模型
+   - final关键字
+   - 线程安全
+   - 内存可见性
+categories: java并发编程
+image: http://pbhb4py13.bkt.clouddn.com/2018-08-30-david-beatz-798135-unsplash.jpg
+top : 99
+
 ---
 
 # AQS的原理解析
@@ -470,16 +477,184 @@ private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
 
 
 ### AQS共享锁模式
+共享锁的实现方式为CountDownLatch闭锁方式，使一个或者多个线程等待时间的发生。闭锁在new时初始化了state的计数器为一个正值，表示当前正在的事件数量。COuntDown()方法表示一个事件发生了，计数器的值减1.await等待计数器的值为0，表示等待的事件已经发生。如果state不为0，则await会阻塞计数器为0，或者等待线程中断或者等待超时。
+
+#### await等待获取共享锁流程
+
+```java
+public void await() throws InterruptedException {
+     sync.acquireSharedInterruptibly(1);
+}
+```
+countdownlatch等待获取共享锁的流程如下所示。client调用await()方法，当state不等于0，则线程会被封装成Node加到FIFO等待队列并挂起线程等待被唤醒。
+![3C19382C-C0FC-471E-ACAC-2DACF5A0E33F](http://pbhb4py13.bkt.clouddn.com/2018-10-14-3C19382C-C0FC-471E-ACAC-2DACF5A0E33F.png)
 
 
+#### acquireSharedInterruptibly(arg)方法
 
+```java
+public final void acquireSharedInterruptibly(int arg)
+        throws InterruptedException {
+     //响应线程的中断，检查线程是否被中断
+    if (Thread.interrupted())  
+        throw new InterruptedException();
+     //返回-1，说明state不为0 也就是CownDownLatch的计数器不为0 
+    if (tryAcquireShared(arg) < 0)  //获取共享锁，小于0 表示获取失败
+        doAcquireSharedInterruptibly(arg);
+}
 
+//CountDownLatch的计数器是否为0   tryAcquire只是判断当前的线程能否获取锁
+protected int tryAcquireShared(int acquires) {
+     return (getState() == 0) ? 1 : -1;
+}
+```
 
+#### doAcquireSharedInterruptibly(arg)
+该方法是将thread包装成Node，加入到FIFO队列中
 
+```java
+private void doAcquireSharedInterruptibly(int arg)
+    throws InterruptedException {
+     //将当前节点包装成共享节点
+     //将node加入到FIFO队列中
+    final Node node = addWaiter(Node.SHARED);
+    boolean failed = true;
+    try {
+        for (;;) {
+            //一直判断node节点的状态
+            final Node p = node.predecessor();
+            if (p == head) {
+               //如果当前节点是head节点的next节点，说明当前节点是AQS队列中获取锁的第一个节点
+               //按照FIFO原则，可以直接尝试获取锁
+                int r = tryAcquireShared(arg);
+                if (r >= 0) {
+                    //如果当前node获取锁成功，就要将当前节点设为AQS第一个节点
+                    //AQS队列的第一个节点表示当前已经获取锁的节点
+                    setHeadAndPropagate(node, r);
+                    p.next = null; // help GC
+                    failed = false;
+                    return;
+                }
+            }
+               //如果当前节点没有获取到锁，就要检查需要把当前节点挂起
+            if (shouldParkAfterFailedAcquire(p, node) &&
+                parkAndCheckInterrupt())
+                throw new InterruptedException();
+        }
+    } finally {
+        if (failed)
+            cancelAcquire(node);
+    }
+}
 
+//将头节点设置成传播属性
+private void setHeadAndPropagate(Node node, int propagate) {
+    Node h = head; // Record old head for check below
+    setHead(node);
 
+    if (propagate > 0 || h == null || h.waitStatus < 0 ||
+            (h = head) == null || h.waitStatus < 0) {
+        Node s = node.next;
+        if (s == null || s.isShared())
+            doReleaseShared(); //每一个成为头节点都要释放下一个节点 
+    }
+}
+```
 
+### 释放共享锁的流程
+AQS调用countDown()方法会state减1，当state减为0时，会释放FIFO队列中的所有线程，即共享锁。
+![449C4349-CB49-48D8-A762-487BEC2B2F3F](http://pbhb4py13.bkt.clouddn.com/2018-10-14-449C4349-CB49-48D8-A762-487BEC2B2F3F.png)
+#### releaseShared()方法
+tryReleaseShared()后如果state=0，则countDownLatch中的所有子线程都执行完毕，要唤醒await的线程，这些线程都在AQS中被挂起。下一步是唤醒AQS的头节点，然后由头节点依次唤醒下一个节点。
 
+```java
+public final boolean releaseShared(int arg) {
+    if (tryReleaseShared(arg)) { 
+        //如果state =0 就唤醒FIFO的队列的线程
+        doReleaseShared();
+        return true;
+    }
+    return false;
+}
+
+//如果state为0  表示当前线程释放锁，唤醒队列中线程
+protected boolean tryReleaseShared(int releases) {
+    // Decrement count; signal when transition to zero
+    for (; ; ) {
+        int c = getState();
+        if (c == 0)
+            return false;
+        int nextc = c - 1;
+        if (compareAndSetState(c, nextc))
+            return nextc == 0;
+    }
+}
+```
+
+#### AQS的doReleaseShared()方法 唤醒head节点的next节点
+
+```java
+private void doReleaseShared() {
+    for (; ; ) {
+        Node h = head;
+        if (h != null && h != tail) {
+            int ws = h.waitStatus;
+            if (ws == Node.SIGNAL) {
+                //如果当前节点是SIGNAL意味着，它正在等待一个信号。
+                //或者说，它在等待被唤醒，因此做两件事
+                /*重置waitStatus标志位，如果失败则重试*/
+                if (!compareAndSetWaitStatus(h, Node.SIGNAL, 0))
+                    continue;            // loop to recheck cases
+
+                /*重置成功后,唤醒等待获取共享锁的第一个节点*/
+                unparkSuccessor(h);
+            } else if (ws == 0 && !compareAndSetWaitStatus(h, 0, Node.PROPAGATE))
+                //如果本身头节点的waitStatus是处于重置状态（waitStatus==0）的，将其设置为“传播”状态。
+                //意味着需要将状态向后一个节点传播。
+                continue;                // loop on failed CAS
+        }
+        if (h == head)                   // loop if head changed
+            break;
+    }
+}
+```
+当调用unparkSuccessor()方法唤醒AQS队列的第一个节点时，被唤醒的线程会继续执行doAcquireSharedInterruptibly()方法，如果当前的节点是head节点的next节点，就把该节点设置成新的head节点，然后移除老的head节点。再接着调用doReleaseShared()方法依次唤醒下一个节点。
+
+每一个设置成新的head节点都要调用doReleaseShared()方法区唤醒head节点的next节点。从而实现了共享对象的传播。
+```java
+private void setHeadAndPropagate(Node node, int propagate) {
+    Node h = head; // Record old head for check below
+    setHead(node);
+
+    if (propagate > 0 || h == null || h.waitStatus < 0 ||
+            (h = head) == null || h.waitStatus < 0) {
+        Node s = node.next;
+        if (s == null || s.isShared())
+            doReleaseShared();
+    }
+}
+```
+
+## 不同的子类对AQS的state的维护
+
+1. ReentrantLock:  独占锁 如果state为0 说明锁是空闲的，调用tryAcquire()设置state=1，当前线程获取锁 如果state大于1，则表示当前线程获得了重入的效果，其他线程只能被park，直到这个线程进入锁的次数为0而释放原子状态 
+2. Semaphare 共享锁 state记录了当前还有多少次许可证可以使用。当state小于0，则线程被阻塞。否则线程可以执行。维护了同时可以并发的线程数量
+3. CountDownLatch 共享锁 闭锁是state来维护一个状态，在这个状态到达一个状态之前，所有的线程都会被park，当state=0时，则所有被park的线程都会被唤醒。
+4. FutureTask 独占锁 用state来表示执行任务的线程的执行状态。当调用get()方法会获取state的值，当大于0(RUNNING)时，表示线程还在执行。，AQS就会park掉get()方法的线程。在跑任务的线程结束后会回调一个方法设置state的状态为0(FiNISHED)。然后unpark唤醒get的线程，获取执行结果。
+ 
+## 总结
+最后，我们来做一个总结。AQS的主要任务是
+
+1. 设计了同步器的基本范式，结构
+2. 使用lockSupport包的park和unpark操作线程的状态
+3. 对阻塞FIFO队列的维护
+
+AQS设计了独占锁模式和共享锁模式。区别是
+
+*  独占锁的state是在1和0之间切换，保证了同一时间只有一个线程是活动的，其他线程都被阻塞。，唤醒FIFO队列每次只唤醒一个。
+* 共享锁的state是在整数区间内，如果state大于0表示阻塞线程，否则唤醒FIFO队列中的所有线程
+
+AQS的框架里面依赖的tryAcquire，tryRealease，tryAcquireShared，tryReleaseShared 方法在AQS中没有实现，这四个方法是对state资源的管理，由子类根据不同的场景定制。
 
 参考文献
 https://blog.csdn.net/lingfenglangshao/article/details/78233414
