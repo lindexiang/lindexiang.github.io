@@ -1,14 +1,13 @@
 ---
-title: 深入理解final关键字的作用
-date: 2018-08-30 22:55:46
+title: AQS原理
+date: 2018-08-25 15:30:05
 tags: 
-   - 内存模型
-   - final关键字
-   - 线程安全
-   - 内存可见性
-categories: java并发编程
-image: http://pbhb4py13.bkt.clouddn.com/2018-08-30-david-beatz-798135-unsplash.jpg
-top : 99
+    - java并发
+    - 线程同步
+    - 内存可见性
+categories: java同步包
+image: http://pbhb4py13.bkt.clouddn.com/wallls.com_175256.jpg
+top: 100
 
 ---
 
@@ -633,6 +632,94 @@ private void setHeadAndPropagate(Node node, int propagate) {
             doReleaseShared();
     }
 }
+```
+
+### 可中断的锁的实现方式
+在上面的独占锁和共享锁中，**调用lock()方法均是不可中断的。在调用void lock()方法区获取锁时，如果锁被占用，线程将会阻塞，调用线程的interrupt()方法也不能取消锁。**
+当想要等待超时或者中断退出的锁实现时，需要使用lockInterruptibly()方法。LockSupport.park()方法可以响应中断，但是不会抛出InterruptedException的异常。
+#### AQS的acquireInterruptibly方法
+如果线程被中断了，会抛出InterruptedException()异常。
+
+```java
+public final void acquireInterruptibly(int arg)
+            throws InterruptedException {
+    if (Thread.interrupted())
+        throw new InterruptedException();
+    if (!tryAcquire(arg))
+        doAcquireInterruptibly(arg);   // @1
+}
+```
+
+#### doAcquireInterruptibly()方法
+从这段代码就看出来了lock从中断退出的。
+当线程被中断了，读取Thread.Interruped()方法为true，表示线程被中断了，就抛出异常，从for循环中退出。在最外面捕获异常后调用cancelAcquire(node)方法将节点取消。
+
+```java
+private void doAcquireInterruptibly(int arg)
+        throws InterruptedException {
+    final Node node = addWaiter(Node.EXCLUSIVE);   // @1
+    boolean failed = true;
+    try {
+        for (;;) {
+            final Node p = node.predecessor();
+            if (p == head && tryAcquire(arg)) {              // @2
+                setHead(node);
+                p.next = null; // help GC
+                failed = false;
+                return;
+            }
+            if (shouldParkAfterFailedAcquire(p, node) &&
+                parkAndCheckInterrupt())
+                throw new InterruptedException();   //@3
+        }
+    } finally {
+        if (failed)
+            cancelAcquire(node); //@4
+    }
+}
+
+```
+
+#### cancelAcquire()方法
+取消节点的步骤如下
+
+1. 从node出发找到一个未被取消的prev节点，并移除中间的取消节点。
+3. 如果node是tail节点，就调用CAS将prev设置为tail节点。如果CAS失败，表示有其他线程设置了tail节点，结束
+4. 如果node节点不是tail节点，那么就要将node从队列中移除。prev.next = node.next是否能操作的逻辑是prev不是head节点，prev.waitStatus是Signal或者设置waitStatus的类型为signal成功并且node.next节点是非取消的，则可以将node节点移除。
+5. 如果prev为head节点，那么执行一次唤醒操作。
+
+```java
+private void cancelAcquire(Node node) {
+        if (node == null)
+            return;
+ 
+        node.thread = null;
+        Node pred = node.prev;   
+        while (pred.waitStatus > 0)  // @1
+            node.prev = pred = pred.prev;
+ 
+        Node predNext = pred.next; //@2
+        node.waitStatus = Node.CANCELLED; 
+ 
+        if (node == tail && compareAndSetTail(node, pred)) {   // @3 
+            compareAndSetNext(pred, predNext, null);
+        } else {  // @4
+            int ws;
+            if (pred != head &&
+                ((ws = pred.waitStatus) == Node.SIGNAL ||
+                 (ws <= 0 && compareAndSetWaitStatus(pred, ws, Node.SIGNAL))) &&
+                pred.thread != null) {   // @5
+                Node next = node.next;
+                if (next != null && next.waitStatus <= 0)
+                    compareAndSetNext(pred, predNext, next);
+            } else {  // @6
+                unparkSuccessor(node);
+            }
+ 
+            node.next = node; // help GC
+        }
+    }
+
 ```
 
 ## 不同的子类对AQS的state的维护
