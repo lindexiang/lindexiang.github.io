@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-CH">
+<html class="theme-next muse use-motion" lang="zh-CH">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -143,8 +143,8 @@
 <meta property="og:description" content="ThreadLocalThreadLocal的用法 在工作中使用到了ThreadLocal变量，但是对其原理不是非常的清楚，只是知道可以保存一个共享变量到本地线程的副本，线程之间不会竞争访问该变量。具体到在原理层面上如何去实现，还有ThreadLocal引发的内存泄漏问题都不是非常清楚。这篇博客将会讲讲我对源码的了解。">
 <meta property="og:locale" content="zh-CH">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15349553966324.png">
-<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/未命名文件 (1">
-<meta property="og:updated_time" content="2018-08-25T06:21:12.203Z">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/2018-08-27-threadlocal1.jpg">
+<meta property="og:updated_time" content="2018-10-22T06:59:41.978Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="threadLocal原理解析">
 <meta name="twitter:description" content="ThreadLocalThreadLocal的用法 在工作中使用到了ThreadLocal变量，但是对其原理不是非常的清楚，只是知道可以保存一个共享变量到本地线程的副本，线程之间不会竞争访问该变量。具体到在原理层面上如何去实现，还有ThreadLocal引发的内存泄漏问题都不是非常清楚。这篇博客将会讲讲我对源码的了解。">
@@ -156,7 +156,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
+    scheme: 'Muse',
     version: '5.1.3',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
     fancybox: true,
@@ -400,6 +400,8 @@
         
 
         <div class="post-meta">
+          
+          
           <span class="post-time">
             
               <span class="post-meta-item-icon">
@@ -474,7 +476,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,011
+                  2,010
                 </span>
               
 
@@ -533,10 +535,9 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadLocalMap</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Entry</span> <span class="keyword">extends</span> <span class="title">WeakReference</span>&lt;<span class="title">ThreadLocal</span>&lt;?&gt;&gt; </span>&#123;</span><br><span class="line">        <span class="comment">/** The value associated with this ThreadLocal. */</span></span><br><span class="line">        Object value;</span><br><span class="line"></span><br><span class="line">        Entry(ThreadLocal&lt;?&gt; k, Object v) &#123;</span><br><span class="line">            <span class="keyword">super</span>(k);<span class="comment">//调用weakReference的构造函数 </span></span><br><span class="line">            value = v;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> Entry[] table;</span><br><span class="line">    </span><br><span class="line">    ThreadLocalMap(ThreadLocal&lt;?&gt; firstKey, Object firstValue) &#123;</span><br><span class="line">         table = <span class="keyword">new</span> Entry[INITIAL_CAPACITY];</span><br><span class="line">         <span class="keyword">int</span> i = firstKey.threadLocalHashCode &amp; (INITIAL_CAPACITY - <span class="number">1</span>);</span><br><span class="line">         table[i] = <span class="keyword">new</span> Entry(firstKey, firstValue);</span><br><span class="line">         size = <span class="number">1</span>;</span><br><span class="line">         setThreshold(INITIAL_CAPACITY);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> Entry <span class="title">getEntry</span><span class="params">(ThreadLocal&lt;?&gt; key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = key.threadLocalHashCode &amp; (table.length - <span class="number">1</span>);</span><br><span class="line">        Entry e = table[i];</span><br><span class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span> &amp;&amp; e.get() == key)</span><br><span class="line">            <span class="keyword">return</span> e;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> getEntryAfterMiss(key, i, e);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>每个线程都有一个ThreadLocalMap对象，key为ThreadLocal&lt;?&gt;对象，value为Object。可以在方法中定义多个threadLocal对象，但是一般都是讲ThreadLocal对象定义为static类型或者外部类中。相同的key在不同的Thread中的值是不同的。每个线程都操作各自的ThreadLocalmap对象。</p>
 <blockquote>
-<p>Entry继承了WeakReference，且设置key为弱引用，WeakReference是在gc时一定会被回收的对象，softReference是在gc后内存不足才会再gc一遍回收软引用指向的对象。<br><img src="http://pbhb4py13.bkt.clouddn.com/未命名文件 (1" alt="未命名文件 -1-">.jpg)</p>
+<p>Entry继承了WeakReference，且设置key为弱引用，WeakReference是在gc时一定会被回收的对象，softReference是在gc后内存不足才会再gc一遍回收软引用指向的对象。<br><img src="http://pbhb4py13.bkt.clouddn.com/2018-08-27-threadlocal1.jpg" alt="threadlocal1"></p>
 </blockquote>
-<p>##ThreadLocal造成的内存泄露</p>
-<blockquote>
+<h2 id="ThreadLocal造成的内存泄露"><a href="#ThreadLocal造成的内存泄露" class="headerlink" title="ThreadLocal造成的内存泄露"></a>ThreadLocal造成的内存泄露</h2><blockquote>
 <p>首先，我们要明确Entry是一个强引用，Entry的key即threadLocal是一个弱引用，当这个对象只有没弱引用持有时，一定是被gc掉的。</p>
 </blockquote>
 <p>考虑一种情况，在一个方法内申明一个ThreadLocal对象，并设置了value值。当方法运行结束时，该threadLocal对象将没有被栈的变量指向，只有Entry的一个弱引用。<strong>那么在gc时，会出现上图中所示的key为null，value存在的情况，而且该value将无法被访问。</strong>则就出现了内存泄漏。</p>
@@ -596,6 +597,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/25/happen-before/" rel="prev" title="Happens-Before">
+                Happens-Before <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -681,7 +686,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -692,7 +697,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -703,7 +708,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -788,7 +793,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ThreadLocal"><span class="nav-number">1.</span> <span class="nav-text">ThreadLocal</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ThreadLocal的用法"><span class="nav-number">1.1.</span> <span class="nav-text">ThreadLocal的用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThreadLocal的源码解析"><span class="nav-number">1.2.</span> <span class="nav-text">ThreadLocal的源码解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThreadLocalMap对象"><span class="nav-number">1.3.</span> <span class="nav-text">ThreadLocalMap对象</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ThreadLocal"><span class="nav-number">1.</span> <span class="nav-text">ThreadLocal</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ThreadLocal的用法"><span class="nav-number">1.1.</span> <span class="nav-text">ThreadLocal的用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThreadLocal的源码解析"><span class="nav-number">1.2.</span> <span class="nav-text">ThreadLocal的源码解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThreadLocalMap对象"><span class="nav-number">1.3.</span> <span class="nav-text">ThreadLocalMap对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThreadLocal造成的内存泄露"><span class="nav-number">1.4.</span> <span class="nav-text">ThreadLocal造成的内存泄露</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -948,13 +953,6 @@
 
   
   
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
-
-
 
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>

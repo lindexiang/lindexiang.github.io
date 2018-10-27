@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CH">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#fff">
+
+
+
+  
+  
+    
+      
+    
+    
+      
+    
+  <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+  <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-flash.min.css" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.cat.net/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#fff">
+
+
+
+
+
+  <meta name="keywords" content="线程同步,内存可见性,JVM," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ldx's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="happens-before简介在看JVM的内存模型时对内存可见性一直有个问题，线程A锁住，更新了对象内容A，释放锁，线程B锁住，为什么能获得对象A的最新值。还有双重检查生成单例时为什么需要把instance设置成violatile。问题的本质是线程同步的原子性，可见性，有序性的实现原理。">
+<meta name="keywords" content="线程同步,内存可见性,JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Happens-Before">
+<meta property="og:url" content="https://lindexiang.github.io/2018/08/25/happen-before/index.html">
+<meta property="og:site_name" content="ldx&#39;s Blog">
+<meta property="og:description" content="happens-before简介在看JVM的内存模型时对内存可见性一直有个问题，线程A锁住，更新了对象内容A，释放锁，线程B锁住，为什么能获得对象A的最新值。还有双重检查生成单例时为什么需要把instance设置成violatile。问题的本质是线程同步的原子性，可见性，有序性的实现原理。">
+<meta property="og:locale" content="zh-CH">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15351845594543.jpg">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15351846294119.jpg">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15352716670491.png">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/2018-08-27-HB3.jpg">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/2018-08-27-HB4.jpg">
+<meta property="og:updated_time" content="2018-10-22T06:59:41.976Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Happens-Before">
+<meta name="twitter:description" content="happens-before简介在看JVM的内存模型时对内存可见性一直有个问题，线程A锁住，更新了对象内容A，释放锁，线程B锁住，为什么能获得对象A的最新值。还有双重检查生成单例时为什么需要把instance设置成violatile。问题的本质是线程同步的原子性，可见性，有序性的实现原理。">
+<meta name="twitter:image" content="http://pbhb4py13.bkt.clouddn.com/15351845594543.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"perspectiveLeftIn","post_header":"fadeIn","post_body":"fadeIn","coll_header":"perspectiveLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://lindexiang.github.io/2018/08/25/happen-before/"/>
+
+
+
+
+
+  <title>Happens-Before | ldx's Blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CH">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/lindexiang">
+      <img style="position: absolute; top: 0; right: 0; border: 0;"
+      src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ldx's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br />
+            
+            top
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-futbol-o"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://lindexiang.github.io/2018/08/25/happen-before/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lindexiang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avator.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ldx's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Happens-Before</h1>
+        
+
+        <div class="post-meta">
+          
+            <i class="fa fa-thumb-tack"></i>
+            <font color=7D26CD>置顶</font>
+            <span class="post-meta-divider">|</span>
+          
+          
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-25T15:30:05+08:00">
+                2018-08-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JVM虚拟机原理/" itemprop="url" rel="index">
+                    <span itemprop="name">JVM虚拟机原理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/25/happen-before/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/08/25/happen-before/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,812
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  15
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="happens-before简介"><a href="#happens-before简介" class="headerlink" title="happens-before简介"></a>happens-before简介</h2><p>在看JVM的内存模型时对内存可见性一直有个问题，线程A锁住，更新了对象内容A，释放锁，线程B锁住，为什么能获得对象A的最新值。还有双重检查生成单例时为什么需要把instance设置成violatile。问题的本质是线程同步的原子性，可见性，有序性的实现原理。<a id="more"></a>我在看了<br><a href="http://ifeve.com/java-%E4%BD%BF%E7%94%A8-happen-before-%E8%A7%84%E5%88%99%E5%AE%9E%E7%8E%B0%E5%85%B1%E4%BA%AB%E5%8F%98%E9%87%8F%E7%9A%84%E5%90%8C%E6%AD%A5%E6%93%8D%E4%BD%9C/" target="_blank" rel="noopener">http://ifeve.com/java-%E4%BD%BF%E7%94%A8-happen-before-%E8%A7%84%E5%88%99%E5%AE%9E%E7%8E%B0%E5%85%B1%E4%BA%AB%E5%8F%98%E9%87%8F%E7%9A%84%E5%90%8C%E6%AD%A5%E6%93%8D%E4%BD%9C/</a> 这个文章后有一种恍然大悟的感觉，终于搞明白了。</p>
+<p>在深入理解JVM虚拟机文章中说过一句话，JMM(java内存模型)中的happens-before(hb规则)规则定义了java多线程操作的有序性和可见性，防止编译器重排序对结果的影响。 官方文档说:</p>
+<blockquote>
+<p>一个变量被多个线程读取并且至少被一个线程写入时，如果读操作和写操作没有HB规则，那么将会产生数据竞争问题。为了保证操作B能看到操作A的结果(无论A和B是否在一个线程)，那么A和B之间必须满足HB规则，如果没有，将会导致重排序。</p>
+</blockquote>
+<p>总结起来就是2点</p>
+<ul>
+<li>如果满足HB规则，那么能保证可见性和有序性。比如线程加锁，同一个锁时，顺序为线程A-线程B，那么线程B一定能看到线程A的任何修改结果。缓存和主内存之间的关系会失效。</li>
+<li>HB规则的实现原理具体我也不知道，好像是根据CPU总线事务来操作的。只要知道HB规则会使缓存失效。</li>
+</ul>
+<h2 id="缓存一致性和java内存模型-JMM-java-memory-model"><a href="#缓存一致性和java内存模型-JMM-java-memory-model" class="headerlink" title="缓存一致性和java内存模型(JMM java memory model)"></a>缓存一致性和java内存模型(JMM java memory model)</h2><blockquote>
+<p>在谈论java线程模型时必须要了解缓存一致性原则，这个是java内存模型的基础。java内存模型是一个概念模型，底层是寄存器、缓存内存、主内存、CPU之间的互相协作。</p>
+</blockquote>
+<p>在多处理器的情况下，共享数据的交互硬件之间的关系如下:<br><img src="http://pbhb4py13.bkt.clouddn.com/15351845594543.jpg" alt=""><br>JMM<br><img src="http://pbhb4py13.bkt.clouddn.com/15351846294119.jpg" alt=""></p>
+<h3 id="缓存一致性协议-MESI"><a href="#缓存一致性协议-MESI" class="headerlink" title="缓存一致性协议(MESI) "></a>缓存一致性协议(MESI) <a id="jump"></a></h3><p>每个CPU都有属于自己的高速缓存，在需要同步的情况下，如果在缓存中更新了数据后，其他CPU读取该共享变量的缓存后就会出现<strong>缓存不一致</strong>的错误。这个时候就需要MESI协议来实现缓存一致性。<br>可以采用LOCK#信号来对总线进行锁定，一个CPU在总线上输出该信号后，其他CPU的请求将会被阻塞，则该CPU可以独自共享内存，但是该方法的开销太大，之后的计算机一般采用<strong>缓存锁定</strong>的方式。<br>MESI代表缓存数据的4种状态的名字，分别为Modified, Exclusive, Shared, Invalid</p>
+<ul>
+<li>Modified<br>被修改的缓存。该缓存在本CPU中有缓存数据,其他CPU中没有，对其他缓存中的值是已经被修改过的，但是没有更新到内存中。</li>
+<li>Exclusive<br>独占的。处于该状态的缓存，在本CPU中有缓存，并且数据没有修改，在内存中一致。</li>
+<li>Shared<br>共享的。处于这个状态的数据在多个CPU中都有缓存，且和内存一致。<br>-Invalid<br>失效的数据。缓存的数据已经失效，或者不在缓存中。</li>
+</ul>
+<blockquote>
+<p>嗅探技术：嗅探能够嗅探到其他处理器访问主内存和它们的内存缓存</p>
+</blockquote>
+<p>缓存行在以上的4种状态的基础上，通过“嗅探”的技术完成以下功能 </p>
+<ul>
+<li>一个处于M状态的缓存行，必须时刻监听所有试图读取该缓存行对应的主内存地址的值，如果监听到，则必须在此操作执行前将缓存行写回CPU中。</li>
+<li>处于S状态的缓存行，必须监听使该缓存行无效或者独占该缓存行的请求，监听到后将该缓存行设置为I</li>
+<li>处于E状态，必须监听其他试图读取该缓存行的主内存地址的操作，监听到，将该缓存行的状态设置为S</li>
+<li>只有E和M状态可以进行写操作并且不需要额外操作，想要对S状态的缓存字段写操作，先发送一个RFO广播，该广播可以让其他CPU缓存中的相同的字段的状态变成I</li>
+</ul>
+<p>通过以上的机制可以保证处理器的读写操作是原子性的，并且读到的数据都是最新的，即内存可见性。</p>
+<blockquote>
+<p>总结以上的<strong>EMSI协议，其实就是能通过使缓存失效和读取变量强制从主内存中读取的方式来保证了内存的可见性</strong>。类似的，java中的锁和violatile也是这样的原理.</p>
+</blockquote>
+<h3 id="java并发编程中的几个原则"><a href="#java并发编程中的几个原则" class="headerlink" title="java并发编程中的几个原则"></a>java并发编程中的几个原则</h3><blockquote>
+<p>在使用synchorized和RenntrantLock时，我们只关注了它们的原子性，其实它们的可见性和有序性更加的重要。可见性保证了同步的两个线程读取的变量的是最新值。有序性保证了线程的先后顺序。原子性就是你们所理解的那样子。</p>
+</blockquote>
+<ol>
+<li>原子性<br>Java主要提供了<strong>锁机制以及CAS操作实现原子性</strong>，对于单个读/写操作是通过LOCK#信号或“缓存锁定”实现的。 除此之外，long和double类型的变量读/写是非原子性的，每次都只读/写32位数据，所以一个单个的读/写操作就变成了两个读/写操作，有可能在只读/写了其中32位操作后CPU就被其他线程抢占到。</li>
+<li>可见性<br>每个线程都有私有的缓存。java中提供了violatile保证了内存的可见性，底层通过了Lock#或者缓存锁定实现。</li>
+<li>有序性<br>编译器和处理器会对代码进行排序，排序包括了 1. 语句的执行顺序重排序。 2.指令集并行的重排序，多个CPU协同读取 3.内存系统的重排序 缓存和内存的数据同步存在时间差。</li>
+</ol>
+<h3 id="内存屏障"><a href="#内存屏障" class="headerlink" title="内存屏障 "></a>内存屏障 <a id="jump1"></a></h3><p>内存屏障是一个CPU指令，java编译器会在生成指令的适当位置插入内存屏障指令来禁止特定类型的处理器重排序，作用有2个:</p>
+<ul>
+<li>保证了特定操作的执行顺序</li>
+<li>保证了某些变量的内存可见性<br>如果在指令间插入了Memory Barrier，则会告诉编译器和CPU，不管什么指令都不能和这条指令重排序，即<strong>插入了内存屏障后禁止在内存屏障前后的指令执行重拍序。</strong>Memory Barrier强制刷出各种CPU缓存数据，任何CPU的线程都能读取这些数据的最新值。<br><strong>JMM内存屏障可以保证了load和store之间的有序性和可见性。</strong><br><img src="http://pbhb4py13.bkt.clouddn.com/15352716670491.png" alt=""></li>
+</ul>
+<h2 id="HB规则"><a href="#HB规则" class="headerlink" title="HB规则"></a>HB规则</h2><ol>
+<li>程序次序原则: 在一个线程内，代码按照顺序执行</li>
+<li>管程锁定规则: 在同一个monitor上，unlock操作时间上先行发生于后面的lock操作</li>
+<li>volatile变量规则: 对一个volatile变量的写操作先于读操作</li>
+<li>线程启动原则: Thread的start()先于该线程的任何操作</li>
+<li>线程终止原则: Thread的所有操作都先于线程的终止检测。可以通过Thread.join()和Thread.isAlive()的返回值检测线程是否已终止</li>
+<li>线程终端规则: 线程的interrupt()方法先于中断线程检测到中断事件的发生，即可以使用interrupted()方法检测到线程是否被中断了。</li>
+<li>对象终结原则: 对象构造函数执行完毕先于finilized()方法</li>
+<li>传递性: <strong>A先于B，B先于C。可以推断出A先于C</strong></li>
+</ol>
+<p><strong>只要满足如上的8条规则，都能保证后面操作的读线程能读取到前面写线程的最新值，即保证了可见性。</strong>其中对<strong>传递性的规则是最重要的</strong>，如果A HB B， B HB C，那么A的操作共享变量的结果对C都是可见的。实现可见性的原理是通过缓存一致性协议(MESI)和内存屏障(Memory Barrrier)。</p>
+<h3 id="同步的实现解析"><a href="#同步的实现解析" class="headerlink" title="同步的实现解析"></a>同步的实现解析<a id="jump2"></a></h3><p>Happens-Before的排序规则十分的强大，一般是使用happens-Before和监视器锁或者volatile变量的规则结合来保证对某个未被锁保护变量的访问。</p>
+<p>如下代码是线程同步的简单列子，没有使用锁，仅仅通过volatile变量就保证了线程同步。相比于锁。没有线程的阻塞，极大的提升了效率。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HappenBeforeTest</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> flag = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">task1</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">while</span> (num &lt; <span class="number">100</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (!flag &amp;&amp; (num == <span class="number">0</span> || ++num % <span class="number">2</span> == <span class="number">0</span>)) &#123;</span><br><span class="line">                    System.out.println(num);</span><br><span class="line">                    flag = <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">task2</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">while</span> (num &lt; <span class="number">100</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (flag &amp;&amp; (++num % <span class="number">2</span> != <span class="number">0</span>)) &#123;</span><br><span class="line">                    System.out.println(num);</span><br><span class="line">                    flag = <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Thread thread1 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> HappenBeforeTest().new task1());</span><br><span class="line">        Thread thread2 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> HappenBeforeTest().new task2());</span><br><span class="line"></span><br><span class="line">        thread1.start();</span><br><span class="line">        thread2.start();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上的代码会按照循序打印出0~100的数字，但是num变量并不是volatile，并且num++也不能保证原子性，会有可见性问题。<strong>问题是为什么t1更新了num，t2能感知到</strong>。</p>
+<p>其实以上代码执行的顺序如下<br><img src="http://pbhb4py13.bkt.clouddn.com/2018-08-27-HB3.jpg" alt="HB3"><br>可以使用Happens-Before来完成可见性分析。</p>
+<ol>
+<li>t1 num++，然后修改了volatile变量 则1 HB 2</li>
+<li>t2 读取了修改后的volatile变量 则2 HB 3</li>
+<li>t2 读取num的变量，并执行了num++ 则3 HB 4</li>
+<li>根据传递性原则，可以推断到1 HB 4</li>
+</ol>
+<p>根据以上的分析，可以得到t2 对 t1的操作结果具有可见性，不用锁也能得到正确的线程执行顺序。即使num没有进行加锁访问。</p>
+<h3 id="3个线程按顺序打印"><a href="#3个线程按顺序打印" class="headerlink" title="3个线程按顺序打印"></a>3个线程按顺序打印</h3><p>3个线程按照循序打印ABC各3次还可以使用一下的方法，只是利用了volatile的可见性和HB规则。但是使用while去一直循环查询感觉效率并没有wait-notify高。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HappenBeforeTest</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="keyword">int</span> flag = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">task1</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">while</span> (num &lt; <span class="number">9</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (flag == <span class="number">0</span>) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"A"</span>);</span><br><span class="line">                    num++;</span><br><span class="line">                    flag = <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">task2</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">while</span> (num &lt; <span class="number">9</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (flag == <span class="number">1</span>) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"B"</span>);</span><br><span class="line">                    num++;</span><br><span class="line">                    flag = <span class="number">2</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">task3</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">while</span> (num &lt; <span class="number">9</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (flag == <span class="number">2</span>) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"C"</span>);</span><br><span class="line">                    num++;</span><br><span class="line">                    flag = <span class="number">0</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Thread thread1 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> HappenBeforeTest().new task1());</span><br><span class="line">        Thread thread2 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> HappenBeforeTest().new task2());</span><br><span class="line">        Thread thread3 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> HappenBeforeTest().new task3());</span><br><span class="line">        thread1.start();</span><br><span class="line">        thread2.start();</span><br><span class="line">        thread3.start();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="其他规则实现同步"><a href="#其他规则实现同步" class="headerlink" title="其他规则实现同步"></a>其他规则实现同步</h2><p>以下的代码也能保证a的正确访问，因为JMM已经保证了访问的先后顺序和可见性。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Thread的join()方法保证了可见性</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    Thread tb = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">      a = <span class="number">2</span>;</span><br><span class="line">    &#125;);</span><br><span class="line">    Thread ta = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        tb.join();</span><br><span class="line">      &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">        <span class="comment">//NO</span></span><br><span class="line">      &#125;</span><br><span class="line">      System.out.println(a);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    ta.start();</span><br><span class="line">    tb.start();</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">//Thread的start()方法保证可见性</span></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    Thread tb = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">      System.out.println(a);</span><br><span class="line">    &#125;);</span><br><span class="line">    Thread ta = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">      tb.start();</span><br><span class="line">      a = <span class="number">2</span>;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    ta.start();</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="volatile双重检查实现单例原理"><a href="#volatile双重检查实现单例原理" class="headerlink" title="volatile双重检查实现单例原理"></a>volatile双重检查实现单例原理</h2><p>上面说过了volatile的作用一共有2个。</p>
+<ol>
+<li>可见性<br>volatile变量写完会立即同步到主内存，并且使其他缓存失效，只能从主内存中读取，这个是由内存一致性协议(MESI)决定。见 <a href="#jump">缓存一致性协议</a></li>
+<li>防止指令重拍序<br>volatile变量会在代码编译时插入LOCK#指令，该操作相当于一个<a href="#jump1">内存屏障</a>，内存屏障能保证重拍序无法将后面的指令重拍序到内存屏障之前。</li>
+</ol>
+<h3 id="双重检查锁-DCL"><a href="#双重检查锁-DCL" class="headerlink" title="双重检查锁(DCL)"></a>双重检查锁(DCL)</h3><p>这个DCL之前在分析<a href="http://medesqure.top/2018/08/07/JVM-12/" target="_blank" rel="noopener">java内存模型</a>时已经说过，还是会存在对象没有构造完全的风险。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(instance == <span class="keyword">null</span>) &#123; <span class="comment">//1</span></span><br><span class="line">			synchonorized(Singleton.class) &#123; <span class="comment">//2</span></span><br><span class="line">				<span class="keyword">if</span>(instance == <span class="keyword">null</span>) &#123; <span class="comment">//3</span></span><br><span class="line">					instance = <span class="keyword">new</span> Singleton(); <span class="comment">//4</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> instance;  <span class="comment">//5</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.age = <span class="number">18</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123; <span class="comment">//6</span></span><br><span class="line">		<span class="keyword">return</span> age;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于步骤4，看上去只有<code>instance = new Singleton()</code>一个操作，但是其实至少有3个步骤</p>
+<ol>
+<li>在堆中开辟一块新的内存(new)</li>
+<li>调用对象的构造函数对内存进行初始化(invokespecial)</li>
+<li>将内存的引用赋值给变量(astore)</li>
+</ol>
+<p>但是存在指令重拍序时，很可能发生了如下的执行顺序，1-3-2。这个没有疑问。<br>重点来了，我们来好好分析一下可能出现的对象构造不完全的情况。</p>
+<ol>
+<li>线程A执行到4，执行new的顺序恰好是1-3-2 </li>
+<li>当其执行完3时，这个时候该线程的CPU时间被剥夺分配给线程B，而B恰好执行了步骤1.</li>
+<li>因为1不是同步操作，所以线程B判断i<br>f(instance == null)返回false，因为这个时候这个引用已经被分配值了。所以直接返回了一个instance。</li>
+</ol>
+<p>不管B是不是会去访问age变量，但是一个没有被构造完全的对象被引用了，就存在了风险。</p>
+<p>画个图吧，这个我觉得已经讲的非常明白了 不过这个概率发生的概率大概和买彩票中500w差不多了吧。咳咳<br><img src="http://pbhb4py13.bkt.clouddn.com/2018-08-27-HB4.jpg" alt="HB4"><br>但是使用了volatile之后，<code>instance = new Singleton()</code>的执行顺序一定会是1-2-3，从Happens-Before的规则出发，instance对象的初始化一定会被线程B观察到，所以才会是正确的构造结果。<strong>不会导致未被完全构造完成的对象发布出去</strong>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这个文章写得有点多了，最后总结一下吧。使用HB规则能简单的推导出上一个操作对下一个操作的可见性。<br>这个特性在使用ReentrantLock也被使用到了。所以其也可以实现线程同步的原子性，可见性，有序性。其在内部使用了volatile的state状态来定义状态，每次操作共享变量时会先读取state变量，这个就和<a href="#jump2">同步的实现解析</a>一样了。因为CAS只是保证了赋值的原子性。<br>其实并发容器中大部分都是用了这个HB来保证可见性，CountDownlatch,Semaphore，Future等等。</p>
+<p>最后，啰嗦一句，使用HB规则去判断可见性，是java内存模型的精髓。<br><a href="http://medesqure.top/" target="_blank" rel="noopener">个人博客</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/线程同步/" rel="tag"># 线程同步</a>
+          
+            <a href="/tags/内存可见性/" rel="tag"># 内存可见性</a>
+          
+            <a href="/tags/JVM/" rel="tag"># JVM</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/17/threadLocal/" rel="next" title="threadLocal原理解析">
+                <i class="fa fa-chevron-left"></i> threadLocal原理解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/25/AQS/" rel="prev" title="AQS原理">
+                AQS原理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avator.gif"
+                alt="lindexiang" />
+            
+              <p class="site-author-name" itemprop="name">lindexiang</p>
+              <p class="site-description motion-element" itemprop="description">this is personal blog</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/lindexiang" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="1027710124@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                神奇的链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://music.163.com/#/user/home?id=86590096" title="😆 网易云音乐 😆" target="_blank">😆 网易云音乐 😆</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://coldplay.com/" title="Coldplay Official Website" target="_blank">Coldplay Official Website</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://elonmusknews.org/" title="获取 Elon Musk 的新闻" target="_blank">获取 Elon Musk 的新闻</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.bilibili.com/video/av6211226/" title="尼古拉·特斯拉：发明了现代世界的人" target="_blank">尼古拉·特斯拉：发明了现代世界的人</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://lindexiang.github.io/about/" title="关于此博客" target="_blank">关于此博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#happens-before简介"><span class="nav-number">1.</span> <span class="nav-text">happens-before简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存一致性和java内存模型-JMM-java-memory-model"><span class="nav-number">2.</span> <span class="nav-text">缓存一致性和java内存模型(JMM java memory model)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存一致性协议-MESI"><span class="nav-number">2.1.</span> <span class="nav-text">缓存一致性协议(MESI) </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java并发编程中的几个原则"><span class="nav-number">2.2.</span> <span class="nav-text">java并发编程中的几个原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存屏障"><span class="nav-number">2.3.</span> <span class="nav-text">内存屏障 </span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HB规则"><span class="nav-number">3.</span> <span class="nav-text">HB规则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#同步的实现解析"><span class="nav-number">3.1.</span> <span class="nav-text">同步的实现解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3个线程按顺序打印"><span class="nav-number">3.2.</span> <span class="nav-text">3个线程按顺序打印</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他规则实现同步"><span class="nav-number">4.</span> <span class="nav-text">其他规则实现同步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#volatile双重检查实现单例原理"><span class="nav-number">5.</span> <span class="nav-text">volatile双重检查实现单例原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#双重检查锁-DCL"><span class="nav-number">5.1.</span> <span class="nav-text">双重检查锁(DCL)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lindexiang</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user-circle-o"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      <i class="fa fa-eye"></i>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.1/velocity.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.1/velocity.ui.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'CGD5uAsfibJi6l5bykvuxJQQ-gzGzoHsz',
+        appKey: 'T6VMmohj66z8YpBlxXgEsezd',
+        placeholder: '快来评论啊 小哥',
+        avatar:'mm',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

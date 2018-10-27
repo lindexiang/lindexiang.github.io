@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CH">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#fff">
+
+
+
+  
+  
+    
+      
+    
+    
+      
+    
+  <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+  <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-flash.min.css" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.cat.net/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#fff">
+
+
+
+
+
+  <meta name="keywords" content="socket编程,计算机网络,TCP/IP," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ldx's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="socket编程介绍简介进程间通信的方法有管道，命名管道，信号，消息队列，共享内存，信号量，这些方法要求通信的两个线程位于同一个主机。对于非同一个主机可以使用TCP／IP协议搞定。套接字是网络通信的基础。当一个程序创建了一个socket并与端口号绑定时候，意味着向TCP/IP协议申明了对端口的占有。比如端口为8080。所有目标为8080端口的TCP/IP协议包都会被该程序收到。Accept函数，就">
+<meta name="keywords" content="socket编程,计算机网络,TCP&#x2F;IP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="socket原理">
+<meta property="og:url" content="https://lindexiang.github.io/2018/10/21/socket/index.html">
+<meta property="og:site_name" content="ldx&#39;s Blog">
+<meta property="og:description" content="socket编程介绍简介进程间通信的方法有管道，命名管道，信号，消息队列，共享内存，信号量，这些方法要求通信的两个线程位于同一个主机。对于非同一个主机可以使用TCP／IP协议搞定。套接字是网络通信的基础。当一个程序创建了一个socket并与端口号绑定时候，意味着向TCP/IP协议申明了对端口的占有。比如端口为8080。所有目标为8080端口的TCP/IP协议包都会被该程序收到。Accept函数，就">
+<meta property="og:locale" content="zh-CH">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/2018-10-21-9B702DEB-FAF5-4F31-9630-5E634D150B3B.png">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/2018-10-21-0E6B62B2-5328-44E8-A2E1-873F6558B138.png">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/2018-10-21-673B10A2-B926-4778-8908-FE5167CD6B3C.png">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/2018-10-21-BC7DF720-2072-435A-B68D-C2A4836A6C28.png">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/2018-10-22-0D5A9C5B-FE0C-4389-8D9C-6C02985252DF.png">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/2018-10-22-3CE21703-CC96-4CDC-A974-4E172B3A92CC.png">
+<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/2018-10-22-15401396825782.jpg">
+<meta property="og:updated_time" content="2018-10-23T14:02:36.928Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="socket原理">
+<meta name="twitter:description" content="socket编程介绍简介进程间通信的方法有管道，命名管道，信号，消息队列，共享内存，信号量，这些方法要求通信的两个线程位于同一个主机。对于非同一个主机可以使用TCP／IP协议搞定。套接字是网络通信的基础。当一个程序创建了一个socket并与端口号绑定时候，意味着向TCP/IP协议申明了对端口的占有。比如端口为8080。所有目标为8080端口的TCP/IP协议包都会被该程序收到。Accept函数，就">
+<meta name="twitter:image" content="http://pbhb4py13.bkt.clouddn.com/2018-10-21-9B702DEB-FAF5-4F31-9630-5E634D150B3B.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"perspectiveLeftIn","post_header":"fadeIn","post_body":"fadeIn","coll_header":"perspectiveLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://lindexiang.github.io/2018/10/21/socket/"/>
+
+
+
+
+
+  <title>socket原理 | ldx's Blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CH">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/lindexiang">
+      <img style="position: absolute; top: 0; right: 0; border: 0;"
+      src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ldx's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br />
+            
+            top
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-futbol-o"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://lindexiang.github.io/2018/10/21/socket/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lindexiang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avator.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ldx's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">socket原理</h1>
+        
+
+        <div class="post-meta">
+          
+            <i class="fa fa-thumb-tack"></i>
+            <font color=7D26CD>置顶</font>
+            <span class="post-meta-divider">|</span>
+          
+          
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-21T23:41:33+08:00">
+                2018-10-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/socket编程/" itemprop="url" rel="index">
+                    <span itemprop="name">socket编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/21/socket/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/10/21/socket/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,420
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  13
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="socket编程介绍"><a href="#socket编程介绍" class="headerlink" title="socket编程介绍"></a>socket编程介绍</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>进程间通信的方法有管道，命名管道，信号，消息队列，共享内存，信号量，这些方法要求通信的两个线程位于同一个主机。对于非同一个主机可以使用TCP／IP协议搞定。<br>套接字是网络通信的基础。当一个程序创建了一个socket并与端口号绑定时候，意味着向TCP/IP协议申明了对端口的占有。比如端口为8080。所有目标为8080端口的TCP/IP协议包都会被该程序收到。Accept函数，就是抽象的TCP连接建立过程，accept函数返回的是新socket是指代本次连接。一个链接包括两个部分，一个是源IP和源端口，另一部分是目标IP和目标端口。所以accept可以产生多个socket。<br><strong>Socket类似于是对TCP/IP协议协议的抽象，对外提供了编程的接口、使用这个接口可以方便的使用tcp/IP的功能。所有socket是对TCP/IP协议栈的抽象，而不是简单的映射关系。</strong><br><a id="more"></a><br><img src="http://pbhb4py13.bkt.clouddn.com/2018-10-21-9B702DEB-FAF5-4F31-9630-5E634D150B3B.png" alt="9B702DEB-FAF5-4F31-9630-5E634D150B3B"><br><img src="http://pbhb4py13.bkt.clouddn.com/2018-10-21-0E6B62B2-5328-44E8-A2E1-873F6558B138.png" alt="0E6B62B2-5328-44E8-A2E1-873F6558B138"><br>socket包括客户端和服务端。<br>Socket是客户端使用的，构造函数如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Socket(String host, <span class="keyword">int</span> port, InetAddress localAddress, <span class="keyword">int</span> localPort)<span class="keyword">throws</span> IOException</span><br></pre></td></tr></table></figure>
+<p>会尝试和服务端建立链接，失败抛出异常，成功后返回socket对象，是一个同步阻塞IO<br>serverSocket是服务端使用的，构造函数如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ServerSocket(<span class="keyword">int</span> port, <span class="keyword">int</span> backlog, InetAddress bindAddr)<span class="keyword">throws</span> IOException</span><br></pre></td></tr></table></figure>
+<p>其中 port是服务端监听的端口号，backlog是accept队列的大小。bindAddr是服务端绑定的IP</p>
+<h2 id="listen，connect，accept的流程以及原理"><a href="#listen，connect，accept的流程以及原理" class="headerlink" title="listen，connect，accept的流程以及原理"></a>listen，connect，accept的流程以及原理</h2><p>客户端发起socket链接后，会使用TCP的3次握手和服务端建立链接，而serverSocket使用accept函数来得到链接的客户端。<br>流程图如下<br><img src="http://pbhb4py13.bkt.clouddn.com/2018-10-21-673B10A2-B926-4778-8908-FE5167CD6B3C.png" alt="673B10A2-B926-4778-8908-FE5167CD6B3C"></p>
+<ol>
+<li>服务端new一个serverSocket后，会绑定一个端口设置状态为LISTEN，监听端口的情况。同时内核生成2个队列，一个是syn队列。另一个是accept队列。其中ACCEPT队列的长度由backlog决定。</li>
+<li>服务端调用accept后，将会阻塞，等待ACCEPT队列中有元素。</li>
+<li>客户端调用connect函数后，将发起SYN请求，请求与服务端建立TCP连接，第一次握手</li>
+<li>服务端收到SYN请求后，将client放入syn队列中，并给客户返回ACK，此时还会携带一个要和客户端建立连接的请求标志SYN，称为第二次握手。</li>
+<li>客户端收到SYN+ACK后，connect函数返回，并发送ACK给服务器端，称为第三次握手。</li>
+<li>服务端收到ACK后，从SYN队列中移除client，并加入ACCEPT队列中，而accept函数等到资源，阻塞中唤醒，从ACCEPT队列中取出请求方，重新建立一个连接socketId，返回。</li>
+</ol>
+<h2 id="BIO编程"><a href="#BIO编程" class="headerlink" title="BIO编程"></a>BIO编程</h2><p>网络编程的基本模型是C/S，即两个进程间的通信。<br>服务端提供了IP和监听接口，客户端如果想对监听的地址发起连接请求,通过三次握手连接，如果连接建立成功，双方就可以通过socket通信。<br>传统的同步阻塞模型开发中，ServerSocket负责绑定IP地址,启动监听端口；socket负责发起连接操作。连接成功后，双方通过输入流和输出流进行同步阻塞通信。<br>BIO通信模型： 采用BIO通信模型的服务端，通常有一个独立的accept线程负责监听客户端的连接，他收到客户端连接请求后为每个客户端创建一个新的线程进行数据处理。处理完成后通过输入流返回给应答客户端。线程销毁。<br><img src="http://pbhb4py13.bkt.clouddn.com/2018-10-21-BC7DF720-2072-435A-B68D-C2A4836A6C28.png" alt="BC7DF720-2072-435A-B68D-C2A4836A6C28"><br>BIO的问题是当有一个新的客户端请求接入时候，服务端要建立一个新的线程来处理这个链路。该模型缺乏伸缩能力，当客户端并发量增加后，由于服务端和客户端的访问数量是1:1，则在线程数增加后，系统的性能就会下降很多。</p>
+<h2 id="BIO使用线程池"><a href="#BIO使用线程池" class="headerlink" title="BIO使用线程池"></a>BIO使用线程池</h2><p>我们可以使用线程池来实现一个线程或者多个线程来处理N个客户端模型。底层还是使用同步阻塞IO，称为伪异步IO模型<br><img src="http://pbhb4py13.bkt.clouddn.com/2018-10-22-0D5A9C5B-FE0C-4389-8D9C-6C02985252DF.png" alt="0D5A9C5B-FE0C-4389-8D9C-6C02985252DF"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">(<span class="keyword">int</span> port)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (server != <span class="keyword">null</span>) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            server = <span class="keyword">new</span> ServerSocket(port);</span><br><span class="line">            System.out.println(<span class="string">"服务器已启动，端口号: "</span> + port);</span><br><span class="line">            <span class="comment">//无限循环监听客户端连接</span></span><br><span class="line">            <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">                Socket socket = server.accept();</span><br><span class="line">                executorService.execute(<span class="keyword">new</span> ServerHandler(socket));</span><br><span class="line">           <span class="comment">//new Thread(new ServerHandler(socket)).start();</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (server != <span class="keyword">null</span>) &#123;</span><br><span class="line">                System.out.println(<span class="string">"服务器已关闭"</span>);</span><br><span class="line">                server.close();</span><br><span class="line">                server = <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上述的一部分代码中看出，使用线程池来管理了socket。使用了线程池后，不仅能帮我们管理线程,使用FixedThreadPool能有效控制线程的最大数量，保证系统的资源的控制。<br>但是，限制了线程的最大数量，如果发生大量的并发请求，超过最大数量的线程就只能等待，直到线程池中有空闲的线程可以被复用。而对socket的输入流读取时会一直阻塞，直到发生：</p>
+<ol>
+<li>有数据可以读取</li>
+<li>可用数据读取完毕</li>
+<li>发生空指针异常</li>
+</ol>
+<p>所以在读取数据较慢时候(数据量大、网络传输慢)，其他的消息只能等待。</p>
+<h2 id="NIO编程"><a href="#NIO编程" class="headerlink" title="NIO编程"></a>NIO编程</h2><p>从上述的BIO模型中，可以很明显的看出其实大部分的线程都是在等待数据传输过来，这部分的线程一直都是在等待的状态，相当于在IO模型的第一部分wait data的状态。使用NIO，在第一阶段不会创建线程，而是采用channel来等待数据，当数据读取完毕后才创建线程来处理。<br>NIO提供了与传统的BIO模型中的socket和ServerSocket相对应的socketChannel和ServerSocketChannel两种不同的套接字实现。<br><img src="http://pbhb4py13.bkt.clouddn.com/2018-10-22-3CE21703-CC96-4CDC-A974-4E172B3A92CC.png" alt="3CE21703-CC96-4CDC-A974-4E172B3A92CC"></p>
+<h3 id="channel理解"><a href="#channel理解" class="headerlink" title="channel理解"></a>channel理解</h3><p>Channel,中文意思“通道”，表示IO源与目标打开的连接，类似于传统的“流”。但是Channel不能直接访问数据，需要和缓冲区buffer进行交互。<strong>打个比方，山西有煤，我们想要，于是乎建了一条铁路连通到山西，这条铁路就是这里的”Channel”，而buffer类似于火车。</strong><br>使用channel来处理IO请求的工作原理如下。buffer是内核地址空间的，也可以把channel理解为一条TCP通道。<br><img src="http://pbhb4py13.bkt.clouddn.com/2018-10-22-15401396825782.jpg" alt=""></p>
+<blockquote>
+<p>从上面的图中可以看出可以设置一个API直接从内核地址空间的buffer中读取数据，不要将数据copy到用户空间中。这样可以极大的提高效率。<br>程序的数据要先到jvm用户地址缓冲区，再到计算机内存中。也就是不能直接和计算机内存进行数据操作。那么通过内存映射文件，也就是上诉方式，内部以直接缓冲区和内存映射文件实现了直接访问内存。这样大大提高了效率。但是也有缺点，如果写过去的数据很大，然后jvm没有及时回收内存，那么结果可想而知。因此，这个适用于那种长久存放在内存不也不会被短时间内就需要回收的数据。</p>
+</blockquote>
+<h3 id="缓冲区buffer"><a href="#缓冲区buffer" class="headerlink" title="缓冲区buffer"></a>缓冲区buffer</h3><p>Buffer是一个数据的缓冲对象。在NIO中，所有的数据都是通过buffer处理。channel的数据要先读取到buffer中才可以直接使用。directBuffer指的是内核上的缓冲对象。<strong>netty是直接读取这部分的数据，少了将数据从内核拷贝到用户的过程。</strong></p>
+<h3 id="select选择器"><a href="#select选择器" class="headerlink" title="select选择器"></a>select选择器</h3><blockquote>
+<p>Selector(选择器)是java中检测多个NIO通道，并能够知晓通道是否有读写事件的组件，这样子一个线程能管理多个channel，从而管理多个网络。</p>
+</blockquote>
+<p>使用一个Selector来管理多个channel的好处是只要很少的线程来处理通道。对于操作系统来说，线程之间的上下文切换需要很大的开销，而且每个线程都占用系统的资源(内存)。<br>当通道触发了一个事件，表明这个事件已经就绪。所以某个客户端的channel成功连接上服务器称为<strong>连接就绪</strong>。一个<code>serverSocketChannel</code>准备好接收新进入的连接称为<strong>接受就绪</strong>。一个有数据可读的通道为<strong>读就绪</strong>。等待写数据的通道为<strong>写就绪</strong>。</p>
+<blockquote>
+<p>使用NIO编程相当于<strong>多路IO复用模型</strong>的第一部分。在数据准备阶段由Selector来搞定。当数据传输完毕，Selector会调用用户线程来进行真正的IO读写。这是第二部分的内容。则NIO是一个同步非阻塞IO模型。同步和异步指的是再真正的IO读写的时候需不需要用户线程参与。</p>
+</blockquote>
+<p>使用NIO的代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Selector的创建</span></span><br><span class="line">Selector selector = Selector.open();</span><br><span class="line"><span class="comment">// Selector注册channel</span></span><br><span class="line">channel.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line">SelectionKey key = channel.register(selector,Selectionkey.OP_READ);</span><br></pre></td></tr></table></figure>
+<p>将channel与Selector配合使用。将channel注册到Selector上，使用registor()方法实现。使用Selector，Channel必须为非阻塞模式。 registor方法的第二个参数是Selector对那种Channel的时间感兴趣，可以监听不同的四种事件。Connect事件，Accept事件，Read事件，Write事件。<br>selectkey的合集</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SelectionKey.OP_CONNECT</span><br><span class="line">SelectionKey.OP_ACCEPT</span><br><span class="line">SelectionKey.OP_READ</span><br><span class="line">SelectionKey.OP_WRITE</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>通过Selector来选择channel。一旦Selector注册了一个或者多个channel，就可以调用多个select方法。select()方法会阻塞到至少有一个通道在你注册的事件上就绪了。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServerHandler</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Selector selector;</span><br><span class="line">    <span class="keyword">private</span> ServerSocketChannel serverChannel;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> started;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ServerHandler</span><span class="params">(<span class="keyword">int</span> port)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            selector = Selector.open();  <span class="comment">//打开selector</span></span><br><span class="line">            serverChannel = ServerSocketChannel.open();<span class="comment">//打开channel</span></span><br><span class="line">            serverChannel.configureBlocking(<span class="keyword">false</span>); <span class="comment">//channel为非阻塞</span></span><br><span class="line">            serverChannel.bind(<span class="keyword">new</span> InetSocketAddress(port), <span class="number">1024</span>); <span class="comment">//绑定本地端口</span></span><br><span class="line">            serverChannel.register(selector, SelectionKey.OP_ACCEPT); <span class="comment">//将chaannel注册到selector中，这个channel专门监听连接请求</span></span><br><span class="line">            started = <span class="keyword">true</span>;</span><br><span class="line">            System.out.println(<span class="string">"服务器已启动，端口号："</span> + port);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span></span>&#123;</span><br><span class="line">        started = <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (started) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                selector.select(<span class="number">1000</span>); <span class="comment">//1s返回</span></span><br><span class="line">                Set&lt;SelectionKey&gt; keys = selector.selectedKeys();</span><br><span class="line">                Iterator&lt;SelectionKey&gt; it = keys.iterator();</span><br><span class="line">                SelectionKey key = <span class="keyword">null</span>;</span><br><span class="line">                <span class="keyword">while</span>(it.hasNext())&#123;</span><br><span class="line">                    key = it.next();</span><br><span class="line">                    it.remove();</span><br><span class="line">                    <span class="keyword">try</span>&#123;</span><br><span class="line">                        handleInput(key);</span><br><span class="line">                    &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">                        <span class="keyword">if</span>(key != <span class="keyword">null</span>)&#123;</span><br><span class="line">                            key.cancel();</span><br><span class="line">                            <span class="keyword">if</span>(key.channel() != <span class="keyword">null</span>)&#123;</span><br><span class="line">                                key.channel().close();</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (selector != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                selector.close();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">handleInput</span><span class="params">(SelectionKey key)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (key.isValid()) &#123;</span><br><span class="line">            <span class="comment">//处理新接入的连接消息</span></span><br><span class="line">            <span class="keyword">if</span> (key.isAcceptable()) &#123;</span><br><span class="line">                ServerSocketChannel ssc = (ServerSocketChannel)key.channel();  <span class="comment">//一个新的连接，则在服务端新建一个ServerSocketChannel专门来监听这个事件</span></span><br><span class="line">                <span class="comment">//通过ServerSocketChannel的accept创建SocketChannel实例</span></span><br><span class="line">                <span class="comment">//完成该操作意味着完成TCP三次握手，TCP物理链路正式建立</span></span><br><span class="line">                SocketChannel sc = ssc.accept();</span><br><span class="line">                <span class="comment">//设置为非阻塞的</span></span><br><span class="line">                sc.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line">                <span class="comment">//注册为读</span></span><br><span class="line">                sc.register(selector, SelectionKey.OP_READ); </span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(key.isReadable())&#123;</span><br><span class="line">               <span class="comment">//得到这个通道的信息 类似于指针    </span></span><br><span class="line">               <span class="comment">//连接已经建立。有一个socket抽象，那么建一个socketChannel来得到这个socket的引用</span></span><br><span class="line">                SocketChannel sc = (SocketChannel) key.channel();  </span><br><span class="line">                <span class="comment">//创建ByteBuffer，并开辟一个1M的缓冲区</span></span><br><span class="line">                ByteBuffer buffer = ByteBuffer.allocate(<span class="number">1024</span>);</span><br><span class="line">                <span class="comment">//读取请求码流，返回读取到的字节数</span></span><br><span class="line">                <span class="keyword">int</span> readBytes = sc.read(buffer); <span class="comment">//主动去读取channel内的数据</span></span><br><span class="line">                <span class="comment">//读取到字节，对字节进行编解码</span></span><br><span class="line">                <span class="keyword">if</span>(readBytes&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                    <span class="comment">//将缓冲区当前的limit设置为position=0，用于后续对缓冲区的读取操作</span></span><br><span class="line">                    buffer.flip();</span><br><span class="line">                    <span class="comment">//根据缓冲区可读字节数创建字节数组</span></span><br><span class="line">                    <span class="keyword">byte</span>[] bytes = <span class="keyword">new</span> <span class="keyword">byte</span>[buffer.remaining()];</span><br><span class="line">                    <span class="comment">//将缓冲区可读字节数组复制到新建的数组中</span></span><br><span class="line">                    buffer.get(bytes);</span><br><span class="line">                    String expression = <span class="keyword">new</span> String(bytes,<span class="string">"UTF-8"</span>);</span><br><span class="line">                    System.out.println(<span class="string">"服务器收到消息："</span> + expression);k</span><br><span class="line">                    <span class="comment">//处理数据</span></span><br><span class="line">                    String result = <span class="keyword">null</span>;</span><br><span class="line">                    <span class="keyword">try</span>&#123;</span><br><span class="line">                        result = expression.toString();</span><br><span class="line">                    &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">                        result = <span class="string">"计算错误："</span> + e.getMessage();</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">//发送应答消息</span></span><br><span class="line">                    doWrite(sc,result);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//没有读取到字节 忽略</span></span><br><span class="line"><span class="comment">//              else if(readBytes==0);</span></span><br><span class="line">                <span class="comment">//链路已经关闭，释放资源</span></span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(readBytes&lt;<span class="number">0</span>)&#123;</span><br><span class="line">                    key.cancel();</span><br><span class="line">                    sc.close();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//异步发送应答消息</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">doWrite</span><span class="params">(SocketChannel channel,String response)</span> <span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">        <span class="comment">//将消息编码为字节数组</span></span><br><span class="line">        <span class="keyword">byte</span>[] bytes = response.getBytes();</span><br><span class="line">        <span class="comment">//根据数组容量创建ByteBuffer</span></span><br><span class="line">        ByteBuffer writeBuffer = ByteBuffer.allocate(bytes.length);</span><br><span class="line">        <span class="comment">//将字节数组复制到缓冲区</span></span><br><span class="line">        writeBuffer.put(bytes);</span><br><span class="line">        <span class="comment">//flip操作</span></span><br><span class="line">        writeBuffer.flip();</span><br><span class="line">        <span class="comment">//发送缓冲区的字节数组</span></span><br><span class="line">        channel.write(writeBuffer);</span><br><span class="line">        <span class="comment">//****此处不含处理“写半包”的代码</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="服务端建立一个NIO的过程"><a href="#服务端建立一个NIO的过程" class="headerlink" title="服务端建立一个NIO的过程"></a>服务端建立一个NIO的过程</h2><ol>
+<li>打开ServerSocketChannel，监听客户端连接</li>
+<li>绑定监听端口，设置连接为非阻塞模式</li>
+<li>创建Reactor线程，创建多路复用器并启动线程</li>
+<li>将ServerSocketChannel注册到Reactor线程中的Selector上，监听ACCEPT事件</li>
+<li>Selector轮询准备就绪的key</li>
+<li>Selector监听到新的客户端接入，处理新的接入请求，完成TCP三次握手，简历物理链路</li>
+<li>设置客户端链路为非阻塞模式</li>
+<li>将新接入的客户端连接注册到Reactor线程的Selector上，监听读操作，读取客户端发送的网络消息</li>
+<li>异步读取客户端消息到缓冲区</li>
+<li>对Buffer编解码，处理半包消息，将解码成功的消息封装成Task</li>
+<li>将应答消息编码为Buffer，调用SocketChannel的write将消息异步发送给客户端</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/socket编程/" rel="tag"># socket编程</a>
+          
+            <a href="/tags/计算机网络/" rel="tag"># 计算机网络</a>
+          
+            <a href="/tags/TCP-IP/" rel="tag"># TCP/IP</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/21/IO-model/" rel="next" title="LINUX的IO模型">
+                <i class="fa fa-chevron-left"></i> LINUX的IO模型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/24/Thread/" rel="prev" title="Thread知识点">
+                Thread知识点 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avator.gif"
+                alt="lindexiang" />
+            
+              <p class="site-author-name" itemprop="name">lindexiang</p>
+              <p class="site-description motion-element" itemprop="description">this is personal blog</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/lindexiang" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="1027710124@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                神奇的链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://music.163.com/#/user/home?id=86590096" title="😆 网易云音乐 😆" target="_blank">😆 网易云音乐 😆</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://coldplay.com/" title="Coldplay Official Website" target="_blank">Coldplay Official Website</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://elonmusknews.org/" title="获取 Elon Musk 的新闻" target="_blank">获取 Elon Musk 的新闻</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.bilibili.com/video/av6211226/" title="尼古拉·特斯拉：发明了现代世界的人" target="_blank">尼古拉·特斯拉：发明了现代世界的人</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://lindexiang.github.io/about/" title="关于此博客" target="_blank">关于此博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#socket编程介绍"><span class="nav-number">1.</span> <span class="nav-text">socket编程介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#listen，connect，accept的流程以及原理"><span class="nav-number">1.2.</span> <span class="nav-text">listen，connect，accept的流程以及原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BIO编程"><span class="nav-number">1.3.</span> <span class="nav-text">BIO编程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BIO使用线程池"><span class="nav-number">1.4.</span> <span class="nav-text">BIO使用线程池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NIO编程"><span class="nav-number">1.5.</span> <span class="nav-text">NIO编程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#channel理解"><span class="nav-number">1.5.1.</span> <span class="nav-text">channel理解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓冲区buffer"><span class="nav-number">1.5.2.</span> <span class="nav-text">缓冲区buffer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select选择器"><span class="nav-number">1.5.3.</span> <span class="nav-text">select选择器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务端建立一个NIO的过程"><span class="nav-number">1.6.</span> <span class="nav-text">服务端建立一个NIO的过程</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lindexiang</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user-circle-o"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      <i class="fa fa-eye"></i>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.1/velocity.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.1/velocity.ui.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'CGD5uAsfibJi6l5bykvuxJQQ-gzGzoHsz',
+        appKey: 'T6VMmohj66z8YpBlxXgEsezd',
+        placeholder: '快来评论啊 小哥',
+        avatar:'mm',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
