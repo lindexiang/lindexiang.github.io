@@ -37,7 +37,7 @@ BIO在执行IO的两个阶段都被block了。
      
 ## 非阻塞IO模型 NIO
 用户进程在recvfrom的时候，如果数据没有准备好，那么操作系统直接返回一个错误，一般非阻塞IO都会轮训去检查这个状态，看内核中是否已经准备好数据。从用户的角度看，当它发起一个read IO操作后，并没有等待，而是立马得到一个返回结果，用户知道了数据没有准备好，等过段时间再发起read请求。一旦kernel准备好了数据，并且收到了用户的read请求，就会将数据从kernel拷贝到用户内存。用户的进程在不断询问kernel数据是否准备好。
-![Image](http://pbhb4py13.bkt.clouddn.com/2018-10-21-Image.png)
+![](http://pbhb4py13.bkt.clouddn.com/15407792094650.jpg)
 ## 信号驱动IO
 开启套接字信号驱动IO功能，并通过系统调用signalaction来执行一个信号处理函数(系统调用立即返回，进程继续工作，非阻塞)当有数据到达时候，为进程生成一个signal信号，通过信号应用程序调用recvfrom来读取数据。
 ![63FADCFE-4EF5-4055-B2AF-B76B3594494B](http://pbhb4py13.bkt.clouddn.com/2018-10-21-63FADCFE-4EF5-4055-B2AF-B76B3594494B.png)
