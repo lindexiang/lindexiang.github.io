@@ -134,27 +134,27 @@
 
 
 
-<meta name="description" content="Java内存区域与内存溢出异常2.2 运行时数据区域&amp;emsp;&amp;emsp;java虚拟机在运行程序时会把管理的内存分为几个不同的数据区域，这些区域的作用不同并且创建和销毁的时间不同。java虚拟机将管理的内存分为以下几个数据区域。">
+<meta name="description" content="Java内存区域与内存溢出异常运行时数据区域java虚拟机在运行程序时会把管理的内存分为几个不同的数据区域，这些区域的作用不同并且创建和销毁的时间不同。java虚拟机将管理的内存分为以下几个数据区域。">
 <meta name="keywords" content="JVM原理,java运行时数据区,对象创建,对象访问定位">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入理解JVM原理 第2章 java运行时数据区">
 <meta property="og:url" content="https://lindexiang.github.io/2018/08/12/JVM-2/index.html">
 <meta property="og:site_name" content="ldx&#39;s Blog">
-<meta property="og:description" content="Java内存区域与内存溢出异常2.2 运行时数据区域&amp;emsp;&amp;emsp;java虚拟机在运行程序时会把管理的内存分为几个不同的数据区域，这些区域的作用不同并且创建和销毁的时间不同。java虚拟机将管理的内存分为以下几个数据区域。">
+<meta property="og:description" content="Java内存区域与内存溢出异常运行时数据区域java虚拟机在运行程序时会把管理的内存分为几个不同的数据区域，这些区域的作用不同并且创建和销毁的时间不同。java虚拟机将管理的内存分为以下几个数据区域。">
 <meta property="og:locale" content="zh-CH">
-<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15340715696875.jpg">
-<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15340726907022.jpg">
-<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15340727367214.jpg">
-<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15340730001491.jpg">
-<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15340730360158.jpg">
-<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15340730490119.jpg">
-<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15340734287296.jpg">
-<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15340746716311.jpg">
-<meta property="og:updated_time" content="2018-10-22T06:59:41.974Z">
+<meta property="og:image" content="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15286130089914-1.jpg">
+<meta property="og:image" content="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474309463593.jpg">
+<meta property="og:image" content="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474309758013.jpg">
+<meta property="og:image" content="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474309889417.jpg">
+<meta property="og:image" content="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474310005592.jpg">
+<meta property="og:image" content="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474310155827.jpg">
+<meta property="og:image" content="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474310321193.jpg">
+<meta property="og:image" content="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474311067057.jpg">
+<meta property="og:updated_time" content="2019-01-14T02:15:18.979Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解JVM原理 第2章 java运行时数据区">
-<meta name="twitter:description" content="Java内存区域与内存溢出异常2.2 运行时数据区域&amp;emsp;&amp;emsp;java虚拟机在运行程序时会把管理的内存分为几个不同的数据区域，这些区域的作用不同并且创建和销毁的时间不同。java虚拟机将管理的内存分为以下几个数据区域。">
-<meta name="twitter:image" content="http://pbhb4py13.bkt.clouddn.com/15340715696875.jpg">
+<meta name="twitter:description" content="Java内存区域与内存溢出异常运行时数据区域java虚拟机在运行程序时会把管理的内存分为几个不同的数据区域，这些区域的作用不同并且创建和销毁的时间不同。java虚拟机将管理的内存分为以下几个数据区域。">
+<meta name="twitter:image" content="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15286130089914-1.jpg">
 
 
 
@@ -486,7 +486,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,743
+                  2,762
                 </span>
               
 
@@ -523,35 +523,38 @@
       
 
       
-        <h1 id="Java内存区域与内存溢出异常"><a href="#Java内存区域与内存溢出异常" class="headerlink" title="Java内存区域与内存溢出异常"></a>Java内存区域与内存溢出异常</h1><h2 id="2-2-运行时数据区域"><a href="#2-2-运行时数据区域" class="headerlink" title="2.2 运行时数据区域"></a>2.2 运行时数据区域</h2><p>&emsp;&emsp;java虚拟机在运行程序时会把管理的内存分为几个不同的数据区域，这些区域的作用不同并且创建和销毁的时间不同。java虚拟机将管理的内存分为以下几个数据区域。<br><a id="more"></a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">线程共享部分</span><br><span class="line">1. 方法区</span><br><span class="line">2. 堆</span><br><span class="line">线程私有部分</span><br><span class="line">3. 虚拟机栈</span><br><span class="line">4. 本地方法栈</span><br><span class="line">5. 程序计数器</span><br></pre></td></tr></table></figure></p>
-<p><img src="http://pbhb4py13.bkt.clouddn.com/15340715696875.jpg" alt="-c"></p>
-<h3 id="2-2-1-程序计数器"><a href="#2-2-1-程序计数器" class="headerlink" title="2.2.1 程序计数器"></a>2.2.1 程序计数器</h3><p>&emsp;&emsp;一块比较小的内存区域，看成当前线程执行字节码的行号指示器。通过改变这个值来取下一条的指令，分支、循环、跳转、异常处理、<strong>线程恢复</strong>都是靠这个计数器来完成。<br>&emsp;&emsp;java的多线程时通过线程轮流切换并分配处理器的执行时间来实现。为了线程切换后能恢复到正确的执行位置，每个线程需要独立的程序计数器，各个线程的程序计数器相互不影响。<br>&emsp;&emsp;如果线程执行java方法，这个计数器记录正在执行的虚拟机字节码指令的地址，如果是执行native方法，计数器的值为空(undefined)。此内存区域为java虚拟机规范中没有规定任何OutOfMemoryError情况的区域。</p>
-<h3 id="2-2-2-java虚拟机栈"><a href="#2-2-2-java虚拟机栈" class="headerlink" title="2.2.2 java虚拟机栈"></a>2.2.2 java虚拟机栈</h3><p>&emsp;&emsp;java虚拟机栈(Java Virtual Machine Stacks)也是线程私有的，生命周期和线程相同。虚拟机栈描述的是java方法执行的内存模型。在调用方法的同时会创建一个栈帧(Stack Frame)来存储<strong>局部变量表，操作数栈，动态链接，方法出口</strong>等信息。<strong>每个方法从调用到执行完成对应栈帧在虚拟机栈中的入栈道出栈的过程。</strong><br>&emsp;&emsp;局部变量表中存放的是编译期间可知的基本数据类型(boolean, byte, char, short, int, float, long, double)、对象引用类型(reference类型),是指向堆对象的一个引用。其中long和double数据类型占用2个slot槽，其余占用一个slot槽。<strong>一个槽指向一个地址，long和double需要两个地址空间存放64位的数据，则需要两个slot</strong>。局部变量表的所需的空间在编译期间完成，在放啊运行期间不会改变局部变量表的大小。</p>
-<blockquote>
-<p>&emsp;&emsp;在方法中声明的是基本类型的变量时，变量名和值(变量名和值时两个概念)是存放在方法栈中，申明的事引用变量时，对象的内存地址是存放在栈中。<br>&emsp;&emsp;类中声明的是基本基本变量，称为全局变量，变量名和值都是存放在堆中。引用类型存放的是对象的地址。</p>
-</blockquote>
-<p>&emsp;&emsp;在java虚拟机规范中对这个区域规范两种异常，线程请求的栈深度超过虚拟机提供的深度，抛出StackOverflowError异常，如果方法无法申请足够的内存，抛出OutOfMemoryError异常。</p>
-<h3 id="2-2-3-本地方法栈"><a href="#2-2-3-本地方法栈" class="headerlink" title="2.2.3 本地方法栈"></a>2.2.3 本地方法栈</h3><p>本地方法栈(Native Method Stack)和虚拟机栈类似。只是本地方法栈是为虚拟机使用到的native方法服务。本地方法栈也会抛出StackOverflowError和OutOfMemoryError异常。</p>
-<h3 id="2-2-4-Java堆"><a href="#2-2-4-Java堆" class="headerlink" title="2.2.4 Java堆"></a>2.2.4 Java堆</h3><p>&emsp;&emsp;Java堆是虚拟机管理内存最大的部分。是线程共享的。在虚拟机启动的时候创建。存放的是实例对象。 java堆是垃圾收集器管理的主要部分。所以也称为GC堆。 线程共享的java堆中可以划分出线程私有的分配缓冲区(TLAB thread local allcation buffer)。</p>
-<h3 id="2-2-5-方法区"><a href="#2-2-5-方法区" class="headerlink" title="2.2.5 方法区"></a>2.2.5 方法区</h3><p>方法区中存放的是被虚拟机加载的类信息，常量，静态变量，编译后的代码等。GC分代收集扩展至方法区。</p>
-<h3 id="2-2-6-运行时常量池"><a href="#2-2-6-运行时常量池" class="headerlink" title="2.2.6 运行时常量池"></a>2.2.6 运行时常量池</h3><p>class文件中出了类的版本，字段，方法等信息还有常量池，存放编译期间生成的各种字面量和符号引用，该部分在类加载后放在方法区中的运行时常量池中存放。在运行期间也会将新的常量放入池内。比如String的intern()方法。</p>
-<h3 id="2-2-7-直接内存"><a href="#2-2-7-直接内存" class="headerlink" title="2.2.7 直接内存"></a>2.2.7 直接内存</h3><p>在NIO类中，引入了基于通道(channel)与缓冲区(Buffer)的I/O方法，可以使用Native函数直接在堆外分配内存，然后通过存储在java堆中的DirectByteBuffer对象作为这个内存的引用操作。可以提高性能，避免在Java堆和native堆中来回复制数据。<br>显然，本机直接内存不会受到java堆大小的限制，但是受到本机的物理内存的影响。</p>
-<h2 id="2-3-对象的创建过程"><a href="#2-3-对象的创建过程" class="headerlink" title="2.3 对象的创建过程"></a>2.3 对象的创建过程</h2><ol>
+        <h1 id="Java内存区域与内存溢出异常"><a href="#Java内存区域与内存溢出异常" class="headerlink" title="Java内存区域与内存溢出异常"></a>Java内存区域与内存溢出异常</h1><h2 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h2><p>java虚拟机在运行程序时会把管理的内存分为几个不同的数据区域，这些区域的作用不同并且创建和销毁的时间不同。java虚拟机将管理的内存分为以下几个数据区域。<br><a id="more"></a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">线程共享部分</span><br><span class="line">1. 方法区</span><br><span class="line">2. 堆</span><br><span class="line">线程私有部分</span><br><span class="line">3. 虚拟机栈</span><br><span class="line">4. 本地方法栈</span><br><span class="line">5. 程序计数器</span><br></pre></td></tr></table></figure>
+<p><img src="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15286130089914-1.jpg" alt="15286130089914"></p>
+<h3 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h3><p>一块比较小的内存区域，看成当前线程执行字节码的行号指示器。通过改变这个值来取下一条的指令，分支、循环、跳转、异常处理、<strong>线程恢复</strong>都是靠这个计数器来完成。<br>java的多线程时通过线程轮流切换并分配处理器的执行时间来实现。为了线程切换后能恢复到正确的执行位置，每个线程需要独立的程序计数器，各个线程的程序计数器相互不影响。<br>如果线程执行java方法，这个计数器记录正在执行的虚拟机字节码指令的地址，如果是执行native方法，计数器的值为空(undefined)。此内存区域为java虚拟机规范中没有规定任何OutOfMemoryError情况的区域。</p>
+<h3 id="java虚拟机栈"><a href="#java虚拟机栈" class="headerlink" title="java虚拟机栈"></a>java虚拟机栈</h3><p>java虚拟机栈(Java Virtual Machine Stacks)也是线程私有的，生命周期和线程相同。虚拟机栈描述的是java方法执行的内存模型。在调用方法的同时会创建一个栈帧(Stack Frame)来存储<strong>局部变量表，操作数栈，动态链接，方法出口</strong>等信息。<strong>每个方法从调用到执行完成对应栈帧在虚拟机栈中的入栈道出栈的过程。</strong><br>局部变量表中存放的是编译期间可知的基本数据类型(boolean, byte, char, short, int, float, long, double)、对象引用类型(reference类型),是指向堆对象的一个引用。其中long和double数据类型占用2个slot槽，其余占用一个slot槽。<strong>一个槽指向一个地址，long和double需要两个地址空间存放64位的数据，则需要两个slot</strong>。局部变量表的所需的空间在编译期间完成，在运行期间不会改变局部变量表的大小。</p>
+<ol>
+<li>在方法中声明的是基本类型的变量时，变量名和值(变量名和值时两个概念)是存放在方法栈中，申明的事引用变量时，对象的内存地址是存放在栈中。</li>
+<li>类中声明的是基本基本变量，称为全局变量，变量名和值都是存放在堆中。引用类型存放的是对象的地址。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">2</span> 在栈上地址为a的空间分配值为<span class="number">2</span> mov <span class="number">0xff</span>sa <span class="number">2</span></span><br><span class="line">String s = <span class="keyword">new</span> String(<span class="string">"123"</span>) 地址为s的栈上空间地址为引用，指向<span class="string">"123"</span></span><br></pre></td></tr></table></figure>
+<p>在java虚拟机规范中对这个区域规范两种异常，线程请求的栈深度超过虚拟机提供的深度，抛出StackOverflowError异常，如果方法无法申请足够的内存，抛出OutOfMemoryError异常。</p>
+<h3 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h3><p>本地方法栈(Native Method Stack)和虚拟机栈类似。只是本地方法栈是为虚拟机使用到的native方法服务。本地方法栈也会抛出StackOverflowError和OutOfMemoryError异常。</p>
+<h3 id="Java堆"><a href="#Java堆" class="headerlink" title="Java堆"></a>Java堆</h3><p>Java堆是虚拟机管理内存最大的部分。是线程共享的。在虚拟机启动的时候创建。存放的是实例对象。 java堆是垃圾收集器管理的主要部分。所以也称为GC堆。 线程共享的java堆中可以划分出线程私有的分配缓冲区(TLAB thread local allcation buffer)。</p>
+<h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><p>方法区中存放的是被虚拟机加载的类信息，常量，静态变量，编译后的代码等。GC分代收集扩展至方法区。</p>
+<h3 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h3><p>class文件中出了类的版本，字段，方法等信息还有常量池，存放编译期间生成的各种字面量和符号引用，该部分在类加载后放在方法区中的运行时常量池中存放。在运行期间也会将新的常量放入池内。比如String的intern()方法。</p>
+<h3 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h3><p>在NIO类中，引入了基于通道(channel)与缓冲区(Buffer)的I/O方法，可以使用Native函数直接在堆外分配内存，然后通过存储在java堆中的DirectByteBuffer对象作为这个内存的引用操作。可以提高性能，避免在Java堆和native堆中来回复制数据。<br>显然，本机直接内存不会受到java堆大小的限制，但是受到本机的物理内存的影响。</p>
+<h2 id="对象的创建过程"><a href="#对象的创建过程" class="headerlink" title="对象的创建过程"></a>对象的创建过程</h2><ol>
 <li>当虚拟机遇到一个new指令，首先检查这个指令的参数在常量池能定位到一个符号引用，再检查这个符号引用的类是否被加载，解析和初始化，没有要先执行类加载过程。</li>
 <li>将一块等同该对象大小的空间从java堆中划分出来，一般是维护一个队列，记录可用的内存。</li>
 <li>为了保证分配对象的线程安全，1.使用TLAB来分配2.使用CAS来进行失败重试保证内存分配的原子性。</li>
 <li>分配完对象，需要对内存空间进行初始化为零值。并且设置对象的对象头的一些值，比如哈希值，GC年代等等。</li>
 <li>上述工作完成后，虚拟机角度看一个对象产生了，但是从java程序看，对象还没有初始化，因为没有执行<init>方法。</init></li>
 </ol>
-<h2 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h2><p>在虚拟机中，一个对象在内存中的分配区域主要有：<strong>对象头，实例数据，对其补充</strong>。如图所示<br><img src="http://pbhb4py13.bkt.clouddn.com/15340726907022.jpg" alt="-c"></p>
+<h2 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h2><p>在虚拟机中，一个对象在内存中的分配区域主要有：<strong>对象头，实例数据，对其补充</strong>。如图所示<br><img src="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474309463593.jpg" alt=""></p>
 <h3 id="对象头"><a href="#对象头" class="headerlink" title="对象头"></a>对象头</h3><p>对象头中主要有Mark Word和指向class元类型的指针。</p>
 <ul>
 <li>第一部分用于存储对象自身的运行时数据，如哈希码（HashCode）、GC 分代年龄、锁状态标志、线程持有的锁、偏向线程 ID、偏向时间戳、对象分代年龄，这部分信息称为“Mark Word”；Mark Word 被设计成一个非固定的数据结构以便在极小的空间内存储尽量多的信息，它会根据自己的状态复用自己的存储空间。</li>
-<li>第二部分是类型指针，即对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是哪个类的实例；<br>如果对象是一个 Java 数组，那在对象头中还必须有一块用于记录数组长度的数据。因为虚拟机可以通过普通 Java 对象的元数据信息确定 Java 对象的大小，但是从数组的元数据中无法确定数组的大小。<br>这部分数据的长度在 32 位和 64 位的虚拟机（未开启压缩指针）中分别为 32bit 和 64bit。<br><img src="http://pbhb4py13.bkt.clouddn.com/15340727367214.jpg" alt="-c"></li>
+<li>第二部分是类型指针，即对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是哪个类的实例；<br>如果对象是一个 Java 数组，那在对象头中还必须有一块用于记录数组长度的数据。因为虚拟机可以通过普通 Java 对象的元数据信息确定 Java 对象的大小，但是从数组的元数据中无法确定数组的大小。<br>这部分数据的长度在 32 位和 64 位的虚拟机（未开启压缩指针）中分别为 32bit 和 64bit。<br><img src="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474309758013.jpg" alt=""></li>
 </ul>
-<p>例如，在 32 位的 HotSpot 虚拟机中，如果对象处于未被锁定的状态下，那么 Mark Word 的 32bit 空间中的 25bit 用于存储对象哈希码，4bit 用于存储对象分代年龄，2bit 用于存储锁标志位，1bit 固定为 0，如下表所示：<br><img src="http://pbhb4py13.bkt.clouddn.com/15340730001491.jpg" alt="-c"></p>
-<p>在 32 位系统下，存放 Class 指针的空间大小是 4 字节，Mark Word 空间大小也是4字节，因此头部就是 8 字节，如果是数组就需要再加 4 字节表示数组的长度，如下表所示：<br><img src="http://pbhb4py13.bkt.clouddn.com/15340730360158.jpg" alt=""></p>
-<p>在 64 位系统及 64 位 JVM 下，开启指针压缩，那么头部存放 Class 指针的空间大小还是4字节，而 Mark Word 区域会变大，变成 8 字节，也就是头部最少为 12 字节，如下表所示：<br><img src="http://pbhb4py13.bkt.clouddn.com/15340730490119.jpg" alt=""></p>
+<p>例如，在 32 位的 HotSpot 虚拟机中，如果对象处于未被锁定的状态下，那么 Mark Word 的 32bit 空间中的 25bit 用于存储对象哈希码，4bit 用于存储对象分代年龄，2bit 用于存储锁标志位，1bit 固定为 0，如下表所示：<br><img src="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474309889417.jpg" alt=""></p>
+<p>在 32 位系统下，存放 Class 指针的空间大小是 4 字节，Mark Word 空间大小也是4字节，因此头部就是 8 字节，如果是数组就需要再加 4 字节表示数组的长度，如下表所示：<br><img src="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474310005592.jpg" alt=""></p>
+<p>在 64 位系统及 64 位 JVM 下，开启指针压缩，那么头部存放 Class 指针的空间大小还是4字节，而 Mark Word 区域会变大，变成 8 字节，也就是头部最少为 12 字节，如下表所示：<br><img src="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474310155827.jpg" alt=""></p>
 <p><strong>压缩指针：</strong>开启指针压缩使用算法开销带来内存节约，Java 对象都是以 8 字节对齐的，也就是以 8 字节为内存访问的基本单元，那么在地理处理上，就有 3 个位是空闲的，这 3 个位可以用来虚拟，利用 32 位的地址指针原本最多只能寻址 4GB，但是加上 3 个位的 8 种内部运算，就可以变化出 32GB 的寻址。</p>
 <h3 id="实例数据"><a href="#实例数据" class="headerlink" title="实例数据"></a>实例数据</h3><p>实例数据是对象存储的有效信息，在程序代码中定义的各种类型的字段内容。</p>
 <h3 id="对齐补充"><a href="#对齐补充" class="headerlink" title="对齐补充"></a>对齐补充</h3><p>由于HotSpot VM的自动内存管理系统要求<strong>对象起始地址必须是 8 字节的整数倍</strong>，也就是说对象的大小必须是 8 字节的整数倍。对象头部分是 8 字节的倍数，所以当对象实例数据部分没有对齐时，就需要通过对齐填充来补全。</p>
@@ -560,11 +563,11 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Class A &#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">byte</span> b;</span><br><span class="line">    String str;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>其中对象头部占用 ‘Mark Word’4 + ‘类型指针’4 = 8 字节；byte 8 位长，占用 1 字节；int 32 位长，占用 4 字节；String 只有引用，占用 4 字节；<br>那么对象 A 一共占用了 8+1+4+4=17 字节，按照 8 字节对齐原则，对象大小也就是 24 字节。</p>
 <p>这个计算看起来是没有问题的，对象的大小也确实是 24 字节，但是对齐（padding）的位置并不对：</p>
-<p>在 HotSpot VM 中，对象排布时，间隙是在 4 字节基础上的（在 32 位和 64 位压缩模式下），上述例子中，int 后面的 byte，空隙只剩下 3 字节，接下来的 String 对象引用需要 4 字节来存放，因此 byte 和对象引用之间就会有 3 字节对齐，对象引用排布后，最后会有 4 字节对齐，因此结果上依然是 7 字节对齐。此时对象的结构示意图，如下图所示：<br><img src="http://pbhb4py13.bkt.clouddn.com/15340734287296.jpg" alt="-c"></p>
-<h2 id="对象的访问定位"><a href="#对象的访问定位" class="headerlink" title="对象的访问定位"></a>对象的访问定位</h2><p>在访问对象时，通过栈上的reference数据类操作堆上的具体对象。reference类型在具体的访问对象有2种方式：</p>
+<p>在 HotSpot VM 中，对象排布时，间隙是在 4 字节基础上的（在 32 位和 64 位压缩模式下），上述例子中，int 后面的 byte，空隙只剩下 3 字节，接下来的 String 对象引用需要 4 字节来存放，因此 byte 和对象引用之间就会有 3 字节对齐，对象引用排布后，最后会有 4 字节对齐，因此结果上依然是 7 字节对齐。此时对象的结构示意图，如下图所示：<br><img src="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474310321193.jpg" alt=""></p>
+<h2 id="对象的访问定位"><a href="#对象的访问定位" class="headerlink" title="对象的访问定位"></a>对象的访问定位</h2><p>在访问对象时，通过栈上的reference数据类操作堆上的具体对象。reference类型在具体的访问对象有2种方式</p>
 <ol>
-<li>使用句柄访问，<br>&nbsp;&nbsp;&nbsp;&nbsp;在java堆中划分一块区域为句柄池，reference存储的是对象的句柄地址，句柄中包含<strong>对象的实例地址和对象类型。</strong>对象类型是通过对象头的指针来访问</li>
-<li>直接指针访问<br>&nbsp;&nbsp;&nbsp;&nbsp;reference存储的是对象的直接地址。<br><img src="http://pbhb4py13.bkt.clouddn.com/15340746716311.jpg" alt="-c"></li>
+<li>使用句柄访问<br>在java堆中划分一块区域为句柄池，reference存储的是对象的句柄地址，句柄中包含<strong>对象的实例地址和对象类型。</strong>对象类型是通过对象头的指针来访问</li>
+<li>直接指针访问<br>reference存储的是对象的直接地址。<br><img src="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474311067057.jpg" alt=""></li>
 </ol>
 
       
@@ -819,7 +822,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java内存区域与内存溢出异常"><span class="nav-number">1.</span> <span class="nav-text">Java内存区域与内存溢出异常</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-运行时数据区域"><span class="nav-number">1.1.</span> <span class="nav-text">2.2 运行时数据区域</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-程序计数器"><span class="nav-number">1.1.1.</span> <span class="nav-text">2.2.1 程序计数器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2-java虚拟机栈"><span class="nav-number">1.1.2.</span> <span class="nav-text">2.2.2 java虚拟机栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-3-本地方法栈"><span class="nav-number">1.1.3.</span> <span class="nav-text">2.2.3 本地方法栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-4-Java堆"><span class="nav-number">1.1.4.</span> <span class="nav-text">2.2.4 Java堆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-5-方法区"><span class="nav-number">1.1.5.</span> <span class="nav-text">2.2.5 方法区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-6-运行时常量池"><span class="nav-number">1.1.6.</span> <span class="nav-text">2.2.6 运行时常量池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-7-直接内存"><span class="nav-number">1.1.7.</span> <span class="nav-text">2.2.7 直接内存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-对象的创建过程"><span class="nav-number">1.2.</span> <span class="nav-text">2.3 对象的创建过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象的内存布局"><span class="nav-number">1.3.</span> <span class="nav-text">对象的内存布局</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对象头"><span class="nav-number">1.3.1.</span> <span class="nav-text">对象头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例数据"><span class="nav-number">1.3.2.</span> <span class="nav-text">实例数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对齐补充"><span class="nav-number">1.3.3.</span> <span class="nav-text">对齐补充</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#估算对象大小"><span class="nav-number">1.3.4.</span> <span class="nav-text">估算对象大小</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象的访问定位"><span class="nav-number">1.4.</span> <span class="nav-text">对象的访问定位</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java内存区域与内存溢出异常"><span class="nav-number">1.</span> <span class="nav-text">Java内存区域与内存溢出异常</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#运行时数据区域"><span class="nav-number">1.1.</span> <span class="nav-text">运行时数据区域</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#程序计数器"><span class="nav-number">1.1.1.</span> <span class="nav-text">程序计数器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java虚拟机栈"><span class="nav-number">1.1.2.</span> <span class="nav-text">java虚拟机栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本地方法栈"><span class="nav-number">1.1.3.</span> <span class="nav-text">本地方法栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java堆"><span class="nav-number">1.1.4.</span> <span class="nav-text">Java堆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法区"><span class="nav-number">1.1.5.</span> <span class="nav-text">方法区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行时常量池"><span class="nav-number">1.1.6.</span> <span class="nav-text">运行时常量池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#直接内存"><span class="nav-number">1.1.7.</span> <span class="nav-text">直接内存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象的创建过程"><span class="nav-number">1.2.</span> <span class="nav-text">对象的创建过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象的内存布局"><span class="nav-number">1.3.</span> <span class="nav-text">对象的内存布局</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对象头"><span class="nav-number">1.3.1.</span> <span class="nav-text">对象头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例数据"><span class="nav-number">1.3.2.</span> <span class="nav-text">实例数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对齐补充"><span class="nav-number">1.3.3.</span> <span class="nav-text">对齐补充</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#估算对象大小"><span class="nav-number">1.3.4.</span> <span class="nav-text">估算对象大小</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象的访问定位"><span class="nav-number">1.4.</span> <span class="nav-text">对象的访问定位</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -839,7 +842,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
