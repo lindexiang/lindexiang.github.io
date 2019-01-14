@@ -5,9 +5,10 @@ tags:
   - JVM原理 
   - 虚拟机类加载机制
 categories: JVM虚拟机原理
-image: http://pbhb4py13.bkt.clouddn.com/damon-lam-774304-unsplash.jpg
+image: https://medesqure.oss-cn-hangzhou.aliyuncs.com/eonrJ0xDCaO8.jpg
 
 ---
+
 
 # 虚拟机类加载机制
 
@@ -15,7 +16,9 @@ image: http://pbhb4py13.bkt.clouddn.com/damon-lam-774304-unsplash.jpg
 <!--more-->
 
 ## 类加载的时机
-![C03B21D5-7E81-419C-9C63-76CCE16DE2A8](http://pbhb4py13.bkt.clouddn.com/C03B21D5-7E81-419C-9C63-76CCE16DE2A8.png)
+![B864BE37-2303-45FC-B2CD-C9B6FB1F0B68](
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/B864BE37-2303-45FC-B2CD-C9B6FB1F0B68.png)
+
 
 类加载的生命周期：
 1. 加载

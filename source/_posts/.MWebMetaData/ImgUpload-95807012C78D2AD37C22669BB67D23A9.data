@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>B5D8C8DCE2A61516247452EF72472459</key>
+	<array>
+		<dict>
+			<key>localURL</key>
+			<string>media/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-08-19%20%E4%B8%8B%E5%8D%882.46.56.png</string>
+			<key>remoteURL</key>
+			<string>
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/屏幕快照 2017-08-19 下午2.46.56.png</string>
+		</dict>
+		<dict>
+			<key>localURL</key>
+			<string>media/15474798237094.jpg</string>
+			<key>remoteURL</key>
+			<string>
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474798237094.jpg</string>
+		</dict>
+		<dict>
+			<key>localURL</key>
+			<string>media/15474798810139.jpg</string>
+			<key>remoteURL</key>
+			<string>
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474798810139.jpg</string>
+		</dict>
+		<dict>
+			<key>localURL</key>
+			<string>media/15474798607604.jpg</string>
+			<key>remoteURL</key>
+			<string>
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474798607604.jpg</string>
+		</dict>
+		<dict>
+			<key>localURL</key>
+			<string>media/15474799045828.jpg</string>
+			<key>remoteURL</key>
+			<string>
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474799045828.jpg</string>
+		</dict>
+		<dict>
+			<key>localURL</key>
+			<string>media/15474799426642.jpg</string>
+			<key>remoteURL</key>
+			<string>
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474799426642.jpg</string>
+		</dict>
+		<dict>
+			<key>localURL</key>
+			<string>media/15474799656221.jpg</string>
+			<key>remoteURL</key>
+			<string>
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474799656221.jpg</string>
+		</dict>
+		<dict>
+			<key>localURL</key>
+			<string>media/15474799781956.jpg</string>
+			<key>remoteURL</key>
+			<string>
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474799781956.jpg</string>
+		</dict>
+		<dict>
+			<key>localURL</key>
+			<string>media/15474830509397.jpg</string>
+			<key>remoteURL</key>
+			<string>
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474830509397.jpg</string>
+		</dict>
+	</array>
+	<key>selectedItem</key>
+	<string>B5D8C8DCE2A61516247452EF72472459</string>
+</dict>
+</plist>

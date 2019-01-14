@@ -6,14 +6,9 @@ tags:
   - java内存模型 
   - 线程
 categories: JVM虚拟机原理
-image: http://pbhb4py13.bkt.clouddn.com/senor-sosa-30861-unsplash.jpg
+image: https://medesqure.oss-cn-hangzhou.aliyuncs.com/MEX7DEWeTxq.jpg
 
 ---
-
-
-
-
-
 
 # java内存模型和线程
 > JVM的内存模型是为了解决虚拟机实现多线程，但是多线程之间共享和竞争数据导致的问题。
@@ -23,15 +18,14 @@ image: http://pbhb4py13.bkt.clouddn.com/senor-sosa-30861-unsplash.jpg
 <!-- more -->
 **存在问题：缓存一致性** 每个cpu都有自己的高速缓存，同时共享同一个主内存。当多个处理器处理涉及同一个内存，需要有**一致性协议**来保证数据一致性。
 **同时为了使处理器内部的运算单元能被充分利用，处理器对输入的代码会进行乱序处理优化，处理器会保证结果的正确性**
-
-![93F3194E-7D2F-454F-852D-B00B4A4D3E6F](http://pbhb4py13.bkt.clouddn.com/93F3194E-7D2F-454F-852D-B00B4A4D3E6F.png)
-
+![3F5E18C2-5AEA-4748-AE2A-0ED69443F271](
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/3F5E18C2-5AEA-4748-AE2A-0ED69443F271.png)
 ## java内存模型
+
 1. java的内存模型定义了虚拟机将变量存储到内存和从内存中取出变量这样的细节，包括实例字段，静态字段和构成数组对象的元素，但是不包括局部变量和方法参数，因为这些是私有的，不会被共享，不存在竞争问题。
 2. **Java内存模型中规定了所有的变量都存储在主内存中，每条线程还有自己的工作内存（可以与前面将的处理器的高速缓存类比）**，线程的工作内存中保存了该线程使用到的变量到主内存副本拷贝，线程对变量的所有操作（读取、赋值）都必须在工作内存中进行，而不能直接读写主内存中的变量。不同线程之间无法直接访问对方工作内存中的变量，线程间变量值的传递均需要在主内存来完成，线程、主内存和工作内存的交互关系如下图所示
-
-![D8A0CA7A-D144-4795-B7DF-7113C29AA36F](http://pbhb4py13.bkt.clouddn.com/D8A0CA7A-D144-4795-B7DF-7113C29AA36F.png)
-
+![750E126D-CF3F-4350-ABBC-ECBF465CFAF6](
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/750E126D-CF3F-4350-ABBC-ECBF465CFAF6-1.png)
 注意：
 
 * reference变量是局部变量中，是线程私有的，但是它的实例对象是共享的。
@@ -76,7 +70,9 @@ volatile的操作规定，v和w都是volatile变量：
 
 **volatile保证在将修改同步到内存之前，所有之前的操作都已经执行完毕，形成指令重拍序无法越过内存屏障**，即保证了volatile之前的指令都已经执行完毕，在volatile之后的指令都没有执行。但是不保证其他指令的重拍序。</br>
 volatile保证了指令不会被乱序，如果initialized没有使用volatile，那么可能由于指令重排序导致线程A的最后的initialized = true被提前执行，则线程B使用配置文件会出错。
-![ED9DBF9E-4748-413C-904A-C66E8A5797A1](http://pbhb4py13.bkt.clouddn.com/ED9DBF9E-4748-413C-904A-C66E8A5797A1.png)
+![6E487EB7-CCCE-4096-8DE0-B505BC74A511](
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/6E487EB7-CCCE-4096-8DE0-B505BC74A511.png)
+
 
 ### volatile解决DCL(双重检查)问题 单例
 
@@ -165,21 +161,31 @@ volatile变量规定对所有线程都是立即可见的，对volatile的所有�
 ##原子性，可见性，有序性
 java的内存模型都是围绕着在并发过程中如何处理原子性，可见性，有序性三个特征建立的
 
-1. 原子性 &nbsp;&nbsp;&nbsp;&nbsp;java内存模型直接保证8个基本操作是原子性的，如果要在大范围内保证原子性，必须使用monitorenter和monitorexit来隐式使用，这个反映到java代码就是同步代码块synchonorized关键字，即synchonorized的代码是原子性的。
-2. 可见性 &nbsp;&nbsp;&nbsp;&nbsp;一个线程修改了变量的值，其他的线程能立刻得到这个新的值。如volatile变量，除了这个变量，synchronized和final也可以完成可见性。final字段初始化后就能立刻被其他线程访问。
-3. 有序性 &nbsp;&nbsp;&nbsp;&nbsp;线程内表现为串行的操作，在其他的线程看来是无序的。包括指令重排序和主内存同步延迟现象。
+1. 原子性
+java内存模型直接保证8个基本操作是原子性的，如果要在大范围内保证原子性，必须使用monitorenter和monitorexit来隐式使用，这个反映到java代码就是同步代码块synchonorized关键字，即synchonorized的代码是原子性的。
+2. 可见性 
+一个线程修改了变量的值，其他的线程能立刻得到这个新的值。如volatile变量，除了这个变量，synchronized和final也可以完成可见性。final字段初始化后就能立刻被其他线程访问。
+3. 有序性 
+线程内表现为串行的操作，在其他的线程看来是无序的。包括指令重排序和主内存同步延迟现象。
 
 > 对于可见性，violatile保证可见性，synchonorized和final也能保证可见性。synchonorized同步快的可见性是“对一个对象执行unlock前必须将变量同步到主内存(执行store，write)中”保证，**我理解同步块是保证了在同步代码块中变化的变量都必须刷新到主内存中才会释放锁**。final关键字的可见性是被final修饰的字段在构造器中一旦被初始化完成，并且构造器没有把“this”引用传递出去，那么其他线程就能得到正确的值。this指针逃逸是一件危险的事情，其他线程可能访问到初始化了一半的对象。
 对于有序性，violatile和synchonorized都能保证有序性，violatile是防止指令重排序，synchonorized是由一个变量在同一时刻只能一个线程对其lock操作的这个规则获得的==。则决定了同一个锁的两个同步快只能串行的进入。**ReentrantLock是使用CAS来保证同步性，也能保证原子性，可见性，有序性。通过内置的volatile state来保证。因为volatile会保证先行发生原则。也可以理解为读取volatile前将其之前的变量都刷新到主内存中，并使其他的缓存失效**
 
 ###先行发生原则
 虚拟机可以对不满足先行原则的指令进行任意顺序的重排序。满足先行发生原则的规则如下：
-1. 程序次序原则&nbsp;&nbsp;&nbsp;&nbsp;在一个线程内，代码按照顺序执行
-2. 管程锁定规则&nbsp;&nbsp;&nbsp;&nbsp;对同一个锁，unlock操作时间上先行发生于后面的lock操作
-3. volatile变量规则&nbsp;&nbsp;&nbsp;&nbsp;对一个volatile变量的写操作先于度操作
-4. 线程启动原则&nbsp;&nbsp;&nbsp;&nbsp; Thread的start()先于该线程的任何操作
-5. 线程终止原则&nbsp;&nbsp;&nbsp;&nbsp;Thread的所有操作都先于线程的终止检测。可以通过Thread.join()和Thread.isAlive()的返回值检测线程是否已终止
-6. 线程终端规则 线程的interrupt()方法先于中断线程检测到中断事件的发生，即可以使用interrupted()方法检测到线程是否被中断了。
+
+1. 程序次序原则
+在一个线程内，代码按照顺序执行
+2. 管程锁定规则
+对同一个锁，unlock操作时间上先行发生于后面的lock操作
+3. volatile变量规则
+对一个volatile变量的写操作先于度操作
+4. 线程启动原则
+Thread的start()先于该线程的任何操作
+5. 线程终止原则
+Thread的所有操作都先于线程的终止检测。可以通过Thread.join()和Thread.isAlive()的返回值检测线程是否已终止
+6. 线程终端规则 
+线程的interrupt()方法先于中断线程检测到中断事件的发生，即可以使用interrupted()方法检测到线程是否被中断了。
 7. 对象终结原则 对象构造函数执行完毕先于finilized()方法
 8. 传递性 A先于B，B先于C。保证A先于C
 
@@ -187,24 +193,29 @@ java的内存模型都是围绕着在并发过程中如何处理原子性，可�
 线程是比进程轻量级的调度单位。各个线程可以共享进程的资源(内存地址，文件I/O)等，又可以独立调度。**线程是CPU调度的基本单位**
 实现线程一般有3种实现方式，**内核线程实现，用户线程实现，用户线程加轻量级进程混合实现**。
 
-1. 内核线程&nbsp;&nbsp;&nbsp;&nbsp;内核线程(Kernal-Level Thread KLT) 由操作系统内核支持的线程，这种线程由内核来完成线程切换，内核通过**调度器**对线程进行调度，支持多线程的内核叫做多线程内核。**程序一般会使用内核线程的一种高级接口--轻量级进程(Light Weight Process LWP)轻量级进程就是通常意义的线程，每个轻量级进程都是由一个内核线程支持，因此先有内核线程，才能有轻量级进程。**之间的数量关系为1：1。==内核线程耗时好资源，无法创建大规模的内核线程，并发数量低。==
-2. 用户线程&nbsp;&nbsp;&nbsp;&nbsp;系统内核感知不到用户线程的存在。线程的创建，同步，销毁，调度都由用户态完成。优点：快速低耗，可以支持更大规模的线程数量。缺点：很难实现线程的调度。==因为CPU只会调度内核线程，用户线程没有内核线程的支持无法处理切换和调度。这个部分都需要用户自己去实现，比如当一个线程死循环不放弃CPU资源，其他线程将用户无法得到执行。==
-3. 用户线程加上轻量级进程混合实现&nbsp;&nbsp;&nbsp;&nbsp;该方法使用户线程的创建，切换，调度方便，支持大规模的用户线程并发，并且操作系统提供了轻量级进程作为用户线程和内核线程的桥梁，使用内核的调度功能，即用轻量级进程来调度用户线程，用户线程和轻量级进程的数量比例为N:M。   
-
-![WechatIMG92](http://pbhb4py13.bkt.clouddn.com/WechatIMG92.jpeg)
-![WechatIMG93](http://pbhb4py13.bkt.clouddn.com/WechatIMG93.jpeg)
+1. 内核线程
+内核线程(Kernal-Level Thread KLT) 由操作系统内核支持的线程，这种线程由内核来完成线程切换，内核通过**调度器**对线程进行调度，支持多线程的内核叫做多线程内核。**程序一般会使用内核线程的一种高级接口--轻量级进程(Light Weight Process LWP)轻量级进程就是通常意义的线程，每个轻量级进程都是由一个内核线程支持，因此先有内核线程，才能有轻量级进程。**之间的数量关系为1：1。==内核线程耗时好资源，无法创建大规模的内核线程，并发数量低。==
+2. 用户线程
+系统内核感知不到用户线程的存在。线程的创建，同步，销毁，调度都由用户态完成。优点：快速低耗，可以支持更大规模的线程数量。缺点：很难实现线程的调度。==因为CPU只会调度内核线程，用户线程没有内核线程的支持无法处理切换和调度。这个部分都需要用户自己去实现，比如当一个线程死循环不放弃CPU资源，其他线程将用户无法得到执行。==
+3. 用户线程加上轻量级进程混合实现&nbsp;&nbsp;&nbsp;&nbsp;该方法使用户线程的创建，切换，调度方便，支持大规模的用户线程并发，并且操作系统提供了轻量级进程作为用户线程和内核线程的桥梁，使用内核的调度功能，即用轻量级进程来调度用户线程，用户线程和轻量级进程的数量比例为N:M。
 
 ### java线程调度
-1. 协同式线程调度 &nbsp;&nbsp;&nbsp;&nbsp;线程的执行时间由线程控制，线程完成工作后通知系统切换到另一个线程。优点:实现简单，不存在线程同步的问题。缺点：一个进程不退出cpu时间就会爆炸
-2. 抢占式线程调度&nbsp;&nbsp;&nbsp;&nbsp;java使用该方法来调度。线程的执行时间由系统来决定。
+
+1. 协同式线程调度 
+线程的执行时间由线程控制，线程完成工作后通知系统切换到另一个线程。优点:实现简单，不存在线程同步的问题。缺点：一个进程不退出cpu时间就会爆炸
+2. 抢占式线程调度
+java使用该方法来调度。线程的执行时间由系统来决定。
 
 ##java线程的6种状态
+
 1. 新建（New）:创建后尚未启动
 2. 运行（Runable）：包括running和ready两个状态 状态可能是正在运行或者等待时间片
 3. 无限期等待（Waiting）：线程无法获得CPU时间片，必须等待其他线程显示唤醒。 没有设置时间的Object.wait()，Thread.join()方法,LockSupport.park()
 4. 限期等待(Timed Waiting) 线程不会被分配CPU时间片也无需被其他线程显示唤醒，到时间自动唤醒。Thread.sleep()方法，设置等待时间的Object.wait()，Thread.join()方法，LockSupport.parkNanos()方法，LockSupport.parkUntil()方法
 5. 阻塞(Blocked) 阻塞状态和等待状态的区别是阻塞是等待获取一个排他锁，等待状态是等待唤醒动作的发生，这个过程在线程等待进入同步区域的时候，线程会进入这个状态 
 6. 结束(Terminated)：线程被终止
-![WechatIMG94](http://pbhb4py13.bkt.clouddn.com/WechatIMG94.jpeg)
+![993CF673-D651-4226-84FA-69400DA7B033](
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/993CF673-D651-4226-84FA-69400DA7B033.jpg)
+
 
 

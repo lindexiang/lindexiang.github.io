@@ -5,9 +5,10 @@ tags:
     - JVM原理
     - 线程安全与锁优化
 categories: JVM虚拟机原理
-image: http://pbhb4py13.bkt.clouddn.com/jesus-kiteque-224069-unsplash.jpg
+image: https://medesqure.oss-cn-hangzhou.aliyuncs.com/minimalistic-landscape-mountains-forest-bird-sky-artwork-others-13757.jpg
 
 ---
+
 
 # 线程安全与锁优化
 
@@ -169,17 +170,28 @@ public static String concatString(String s1, String s2, String s3) {
 StringBuffer的append()方式使用了synchonorized同步代码块。虚拟机观察了变量sb后，发现它无法逃逸到concatString()方法之外，其他线程无法访问到，则这里虽然有锁，但是会被消除，代码编译后不会添加monitorenter和moniterexit。
 
 ### 锁的状态和转化
+对象头
+![](
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474827770462.jpg)
+
 锁的状态主要有 **无锁状态、偏向锁状态、轻量级锁状态，重量级锁状态**
 状态转化
 
 1. 当JVM设置偏向状态时，则默认对象处于偏向锁状态 (CAS操作)
 2. 当两个线程竞争锁时，获得偏向锁的线程升级为轻量级锁，如果不再活动，转化成无锁状态，如果再活动，升级为重量级锁，然后解锁，进入无锁状态。
-![-c](http://pbhb4py13.bkt.clouddn.com/15343515990453.jpg)
-   轻量级锁能提升程序的同步性能的依据是绝大多数的锁，在整个同步周期内是不存在竞争的。因为没有竞争，轻量级锁使用CAS操作避免了互斥量的开销，如果存在锁竞争，除了互斥量的开销，还要发生CAS操作，因此在有竞争的情况下，使用轻量级锁比重量级锁更慢。
+![](
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474827095905.jpg)
+轻量级锁CAS操作之前堆栈与对象的状态
+![](
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474828219845.jpg)
+轻量级锁CAS操作之后堆栈与对象的状态
+
+轻量级锁能提升程序的同步性能的依据是绝大多数的锁，在整个同步周期内是不存在竞争的。因为没有竞争，轻量级锁使用CAS操作避免了互斥量的开销，如果存在锁竞争，除了互斥量的开销，还要发生CAS操作，因此在有竞争的情况下，使用轻量级锁比重量级锁更慢。
 #### 偏向锁的执行过程
  代码进入同步快，如果没有被锁定(标志位为"01")，那么在当前线程的栈帧中建立一个锁记录(Lock Record)的空间，存储当前对象的Mark Word(**因为对象头需要记录锁相关的内容**)
- ![-c](http://pbhb4py13.bkt.clouddn.com/15343524889555.jpg)
- 然后虚拟机使用CAS操作将对象的Mark Word更新为 Lock Record的指针，如果成功了，那么线程有了对象的锁，将Mark Word的锁标志变成“00” **图中画错了**。
- ![-c](http://pbhb4py13.bkt.clouddn.com/15343528853542.jpg)
+![](
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474827335163.jpg)
+
+ 然后虚拟机使用CAS操作将对象的Mark Word更新为 Lock Record的指针，如果成功了，那么线程有了对象的锁，将Mark Word的锁标志变成“00”
 如果跟新失败了，那么检查对象的Mark Word是否指向当前线程的栈帧，如果是则已经获得锁直接进入同步快，否则锁被其他线程抢占了。如果多个线程竞争同一个锁，那么轻量级锁没用了，升级为重量级锁。
 

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>B5D8C8DCE2A61516247452EF72472459</key>
+	<array>
+		<dict>
+			<key>localURL</key>
+			<string>media/minimalistic-landscape-mountains-forest-bird-sky-artwork-others-13757.jpg</string>
+			<key>remoteURL</key>
+			<string>
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/minimalistic-landscape-mountains-forest-bird-sky-artwork-others-13757.jpg</string>
+		</dict>
+		<dict>
+			<key>localURL</key>
+			<string>media/15474827770462.jpg</string>
+			<key>remoteURL</key>
+			<string>
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474827770462.jpg</string>
+		</dict>
+		<dict>
+			<key>localURL</key>
+			<string>media/15474827095905.jpg</string>
+			<key>remoteURL</key>
+			<string>
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474827095905.jpg</string>
+		</dict>
+		<dict>
+			<key>localURL</key>
+			<string>media/15474828219845.jpg</string>
+			<key>remoteURL</key>
+			<string>
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474828219845.jpg</string>
+		</dict>
+		<dict>
+			<key>localURL</key>
+			<string>media/15474827335163.jpg</string>
+			<key>remoteURL</key>
+			<string>
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474827335163.jpg</string>
+		</dict>
+	</array>
+	<key>selectedItem</key>
+	<string>B5D8C8DCE2A61516247452EF72472459</string>
+</dict>
+</plist>

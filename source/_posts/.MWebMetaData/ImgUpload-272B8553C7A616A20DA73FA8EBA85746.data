@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>B5D8C8DCE2A61516247452EF72472459</key>
+	<array>
+		<dict>
+			<key>localURL</key>
+			<string>media/3F5E18C2-5AEA-4748-AE2A-0ED69443F271.png</string>
+			<key>remoteURL</key>
+			<string>
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/3F5E18C2-5AEA-4748-AE2A-0ED69443F271.png</string>
+		</dict>
+		<dict>
+			<key>localURL</key>
+			<string>media/750E126D-CF3F-4350-ABBC-ECBF465CFAF6-1.png</string>
+			<key>remoteURL</key>
+			<string>
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/750E126D-CF3F-4350-ABBC-ECBF465CFAF6-1.png</string>
+		</dict>
+		<dict>
+			<key>localURL</key>
+			<string>media/6E487EB7-CCCE-4096-8DE0-B505BC74A511.png</string>
+			<key>remoteURL</key>
+			<string>
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/6E487EB7-CCCE-4096-8DE0-B505BC74A511.png</string>
+		</dict>
+		<dict>
+			<key>localURL</key>
+			<string>media/993CF673-D651-4226-84FA-69400DA7B033.jpg</string>
+			<key>remoteURL</key>
+			<string>
+https://medesqure.oss-cn-hangzhou.aliyuncs.com/993CF673-D651-4226-84FA-69400DA7B033.jpg</string>
+		</dict>
+	</array>
+	<key>selectedItem</key>
+	<string>B5D8C8DCE2A61516247452EF72472459</string>
+</dict>
+</plist>
