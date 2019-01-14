@@ -142,14 +142,15 @@
 <meta property="og:site_name" content="ldx&#39;s Blog">
 <meta property="og:description" content="线程安全与锁优化线程安全的定义: 当多个线程访问一个对象时，如果不用考虑这些线程在运行时的调度和交替运行，也不需要执行额外的同步，或者在调用方法时进行其他的协调操作，调用这个对象的行为都可以获得正确的结果，那么这个对象就是线程安全的。">
 <meta property="og:locale" content="zh-CH">
-<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15343515990453.jpg">
-<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15343524889555.jpg">
-<meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/15343528853542.jpg">
-<meta property="og:updated_time" content="2018-08-25T06:18:42.729Z">
+<meta property="og:image" content="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474827770462.jpg">
+<meta property="og:image" content="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474827095905.jpg">
+<meta property="og:image" content="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474828219845.jpg">
+<meta property="og:image" content="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474827335163.jpg">
+<meta property="og:updated_time" content="2019-01-14T16:27:39.707Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解JVM虚拟机 第13章 线程安全和锁优化">
 <meta name="twitter:description" content="线程安全与锁优化线程安全的定义: 当多个线程访问一个对象时，如果不用考虑这些线程在运行时的调度和交替运行，也不需要执行额外的同步，或者在调用方法时进行其他的协调操作，调用这个对象的行为都可以获得正确的结果，那么这个对象就是线程安全的。">
-<meta name="twitter:image" content="http://pbhb4py13.bkt.clouddn.com/15343515990453.jpg">
+<meta name="twitter:image" content="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474827770462.jpg">
 
 
 
@@ -477,7 +478,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,185
+                  3,217
                 </span>
               
 
@@ -550,11 +551,15 @@
 <p>但是在代码编译后会变成如下的样子</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">concatString</span><span class="params">(String s1, String s2, String s3)</span> </span>&#123;</span><br><span class="line">	StringBuffer sb = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">	sb.append(s1);</span><br><span class="line">	sb.append(s2);</span><br><span class="line">	sb.append(s3);</span><br><span class="line">	<span class="keyword">return</span> sb.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>StringBuffer的append()方式使用了synchonorized同步代码块。虚拟机观察了变量sb后，发现它无法逃逸到concatString()方法之外，其他线程无法访问到，则这里虽然有锁，但是会被消除，代码编译后不会添加monitorenter和moniterexit。</p>
-<h3 id="锁的状态和转化"><a href="#锁的状态和转化" class="headerlink" title="锁的状态和转化"></a>锁的状态和转化</h3><p>锁的状态主要有 <strong>无锁状态、偏向锁状态、轻量级锁状态，重量级锁状态</strong><br>状态转化</p>
+<h3 id="锁的状态和转化"><a href="#锁的状态和转化" class="headerlink" title="锁的状态和转化"></a>锁的状态和转化</h3><p>对象头<br><img src="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474827770462.jpg" alt=""></p>
+<p>锁的状态主要有 <strong>无锁状态、偏向锁状态、轻量级锁状态，重量级锁状态</strong><br>状态转化</p>
 <ol>
 <li>当JVM设置偏向状态时，则默认对象处于偏向锁状态 (CAS操作)</li>
-<li>当两个线程竞争锁时，获得偏向锁的线程升级为轻量级锁，如果不再活动，转化成无锁状态，如果再活动，升级为重量级锁，然后解锁，进入无锁状态。<br><img src="http://pbhb4py13.bkt.clouddn.com/15343515990453.jpg" alt="-c"><br>轻量级锁能提升程序的同步性能的依据是绝大多数的锁，在整个同步周期内是不存在竞争的。因为没有竞争，轻量级锁使用CAS操作避免了互斥量的开销，如果存在锁竞争，除了互斥量的开销，还要发生CAS操作，因此在有竞争的情况下，使用轻量级锁比重量级锁更慢。<h4 id="偏向锁的执行过程"><a href="#偏向锁的执行过程" class="headerlink" title="偏向锁的执行过程"></a>偏向锁的执行过程</h4>代码进入同步快，如果没有被锁定(标志位为”01”)，那么在当前线程的栈帧中建立一个锁记录(Lock Record)的空间，存储当前对象的Mark Word(<strong>因为对象头需要记录锁相关的内容</strong>)<br><img src="http://pbhb4py13.bkt.clouddn.com/15343524889555.jpg" alt="-c"><br>然后虚拟机使用CAS操作将对象的Mark Word更新为 Lock Record的指针，如果成功了，那么线程有了对象的锁，将Mark Word的锁标志变成“00” <strong>图中画错了</strong>。<br><img src="http://pbhb4py13.bkt.clouddn.com/15343528853542.jpg" alt="-c"><br>如果跟新失败了，那么检查对象的Mark Word是否指向当前线程的栈帧，如果是则已经获得锁直接进入同步快，否则锁被其他线程抢占了。如果多个线程竞争同一个锁，那么轻量级锁没用了，升级为重量级锁。</li>
+<li>当两个线程竞争锁时，获得偏向锁的线程升级为轻量级锁，如果不再活动，转化成无锁状态，如果再活动，升级为重量级锁，然后解锁，进入无锁状态。<br><img src="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474827095905.jpg" alt=""><br>轻量级锁CAS操作之前堆栈与对象的状态<br><img src="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474828219845.jpg" alt=""><br>轻量级锁CAS操作之后堆栈与对象的状态</li>
 </ol>
+<p>轻量级锁能提升程序的同步性能的依据是绝大多数的锁，在整个同步周期内是不存在竞争的。因为没有竞争，轻量级锁使用CAS操作避免了互斥量的开销，如果存在锁竞争，除了互斥量的开销，还要发生CAS操作，因此在有竞争的情况下，使用轻量级锁比重量级锁更慢。</p>
+<h4 id="偏向锁的执行过程"><a href="#偏向锁的执行过程" class="headerlink" title="偏向锁的执行过程"></a>偏向锁的执行过程</h4><p> 代码进入同步快，如果没有被锁定(标志位为”01”)，那么在当前线程的栈帧中建立一个锁记录(Lock Record)的空间，存储当前对象的Mark Word(<strong>因为对象头需要记录锁相关的内容</strong>)<br><img src="https://medesqure.oss-cn-hangzhou.aliyuncs.com/15474827335163.jpg" alt=""></p>
+<p> 然后虚拟机使用CAS操作将对象的Mark Word更新为 Lock Record的指针，如果成功了，那么线程有了对象的锁，将Mark Word的锁标志变成“00”<br>如果跟新失败了，那么检查对象的Mark Word是否指向当前线程的栈帧，如果是则已经获得锁直接进入同步快，否则锁被其他线程抢占了。如果多个线程竞争同一个锁，那么轻量级锁没用了，升级为重量级锁。</p>
 
       
     </div>
