@@ -7,10 +7,13 @@ tags:
     - 主从复制
     - 索引优化
 categories: 数据库相关
-image: http://pbhb4py13.bkt.clouddn.com/rawpixel-790547-unsplash.jpg
+image: 
+
 top: 100
 
 ---
+
+![tim-van-der-kuip-1398896-unsplash](media/tim-van-der-kuip-1398896-unsplash.jpg)
 
 # 高性能mysql
 ## 事务相关

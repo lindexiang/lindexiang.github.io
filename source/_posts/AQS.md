@@ -6,10 +6,11 @@ tags:
     - 线程同步
     - 内存可见性
 categories: java同步包
-image: http://pbhb4py13.bkt.clouddn.com/wallls.com_175256.jpg
+image: https://medesqure.oss-cn-hangzhou.aliyuncs.com/O84zP57OFwl3.jpg
 top: 100
 
 ---
+
 
 # AQS的原理解析
 ## 简介
@@ -83,7 +84,8 @@ static final class Node {
         }
     }
 ```
-![](http://pbhb4py13.bkt.clouddn.com/2018-10-07-15389236369509.jpg)
+![D0666465-B6DD-445C-BCA8-0A60360AAF90](media/D0666465-B6DD-445C-BCA8-0A60360AAF90.png)
+
 在node类中有prev和next，看出AQS的同步队列是双向队列。有thread来指向当前线程，nextWaiter 如果当前的节点时共享模式，值指向一个SHARE节点。当前节点是条件队列中，值会指向下一个等待条件的节点。waitstatus表示当前节点的状态，值如下所示。
 
 1. -1 SIGNAL 当前节点的后继节点被阻塞，当前节点被释放后要唤醒后继节点
@@ -93,11 +95,12 @@ static final class Node {
 5. 0 无 节点初始状态，head初始化条件队列时使用
 
 在独占锁模式下的同步队列结构如下：
-![](http://pbhb4py13.bkt.clouddn.com/2018-10-07-15389269065863.jpg)
+
+
 head节点存储的是new出来的节点，它的waitStatus的值为0，tail指向队列的最后一个节点。
 
 共享锁的同步队列如下：
-![](http://pbhb4py13.bkt.clouddn.com/2018-10-07-15389269792122.jpg)
+
 共享锁和独占锁时使用同一个同步队列，队列中的节点可以是共享类型也可以是独占类型。
 除了以上的同步队列，还有一个条件队列入地下所示。
 ![](http://pbhb4py13.bkt.clouddn.com/2018-10-07-15389270569481.jpg)
