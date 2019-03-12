@@ -126,8 +126,6 @@
 
 
 
-  
-
 
   <link rel="alternate" href="/atom.xml" title="ldx's Blog" type="application/atom+xml" />
 
@@ -136,14 +134,15 @@
 
 
 
-<meta name="description" content="高性能mysql事务相关事务的含义事务就是一组原子性的SQL查询。事务必须满足ACID特性。  原子性 atomicity事务全部提交成功，或者全部回滚 一个事务不能执行一部分 一致性 consistency数据库从一个状态转换到另一个状态，不会存在中间状态 在事务执行期间系统崩溃了，事务能回滚，数据不会丢失 隔离性 isolation一个事务所做的操作在没有提交之前对其他的事务都是不可见的。隔离">
+<meta name="description" content="高性能mysql事务相关事务的含义事务就是一组原子性的SQL查询。事务必须满足ACID特性。  原子性 atomicity事务全部提交成功，或者全部回滚 一个事务不能执行一部分 一致性 consistency数据库从一个状态转换到另一个状态，不会存在中间状态 在事务执行期间系统崩溃了，事务能回滚，数据不会丢失 隔离性 isolation一个事务所做的操作在没有提交之前对其他的事务都是不可见的。隔">
 <meta name="keywords" content="MYSQL,事务,主从复制,索引优化">
 <meta property="og:type" content="article">
 <meta property="og:title" content="高性能mysql知识点">
 <meta property="og:url" content="https://lindexiang.github.io/2018/10/25/mysql-optimization-1/index.html">
 <meta property="og:site_name" content="ldx&#39;s Blog">
-<meta property="og:description" content="高性能mysql事务相关事务的含义事务就是一组原子性的SQL查询。事务必须满足ACID特性。  原子性 atomicity事务全部提交成功，或者全部回滚 一个事务不能执行一部分 一致性 consistency数据库从一个状态转换到另一个状态，不会存在中间状态 在事务执行期间系统崩溃了，事务能回滚，数据不会丢失 隔离性 isolation一个事务所做的操作在没有提交之前对其他的事务都是不可见的。隔离">
+<meta property="og:description" content="高性能mysql事务相关事务的含义事务就是一组原子性的SQL查询。事务必须满足ACID特性。  原子性 atomicity事务全部提交成功，或者全部回滚 一个事务不能执行一部分 一致性 consistency数据库从一个状态转换到另一个状态，不会存在中间状态 在事务执行期间系统崩溃了，事务能回滚，数据不会丢失 隔离性 isolation一个事务所做的操作在没有提交之前对其他的事务都是不可见的。隔">
 <meta property="og:locale" content="zh-CH">
+<meta property="og:image" content="https://lindexiang.github.io/2018/10/25/mysql-optimization-1/media/tim-van-der-kuip-1398896-unsplash.jpg">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/D92E74CF-1BB8-4370-B18A-4E15262128EB.png">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/11BA25A7-BA7C-4D6F-BB0C-9C286ADBCA06.png">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/AE15D3A1-010A-4013-83D8-3DE2218B5D61.png">
@@ -164,11 +163,11 @@
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/A6721BF7-E89C-4256-BB4E-CEEA6719533E.png">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/123.png">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/47C27702-7B6F-421C-B263-350FA97515BE.jpg">
-<meta property="og:updated_time" content="2018-10-27T06:14:34.661Z">
+<meta property="og:updated_time" content="2019-03-04T02:50:22.312Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="高性能mysql知识点">
-<meta name="twitter:description" content="高性能mysql事务相关事务的含义事务就是一组原子性的SQL查询。事务必须满足ACID特性。  原子性 atomicity事务全部提交成功，或者全部回滚 一个事务不能执行一部分 一致性 consistency数据库从一个状态转换到另一个状态，不会存在中间状态 在事务执行期间系统崩溃了，事务能回滚，数据不会丢失 隔离性 isolation一个事务所做的操作在没有提交之前对其他的事务都是不可见的。隔离">
-<meta name="twitter:image" content="http://pbhb4py13.bkt.clouddn.com/D92E74CF-1BB8-4370-B18A-4E15262128EB.png">
+<meta name="twitter:description" content="高性能mysql事务相关事务的含义事务就是一组原子性的SQL查询。事务必须满足ACID特性。  原子性 atomicity事务全部提交成功，或者全部回滚 一个事务不能执行一部分 一致性 consistency数据库从一个状态转换到另一个状态，不会存在中间状态 在事务执行期间系统崩溃了，事务能回滚，数据不会丢失 隔离性 isolation一个事务所做的操作在没有提交之前对其他的事务都是不可见的。隔">
+<meta name="twitter:image" content="https://lindexiang.github.io/2018/10/25/mysql-optimization-1/media/tim-van-der-kuip-1398896-unsplash.jpg">
 
 
 
@@ -537,7 +536,8 @@
       
 
       
-        <h1 id="高性能mysql"><a href="#高性能mysql" class="headerlink" title="高性能mysql"></a>高性能mysql</h1><h2 id="事务相关"><a href="#事务相关" class="headerlink" title="事务相关"></a>事务相关</h2><h3 id="事务的含义"><a href="#事务的含义" class="headerlink" title="事务的含义"></a>事务的含义</h3><p>事务就是一组原子性的SQL查询。事务必须满足ACID特性。</p>
+        <p><img src="media/tim-van-der-kuip-1398896-unsplash.jpg" alt="tim-van-der-kuip-1398896-unsplash"></p>
+<h1 id="高性能mysql"><a href="#高性能mysql" class="headerlink" title="高性能mysql"></a>高性能mysql</h1><h2 id="事务相关"><a href="#事务相关" class="headerlink" title="事务相关"></a>事务相关</h2><h3 id="事务的含义"><a href="#事务的含义" class="headerlink" title="事务的含义"></a>事务的含义</h3><p>事务就是一组原子性的SQL查询。事务必须满足ACID特性。</p>
 <ol>
 <li>原子性 atomicity<br>事务全部提交成功，或者全部回滚 一个事务不能执行一部分</li>
 <li>一致性 consistency<br>数据库从一个状态转换到另一个状态，不会存在中间状态 <strong>在事务执行期间系统崩溃了，事务能回滚，数据不会丢失</strong></li>
