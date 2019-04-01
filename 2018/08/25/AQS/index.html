@@ -148,7 +148,7 @@
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/2018-10-11-B2C6BF10-5D4A-4BB5-8DD7-26AEDCC80561.png">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/2018-10-14-3C19382C-C0FC-471E-ACAC-2DACF5A0E33F.png">
 <meta property="og:image" content="http://pbhb4py13.bkt.clouddn.com/2018-10-14-449C4349-CB49-48D8-A762-487BEC2B2F3F.png">
-<meta property="og:updated_time" content="2019-03-05T02:32:01.974Z">
+<meta property="og:updated_time" content="2019-04-01T02:48:37.917Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AQS原理">
 <meta name="twitter:description" content="AQS的原理解析简介java中实现线程同步有synchronized和ReentrantLock方法，当然还有其他的方法。synchronized是使用monitorenter和monitorexit指令来同步代码块。而ReentrantLock是底层依赖AQS(AbstractQueuedSynchronizer)组件来实现的，即非阻塞同步队列。AQS相比于monitor可以实现多种同步方式，比">
@@ -484,7 +484,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  6,649
+                  6,648
                 </span>
               
 
@@ -544,7 +544,7 @@
 <p>在独占锁模式下的同步队列结构如下：</p>
 <p>head节点存储的是new出来的节点，它的waitStatus的值为0，tail指向队列的最后一个节点。</p>
 <p>共享锁的同步队列如下：</p>
-<p>共享锁和独占锁时使用同一个同步队列，队列中的节点可以是共享类型也可以是独占类型。<br>除了以上的同步队列，还有一个条件队列入地下所示。<br><img src="http://pbhb4py13.bkt.clouddn.com/2018-10-07-15389270569481.jpg" alt=""><br>使用的也是Node节点，是一个单向队列，用nextWaiter来指向下一个节点。</p>
+<p>共享锁和独占锁时使用同一个同步队列，队列中的节点可以是共享类型也可以是独占类型。<br>除了以上的同步队列，还有一个条件队列如下所示。<br><img src="http://pbhb4py13.bkt.clouddn.com/2018-10-07-15389270569481.jpg" alt=""><br>使用的也是Node节点，是一个单向队列，用nextWaiter来指向下一个节点。</p>
 <h3 id="CAS操作"><a href="#CAS操作" class="headerlink" title="CAS操作"></a>CAS操作</h3><p>AQS中有3个重要的变量,head、tail、state都是volatile类型的，保证了可见性。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 队头结点    </span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">volatile</span> Node head;     </span><br><span class="line"><span class="comment">// 队尾结点    </span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">volatile</span> Node tail;     </span><br><span class="line"><span class="comment">// 代表共享资源    </span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">int</span> state;     </span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getState</span><span class="params">()</span> </span>&#123;        </span><br><span class="line">    <span class="keyword">return</span> state;    </span><br><span class="line">&#125;     </span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">setState</span><span class="params">(<span class="keyword">int</span> newState)</span> </span>&#123;        </span><br><span class="line">    state = newState;    </span><br><span class="line">&#125;     </span><br><span class="line"><span class="comment">//CAS操作，当stateoffset的内存的值state和expect相等时将内存的值设为update</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">compareAndSetState</span><span class="params">(<span class="keyword">int</span> expect, <span class="keyword">int</span> update)</span> </span>&#123;        </span><br><span class="line">    <span class="keyword">return</span> unsafe.compareAndSwapInt(<span class="keyword">this</span>,stateOffset, expect, update);    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="源码解读"><a href="#源码解读" class="headerlink" title="源码解读"></a>源码解读</h2><p>AQS定义了两种的资源共享方式</p>
@@ -678,8 +678,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/25/happen-before/" rel="next" title="Happens-Before">
-                <i class="fa fa-chevron-left"></i> Happens-Before
+              <a href="/2018/08/17/threadLocal/" rel="next" title="threadLocal原理解析">
+                <i class="fa fa-chevron-left"></i> threadLocal原理解析
               </a>
             
           </div>
@@ -688,8 +688,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/08/30/final/" rel="prev" title="深入理解final关键字的作用">
-                深入理解final关键字的作用 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/08/25/happen-before/" rel="prev" title="Happens-Before">
+                Happens-Before <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -776,7 +776,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -786,10 +786,10 @@
               
               
               <div class="site-state-item site-state-categories">
-                
+                <a href="/categories/index.html">
                   <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
-                
+                </a>
               </div>
             
 
@@ -797,10 +797,10 @@
               
               
               <div class="site-state-item site-state-tags">
-                
-                  <span class="site-state-item-count">47</span>
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">44</span>
                   <span class="site-state-item-name">标签</span>
-                
+                </a>
               </div>
             
 
